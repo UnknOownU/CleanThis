@@ -8,4 +8,10 @@
 	<h1>CleanThis</h1>
 	<p>Prestations de nettoyage pour particuliers et professionnels</p>
 
+{% if app.user %}
+	Bienvenue {{ app.user.userIdentifier }}
+{% else %}
+	<p>Pour obtenir un devis et créer un compte, merci de nous contacter</p>
+{% endif %}	
+
 {% endblock %}

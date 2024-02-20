@@ -62,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->operations = new ArrayCollection();
         $this->ope_employe = new ArrayCollection();
+        $this->is_confirmed = false;
     }
 
     public function getId(): ?int

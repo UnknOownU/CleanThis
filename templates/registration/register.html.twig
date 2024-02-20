@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
@@ -11,13 +10,29 @@
                 {{ form_errors(registrationForm) }}
 
                 {{ form_start(registrationForm) }}
-                    {{ form_row(registrationForm.email) }}
+                    <fieldset class="mb-3">
+                        <legend>Mon identité</legend>
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.name) }}
+                        {{ form_row(registrationForm.firstname) }}
+                    </fieldset>
+
+                    <fieldset class="mb-3">
+                        <legend>Mes coordonnées</legend>
+                        {{ form_row(registrationForm.zipcode) }}
+                        {{ form_row(registrationForm.city) }}
+                        {{ form_row(registrationForm.street) }}
+                        {{ form_row(registrationForm.phone) }}
+                    </fieldset>
+
                     {{ form_row(registrationForm.plainPassword, {
                         label: 'Password'
                     }) }}
-                    {{ form_row(registrationForm.RGPDconsent) }}
+                    {{ form_row(registrationForm.rgpdConsent, {
+                        attr : {'class' : 'RGPD'} 
+                    }) }}
 
-                    <button type="submit" class="btn">Register</button>
+                    <button type="submit" class="btn btn-primary btn-lg my-3">S'enregistrer</button>
                 {{ form_end(registrationForm) }}        
         </div>
     </div>
