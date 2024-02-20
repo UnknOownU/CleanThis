@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,36 +31,37 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 50)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 10)]
     private ?string $zipcode = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
     private ?string $street = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 25)]
     private ?string $phone = null;
 
     #[ORM\Column]
-    private ?bool $isconfirmed = null;
+    private ?bool $is_confirmed = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $gender = null;
+    #[ORM\OneToMany(targetEntity: Operation::class, mappedBy: 'customer')]
+    private Collection $operations;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\OneToMany(targetEntity: Employes::class, mappedBy: 'parent')]
-    private Collection $employes;
+    #[ORM\OneToMany(targetEntity: Operation::class, mappedBy: 'employe')]
+    private Collection $ope_employe;
 
     public function __construct()
     {
-        $this->employes = new ArrayCollection();
+        $this->operations = new ArrayCollection();
+        $this->ope_employe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +134,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -191,66 +206,72 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isIsconfirmed(): ?bool
+    public function isIsConfirmed(): ?bool
     {
-        return $this->isconfirmed;
+        return $this->is_confirmed;
     }
 
-    public function setIsconfirmed(bool $isconfirmed): static
+    public function setIsConfirmed(bool $is_confirmed): static
     {
-        $this->isconfirmed = $isconfirmed;
-
-        return $this;
-    }
-
-    public function getGender(): ?string
-    {
-        return $this->gender;
-    }
-
-    public function setGender(string $gender): static
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
+        $this->is_confirmed = $is_confirmed;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Employes>
+     * @return Collection<int, Operation>
      */
-    public function getEmployes(): Collection
+    public function getOperations(): Collection
     {
-        return $this->employes;
+        return $this->operations;
     }
 
-    public function addEmploye(Employes $employe): static
+    public function addOperation(Operation $operation): static
     {
-        if (!$this->employes->contains($employe)) {
-            $this->employes->add($employe);
-            $employe->setParent($this);
+        if (!$this->operations->contains($operation)) {
+            $this->operations->add($operation);
+            $operation->setCustomer($this);
         }
 
         return $this;
     }
 
-    public function removeEmploye(Employes $employe): static
+    public function removeOperation(Operation $operation): static
     {
-        if ($this->employes->removeElement($employe)) {
+        if ($this->operations->removeElement($operation)) {
             // set the owning side to null (unless already changed)
-            if ($employe->getParent() === $this) {
-                $employe->setParent(null);
+            if ($operation->getCustomer() === $this) {
+                $operation->setCustomer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Operation>
+     */
+    public function getOpeEmploye(): Collection
+    {
+        return $this->ope_employe;
+    }
+
+    public function addOpeEmploye(Operation $opeEmploye): static
+    {
+        if (!$this->ope_employe->contains($opeEmploye)) {
+            $this->ope_employe->add($opeEmploye);
+            $opeEmploye->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpeEmploye(Operation $opeEmploye): static
+    {
+        if ($this->ope_employe->removeElement($opeEmploye)) {
+            // set the owning side to null (unless already changed)
+            if ($opeEmploye->getEmploye() === $this) {
+                $opeEmploye->setEmploye(null);
             }
         }
 
