@@ -1,0 +1,12 @@
+/*Registration page*/
+.RGPD {
+    /*Add some space between label and checkbox*/
+    margin: 10px !important;
+}
+
+/*Login page*/
+#login {
+    /*Add some space between password field and connexion button*/
+    margin: 10px;
+    margin-left: 0px !important; /*Remove margin left to align password field and connexion button*/
+}
