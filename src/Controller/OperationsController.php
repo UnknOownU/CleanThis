@@ -19,9 +19,8 @@ class OperationsController extends AbstractController
     #[Route('/{id}', name: 'details')]
     public function details(Operation $id): Response
     {
-        dd($id);
-        // dd($id->getDescription());
-        return $this->render('operations/details.html.twig');
+        return $this->render('operations/details.html.twig', compact('id'));
+            
     }
 
 

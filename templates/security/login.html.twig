@@ -12,12 +12,14 @@
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
 
+                <!--If user is already connected-->
                 {% if app.user %}
                     <div class="mb-3">
                         Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
                     </div>
-                {% else %}
 
+                {% else %}
+                <!--If not, login form-->
                 <h1 class="h3 mb-3 font-weight-normal">Se connecter à son compte</h1>
                 <label for="inputEmail">Email</label>
                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>

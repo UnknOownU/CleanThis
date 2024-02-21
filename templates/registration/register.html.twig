@@ -11,12 +11,14 @@
 
                 {{ form_start(registrationForm) }}
                     <fieldset class="mb-3">
+                        <!--Identity-->
                         <legend>Mon identité</legend>
                         {{ form_row(registrationForm.email) }}
                         {{ form_row(registrationForm.name) }}
                         {{ form_row(registrationForm.firstname) }}
                     </fieldset>
 
+                        <!--Coordonates-->
                     <fieldset class="mb-3">
                         <legend>Mes coordonnées</legend>
                         {{ form_row(registrationForm.zipcode) }}
@@ -25,6 +27,7 @@
                         {{ form_row(registrationForm.phone) }}
                     </fieldset>
 
+                        <!--Password & RGPD-->
                     {{ form_row(registrationForm.plainPassword, {
                         label: 'Password'
                     }) }}

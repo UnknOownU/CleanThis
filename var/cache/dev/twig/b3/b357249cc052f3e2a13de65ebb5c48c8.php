@@ -66,6 +66,8 @@ class __TwigTemplate_82ccfd363899a5b1ccba12aee0b4b02b extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "title"));
 
         echo "Détails de ";
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["id"]) || array_key_exists("id", $context) ? $context["id"] : (function () { throw new RuntimeError('Variable "id" does not exist.', 3, $this->source); })()), "name", [], "any", false, false, false, 3), "html", null, true);
+        echo " ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
@@ -85,7 +87,9 @@ class __TwigTemplate_82ccfd363899a5b1ccba12aee0b4b02b extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
         // line 6
-        echo "    <h1>Détails de </h1>
+        echo "    <h1>Détails de ";
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["id"]) || array_key_exists("id", $context) ? $context["id"] : (function () { throw new RuntimeError('Variable "id" does not exist.', 6, $this->source); })()), "name", [], "any", false, false, false, 6), "html", null, true);
+        echo "</h1>
 ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
@@ -116,17 +120,17 @@ class __TwigTemplate_82ccfd363899a5b1ccba12aee0b4b02b extends Template
      */
     public function getDebugInfo()
     {
-        return array (  88 => 6,  78 => 5,  59 => 3,  36 => 1,);
+        return array (  90 => 6,  80 => 5,  59 => 3,  36 => 1,);
     }
 
     public function getSourceContext()
     {
         return new Source("{% extends 'base.html.twig' %}
 
-{% block title %}Détails de {% endblock %}
+{% block title %}Détails de {{ id.name }} {% endblock %}
 
 {% block body %}
-    <h1>Détails de </h1>
+    <h1>Détails de {{ id.name }}</h1>
 {% endblock %}", "operations/details.html.twig", "D:\\XAMPP\\htdocs\\cleanthis2\\templates\\operations\\details.html.twig");
     }
 }
