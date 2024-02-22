@@ -311,3 +311,5 @@ f90496,127.0.0.1,GET,https://127.0.0.1:8000/admin/users/,1708520290,df5b4d,500,r
 df5b4d,127.0.0.1,GET,https://127.0.0.1:8000/admin/users/,1708520290,,500,request
 c69a52,127.0.0.1,GET,https://127.0.0.1:8000/admin/users/,1708520397,,200,request
 1d66bd,127.0.0.1,GET,https://127.0.0.1:8000/admin/users/,1708520461,,200,request
+b0a118,127.0.0.1,GET,https://127.0.0.1:8000/profil/,1708527206,,200,request
+b5dd22,127.0.0.1,GET,https://127.0.0.1:8000/operations/,1708527226,,200,request
