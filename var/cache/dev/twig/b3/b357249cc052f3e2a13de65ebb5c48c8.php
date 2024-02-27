@@ -67,7 +67,6 @@ class __TwigTemplate_82ccfd363899a5b1ccba12aee0b4b02b extends Template
 
         echo "Détails de ";
         echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["id"]) || array_key_exists("id", $context) ? $context["id"] : (function () { throw new RuntimeError('Variable "id" does not exist.', 3, $this->source); })()), "name", [], "any", false, false, false, 3), "html", null, true);
-        echo " ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
@@ -120,14 +119,14 @@ class __TwigTemplate_82ccfd363899a5b1ccba12aee0b4b02b extends Template
      */
     public function getDebugInfo()
     {
-        return array (  90 => 6,  80 => 5,  59 => 3,  36 => 1,);
+        return array (  89 => 6,  79 => 5,  59 => 3,  36 => 1,);
     }
 
     public function getSourceContext()
     {
         return new Source("{% extends 'base.html.twig' %}
 
-{% block title %}Détails de {{ id.name }} {% endblock %}
+{% block title %}Détails de {{ id.name }}{% endblock %}
 
 {% block body %}
     <h1>Détails de {{ id.name }}</h1>
