@@ -84,16 +84,19 @@ class OperationCrudController extends AbstractCrudController {
                 FormField::addColumn('col-lg-4 col-xl-4'),
                 
                 DateTimeField::new('rdv_at')->setLabel('When?'),
+                DateTimeField::new('created_at')->hideOnForm(),
     
                 FormField::addColumn('col-lg-3 col-xl-6'),
-                TextEditorField::new('description'),
+                TextEditorField::new('description')->hideOnIndex(),
+                
+
                 TextField::new('status'),
                 ChoiceField::new('status')->setChoices([
-                    'To Validation' => '0',
-                    'Validate' => '1',
-                    'In Progress' => '2',
-                    'Finished' => '3',
-                ]),
+                    'En Attente de Validation' => 'En Attente de Validation',
+                    'Validée' => 'Validée',
+                    'En cours' => 'En cours',
+                    'Terminée' => 'Terminée',
+                ])->hideOnIndex(),
                 // ChoiceField::new('status')->renderAsBadges([
                 //     // $value => $badgeStyleName
                 //     'paid' => 'success',
