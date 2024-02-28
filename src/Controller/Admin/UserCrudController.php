@@ -56,14 +56,13 @@ class UserCrudController extends AbstractCrudController
             TextField::new('city'),
             TextField::new('street'),
             TextField::new('phone'),
-            ChoiceField::new('role', 'Role')
-            ->setChoices([
-                'Admin' => 'ROLE_ADMIN',
-                'User' => 'ROLE_USER',
-                // Ajoutez d'autres rôles si nécessaire
-            ])
-            ->renderAsBadges(),
-        // ...
+            ChoiceField::new('singleRole', 'Role')
+                ->setChoices([
+                    'Admin' => 'ROLE_ADMIN',
+                    'Senior' => 'ROLE_SENIOR',
+                    'Apprenti' => 'ROLE_APPRENTI',
+                    'Client' => 'ROLE_CUSTOMER'
+                ]),
     ];
 
 
