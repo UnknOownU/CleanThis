@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\OperationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\User;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OperationRepository;
 
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
 class Operation
@@ -15,51 +16,61 @@ class Operation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 100)]
     private ?string $type = null;
 
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?float $price = null;
+    private ?int $price = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $status = null;
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $rdv_at = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 10)]
     private ?string $zipcode_ope = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $city_ope = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $street_ope = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
-    private ?User $salarie = null;
-
-    #[ORM\ManyToOne(inversedBy: 'operations')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $customer = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $finished_at = null;
+    #[ORM\ManyToOne(inversedBy: 'operations')]
+    private ?User $salarie = null;
+/**
+*@ORM\ManyToOne(targetEntity=User::class)
+*@ORM\JoinColumn(nullable=false)
+ */
+private $createdBy;
 
-    #[ORM\OneToMany(targetEntity: Documents::class, mappedBy: 'customer')]
-    private Collection $documents;
+#[ORM\Column(nullable: true)]
+private ?\DateTimeImmutable $finished_at = null;
 
-    public function __construct()
+    public function getCreatedBy(): ?User
     {
-        $this->documents = new ArrayCollection();
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(User $user): self
+    {
+        $this->createdBy = $user;
+
+        return $this;
     }
 
     public function getId(): ?int
@@ -91,12 +102,12 @@ class Operation
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): ?int
     {
         return $this->price;
     }
 
-    public function setPrice(float $price): static
+    public function setPrice(int $price): static
     {
         $this->price = $price;
 
@@ -115,12 +126,12 @@ class Operation
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
@@ -144,7 +155,7 @@ class Operation
         return $this->rdv_at;
     }
 
-    public function setRdvAt(\DateTimeImmutable $rdv_at): static
+    public function setRdvAt(?\DateTimeImmutable $rdv_at): static
     {
         $this->rdv_at = $rdv_at;
 
@@ -187,18 +198,6 @@ class Operation
         return $this;
     }
 
-    public function getSalarie(): ?User
-    {
-        return $this->salarie;
-    }
-
-    public function setSalarie(?User $salarie): static
-    {
-        $this->salarie = $salarie;
-
-        return $this;
-    }
-
     public function getCustomer(): ?User
     {
         return $this->customer;
@@ -211,45 +210,39 @@ class Operation
         return $this;
     }
 
+    public function getSalarie(): ?User
+    {
+        return $this->salarie;
+    }
+
+    public function setSalarie(?User $salarie): static
+    {
+        $this->salarie = $salarie;
+
+        return $this;
+    }
+
     public function getFinishedAt(): ?\DateTimeImmutable
     {
         return $this->finished_at;
     }
 
-    public function setFinishedAt(\DateTimeImmutable $finished_at): static
+    public function setFinishedAt(?\DateTimeImmutable $finished_at): static
     {
         $this->finished_at = $finished_at;
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Documents>
-     */
-    public function getDocuments(): Collection
+    public function getCustomerFullName(): ?string
     {
-        return $this->documents;
+        if (!$this->customer) {
+            return null;
+        }
+    
+        return $this->customer->getFirstname() . ' ' . $this->customer->getName();
     }
 
-    public function addDocument(Documents $document): static
-    {
-        if (!$this->documents->contains($document)) {
-            $this->documents->add($document);
-            $document->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDocument(Documents $document): static
-    {
-        if ($this->documents->removeElement($document)) {
-            // set the owning side to null (unless already changed)
-            if ($document->getCustomer() === $this) {
-                $document->setCustomer(null);
-            }
-        }
-
-        return $this;
+    public function __construct() {
+        $this->created_at = new DateTimeImmutable();
     }
 }

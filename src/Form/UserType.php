@@ -22,7 +22,6 @@ class UserType extends AbstractType
             ->add('city')
             ->add('street')
             ->add('phone')
-            ->add('cpt_ope')
         ;
         $builder->get('roles')
 
