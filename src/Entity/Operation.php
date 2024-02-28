@@ -15,7 +15,7 @@ class Operation
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $type = null;
+    private ?string $type = null;
 
     #[ORM\Column(length: 100)]
     private ?string $name = null;
@@ -27,7 +27,7 @@ class Operation
     private ?int $price = null;
 
     #[ORM\Column]
-    private ?int $status = null;
+    private ?string $status = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -50,17 +50,24 @@ class Operation
     #[ORM\ManyToOne(inversedBy: 'ope_employe')]
     private ?User $employe = null;
 
+    // public function __toString()
+    // {
+    //     return $this->getCustomer();
+    //     return $this->getEmploye();
+    // }
+
+    
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getType(): ?int
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType(int $type): static
+    public function setType(string $type): static
     {
         $this->type = $type;
 
@@ -103,12 +110,12 @@ class Operation
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
 
