@@ -42,6 +42,9 @@ class OperationCrudController extends AbstractCrudController {
         $operation = new Operation();
         $operation->setCustomer($this->getUser());
         $operation->setCreatedAt(new DateTimeImmutable());
+
+        $operation->setCustomer($this->getUser());
+        $operation->setSalarie($this->getUser());
         return $operation;
     }
 
@@ -92,12 +95,13 @@ class OperationCrudController extends AbstractCrudController {
     ): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
-
+        if ($this->isGranted('ROLE_USER')) {
         if ($user) {
             $qb->andWhere('entity.customer = :user')
                ->setParameter('user', $user);
         }
 
         return $qb;
+    }
     }
 }
