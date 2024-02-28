@@ -3,25 +3,27 @@
 
 namespace App\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Controller\OperationCrudController;
-use App\Entity\Operation;
 use App\Entity\User;
+use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\OperationCrudController;
+use Symfony\Component\HttpFoundation\Request;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
+use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
 class UserCrudController extends AbstractCrudController
 {
@@ -54,7 +56,16 @@ class UserCrudController extends AbstractCrudController
             TextField::new('city'),
             TextField::new('street'),
             TextField::new('phone'),
-        ];
+            ChoiceField::new('role', 'Role')
+            ->setChoices([
+                'Admin' => 'ROLE_ADMIN',
+                'User' => 'ROLE_USER',
+                // Ajoutez d'autres rôles si nécessaire
+            ])
+            ->renderAsBadges(),
+        // ...
+    ];
+
 
         $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
