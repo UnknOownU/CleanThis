@@ -38,8 +38,7 @@ class OperationCrudController extends AbstractCrudController {
     {
         return $crud
             // other configurations...
-            ->setSearchFields(null) // Disable search for ROLE_USER if desired
-            ->setPaginatorPageSize(1); // Assuming ROLE_USER can only see their profile
+            ->setSearchFields(null); // Assuming ROLE_USER can only see their profile
     }
 
         public function createEntity(string $entityFqcn) {
@@ -63,33 +62,27 @@ class OperationCrudController extends AbstractCrudController {
         {
             return [
                 FormField::addTab('Mission'),
-                FormField::addColumn('col-lg-8 col-xl-3'),
-    
-                IdField::new('id')->hideOnForm(),
-                AssociationField::new('customer')->hideOnForm(),
                 
-
+                FormField::addColumn('col-lg-8 col-xl-3'),
+                IdField::new('id')->hideOnForm(),
+                AssociationField::new('customer', 'Client')->hideOnForm(),
                 TextField::new('name')
                 ->setLabel('Mission'),
-
                 ChoiceField::new('type')->setChoices([
-                    'Little' => 'Little',
-                    'Middle' => 'Middle',
-                    'Big' => 'Big',
+                    'Little' => 'Petite',
+                    'Medium' => 'Moyenne',
+                    'Big' => 'Grande',
+                    'Custom' => 'Custom',
                 ])->hideOnIndex(),
                 TextField::new('type')->hideOnForm(),
-
-                MoneyField::new('price')->setCurrency('EUR'),
-    
+                MoneyField::new('price', 'Prix')->setCurrency('EUR'),
                 FormField::addColumn('col-lg-4 col-xl-4'),
-                
-                DateTimeField::new('rdv_at')->setLabel('When?'),
-                DateTimeField::new('created_at')->hideOnForm(),
-    
+                DateTimeField::new('rdv_at', 'Date de RDV'),
+                DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
+
                 FormField::addColumn('col-lg-3 col-xl-6'),
                 TextEditorField::new('description')->hideOnIndex(),
                 
-
                 TextField::new('status'),
                 ChoiceField::new('status')->setChoices([
                     'En Attente de Validation' => 'En Attente de Validation',
@@ -97,26 +90,10 @@ class OperationCrudController extends AbstractCrudController {
                     'En cours' => 'En cours',
                     'Terminée' => 'Terminée',
                 ])->hideOnIndex(),
-                // ChoiceField::new('status')->renderAsBadges([
-                //     // $value => $badgeStyleName
-                //     'paid' => 'success',
-                //     'pending' => 'warning',
-                //     'refunded' => 'danger',
-                // ]),
-                // IntegerField::new('preparation')
-                // ->setLabel('Time of mission'),
-                // CollectionField::new('steps')
-                //     ->setEntryType(StepType::class)
-                //     ->allowDelete()
-                //     ->allowAdd(),
-                // CollectionField::new('images')
-                //     ->setEntryType(ImageType::class)
-                //     ->allowDelete()
-                //     ->allowAdd(),
-    
-                TextField::new('street_ope'),
-                TextField::new('city_ope'),
-                TextField::new('zipcode_ope'),
+                TextField::new('street_ope', 'Rue'),
+                TextField::new('city_ope', 'Ville'),
+                TextField::new('zipcode_ope', 'Code Postal'),
+                DateTimeField::new('finished_at', 'Terminé le')->hideOnForm(),
     
             ];
         }

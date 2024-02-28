@@ -56,12 +56,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Operation::class, mappedBy: 'customer')]
     private Collection $operations;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $finished_at = null;
-
     public function __construct()
     {
         $this->operations = new ArrayCollection();
+    }
+
+    private $plainPassword;
+
+    // Ajoutez les getters et setters pour ce champ
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+    
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
     }
 
     public function getId(): ?int
@@ -246,15 +257,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFinishedAt(): ?\DateTimeImmutable
-    {
-        return $this->finished_at;
-    }
-
-    public function setFinishedAt(?\DateTimeImmutable $finished_at): static
-    {
-        $this->finished_at = $finished_at;
-
-        return $this;
-    }
 }

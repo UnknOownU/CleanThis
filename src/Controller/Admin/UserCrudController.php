@@ -8,57 +8,103 @@ use App\Controller\OperationCrudController;
 use App\Entity\Operation;
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        public UserPasswordHasherInterface $userPasswordHasher
+    ) {}
+
     public static function getEntityFqcn(): string
     {
         return User::class;
     }
 
-    public function configureCrud(Crud $crud): Crud
-    {
-        return $crud
-            // other configurations...
-            ->setSearchFields(null) // Disable search for ROLE_USER if desired
-            ->setPaginatorPageSize(1); // Assuming ROLE_USER can only see their profile
-    }
-
-    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-    {
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-
-        if ($this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
-            // Assurez-vous que l'utilisateur a seulement le rôle ROLE_USER et pas ROLE_ADMIN
-            $qb->andWhere('entity.id = :id')
-                ->setParameter('id', $this->getUser()->getId());
-        }
-
-        return $qb;
-    }
     public function configureActions(Actions $actions): Actions
     {
-        $actions = parent::configureActions($actions);
+        return $actions
+            ->add(Crud::PAGE_EDIT, Action::INDEX)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, Action::DETAIL)
+            ;
+    }
 
-        // Retirer les actions de suppression et de modification pour les utilisateurs avec le rôle ROLE_USER
-        if ($this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
-            $actions->disable(Action::NEW, Action::EDIT, Action::DELETE);
-        }
+    public function configureFields(string $pageName): iterable
+    {
+        $fields = [
+            IdField::new('id')->hideOnForm(),
+            EmailField::new('email'),
+            TextField::new('name'),
+            TextField::new('firstname'),
+            TextField::new('zipcode'),
+            TextField::new('city'),
+            TextField::new('street'),
+            TextField::new('phone'),
+        ];
 
-        return $actions;
+        $password = TextField::new('password')
+            ->setFormType(RepeatedType::class)
+            ->setFormTypeOptions([
+                'type' => PasswordType::class,
+                'first_options' => ['label' => 'Password'],
+                'second_options' => ['label' => '(Repeat)'],
+                'mapped' => false,
+            ])
+            ->setRequired($pageName === Crud::PAGE_NEW)
+            ->onlyOnForms()
+            ;
+        $fields[] = $password;
+
+        return $fields;
+    }
+
+    public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    {
+        $formBuilder = parent::createNewFormBuilder($entityDto, $formOptions, $context);
+        return $this->addPasswordEventListener($formBuilder);
+    }
+
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    {
+        $formBuilder = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        return $this->addPasswordEventListener($formBuilder);
+    }
+
+    private function addPasswordEventListener(FormBuilderInterface $formBuilder): FormBuilderInterface
+    {
+        return $formBuilder->addEventListener(FormEvents::POST_SUBMIT, $this->hashPassword());
+    }
+
+    private function hashPassword() {
+        return function($event) {
+            $form = $event->getForm();
+            if (!$form->isValid()) {
+                return;
+            }
+            $password = $form->get('password')->getData();
+            if ($password === null) {
+                return;
+            }
+
+            $hash = $this->userPasswordHasher->hashPassword($form->getData(), $password);
+            $form->getData()->setPassword($hash);
+        };
+
     }
 
 }
+

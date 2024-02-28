@@ -13,12 +13,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-// src/Controller/Admin/DashboardController.php
-
-
-
-
-
 
 class DashboardController extends AbstractDashboardController
 {
