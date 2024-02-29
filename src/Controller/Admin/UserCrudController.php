@@ -36,6 +36,14 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
+    public function configureCrud(Crud $crud): Crud {
+        return $crud
+            ->overrideTemplate('crud/new', 'user/new.html.twig')
+            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            
+            ->setSearchFields(null);
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         return $actions
