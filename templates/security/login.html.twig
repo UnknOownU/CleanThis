@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!
+{% endblock %}
+
+{% block body %}
+	<form method="post">
+		{% if error %}
+			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+		{% endif %}
+
+		{% if app.user %}
+			<div class="mb-3">
+				You are logged in as
+				{{ app.user.userIdentifier }},
+				<a href="{{ path('app_logout') }}">Logout</a>
+			</div>
+		{% endif %}
+
+		<h1 class="h3 mb-3 font-weight-normal">Connectez vous</h1>
+		<label for="inputEmail">Email</label>
+		<br>
+		<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+		<br><br>
+		<label for="inputPassword">Password</label>
+		<br>
+
+		<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"><br>
+
+		<button class="btn btn-lg btn-primary" type="submit">
+		connexion
+		</button>
+
+		<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion avec Google</title>
+</head>
+<body>
+    <h1>Connexion avec Google</h1>
+    <a href="{{ path('auth_oauth_connect', {service: 'google'}) }}"
+	 class="btn-google">Se connecter avec Google</a>
+</body>
+</html>
+
+	</form>
+{% endblock %}
