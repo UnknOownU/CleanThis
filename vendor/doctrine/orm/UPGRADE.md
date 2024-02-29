@@ -13,9 +13,9 @@ so `$targetEntity` is a first argument now. This change affects only non-named a
 
 When using the `AUTO` strategy to let Doctrine determine the identity generation mechanism for
 an entity, and when using `doctrine/dbal` 4, PostgreSQL now uses `IDENTITY`
-instead of `SEQUENCE`. When upgrading from ORM 2.x and preference is on keeping
-the `SEQUENCE` based identity generation, then configure the ORM this way:
-
+instead of `SEQUENCE` or `SERIAL`.
+* If you want to upgrade your existing tables to identity columns, you will need to follow [migration to identity columns on PostgreSQL](https://www.doctrine-project.org/projects/doctrine-dbal/en/4.0/how-to/postgresql-identity-migration.html)
+* If you want to keep using SQL sequences, you need to configure the ORM this way:
 ```php
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\Configuration;
@@ -495,8 +495,8 @@ The methods have been replaced by PSR-6 compatible counterparts
 
 ## BC BREAK: Remove `Doctrine\ORM\Configuration::newDefaultAnnotationDriver`
 
-This functionality has been moved to the new `DoctrineSetup` class. Call
-`Doctrine\ORM\Tools\DoctrineSetup::createDefaultAnnotationDriver()` to create
+This functionality has been moved to the new `ORMSetup` class. Call
+`Doctrine\ORM\ORMSetup::createDefaultAnnotationDriver()` to create
 a new annotation driver.
 
 ## BC BREAK: Remove `Doctrine\ORM\Tools\Setup`
@@ -504,7 +504,7 @@ a new annotation driver.
 In our effort to migrate from Doctrine Cache to PSR-6, the `Setup` class which
 accepted a Doctrine Cache instance in each method has been removed.
 
-The replacement is `Doctrine\ORM\Tools\DoctrineSetup` which accepts a PSR-6
+The replacement is `Doctrine\ORM\ORMSetup` which accepts a PSR-6
 cache instead.
 
 ## BC BREAK: Removed named queries

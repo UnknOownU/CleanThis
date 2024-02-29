@@ -4,9 +4,20 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Entity\Operation;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\OperationCrudController;
+use Symfony\Component\HttpFoundation\Request;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
@@ -37,16 +48,23 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $fields = [
-            // IdField::new('id'),
-            TextField::new('email'),
+            IdField::new('id')->hideOnForm(),
+            EmailField::new('email'),
             TextField::new('name'),
             TextField::new('firstname'),
-            ArrayField::new('roles'),
             TextField::new('zipcode'),
             TextField::new('city'),
             TextField::new('street'),
             TextField::new('phone'),
-        ];
+            ChoiceField::new('singleRole', 'Role')
+                ->setChoices([
+                    'Admin' => 'ROLE_ADMIN',
+                    'Senior' => 'ROLE_SENIOR',
+                    'Apprenti' => 'ROLE_APPRENTI',
+                    'Client' => 'ROLE_CUSTOMER'
+                ]),
+    ];
+
 
         $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
@@ -95,5 +113,8 @@ class UserCrudController extends AbstractCrudController
             $hash = $this->userPasswordHasher->hashPassword($form->getData(), $password);
             $form->getData()->setPassword($hash);
         };
+
     }
+
 }
+

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
   <parameters>
-    <parameter key="kernel.project_dir">D:\XAMPP\htdocs\cleanthis2</parameter>
+    <parameter key="kernel.project_dir">C:\Users\selim\Desktop\projetfr</parameter>
     <parameter key="kernel.environment">dev</parameter>
     <parameter key="kernel.runtime_environment">%env(default:kernel.environment:APP_RUNTIME_ENV)%</parameter>
     <parameter key="kernel.runtime_mode">%env(query_string:default:container.runtime_mode:APP_RUNTIME_MODE)%</parameter>
@@ -9,9 +9,9 @@
     <parameter key="kernel.runtime_mode.cli">%env(not:default:kernel.runtime_mode.web:)%</parameter>
     <parameter key="kernel.runtime_mode.worker">%env(bool:default::key:worker:default:kernel.runtime_mode:)%</parameter>
     <parameter key="kernel.debug">true</parameter>
-    <parameter key="kernel.build_dir">D:\XAMPP\htdocs\cleanthis2\var\cache\dev</parameter>
-    <parameter key="kernel.cache_dir">D:\XAMPP\htdocs\cleanthis2\var\cache\dev</parameter>
-    <parameter key="kernel.logs_dir">D:\XAMPP\htdocs\cleanthis2\var\log</parameter>
+    <parameter key="kernel.build_dir">C:/Users/selim/Desktop/projetfr/var/cache/dev</parameter>
+    <parameter key="kernel.cache_dir">C:/Users/selim/Desktop/projetfr/var/cache/dev</parameter>
+    <parameter key="kernel.logs_dir">C:\Users\selim\Desktop\projetfr\var\log</parameter>
     <parameter key="kernel.bundles" type="collection">
       <parameter key="FrameworkBundle">Symfony\Bundle\FrameworkBundle\FrameworkBundle</parameter>
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
@@ -29,55 +29,55 @@
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\framework-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\framework-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\FrameworkBundle</parameter>
       </parameter>
       <parameter key="DoctrineBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-bundle</parameter>
         <parameter key="namespace">Doctrine\Bundle\DoctrineBundle</parameter>
       </parameter>
       <parameter key="DoctrineMigrationsBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-migrations-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-migrations-bundle</parameter>
         <parameter key="namespace">Doctrine\Bundle\MigrationsBundle</parameter>
       </parameter>
       <parameter key="DebugBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\debug-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\debug-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\DebugBundle</parameter>
       </parameter>
       <parameter key="TwigBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\TwigBundle</parameter>
       </parameter>
       <parameter key="WebProfilerBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\web-profiler-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\web-profiler-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\WebProfilerBundle</parameter>
       </parameter>
       <parameter key="StimulusBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\stimulus-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\stimulus-bundle</parameter>
         <parameter key="namespace">Symfony\UX\StimulusBundle</parameter>
       </parameter>
       <parameter key="TurboBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\ux-turbo</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\ux-turbo</parameter>
         <parameter key="namespace">Symfony\UX\Turbo</parameter>
       </parameter>
       <parameter key="TwigExtraBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\twig\extra-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\twig\extra-bundle</parameter>
         <parameter key="namespace">Twig\Extra\TwigExtraBundle</parameter>
       </parameter>
       <parameter key="SecurityBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\security-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\SecurityBundle</parameter>
       </parameter>
       <parameter key="MonologBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\monolog-bundle</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\monolog-bundle</parameter>
         <parameter key="namespace">Symfony\Bundle\MonologBundle</parameter>
       </parameter>
       <parameter key="MakerBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\symfony\maker-bundle\src</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\symfony\maker-bundle\src</parameter>
         <parameter key="namespace">Symfony\Bundle\MakerBundle</parameter>
       </parameter>
       <parameter key="EasyAdminBundle" type="collection">
-        <parameter key="path">D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src</parameter>
+        <parameter key="path">C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src</parameter>
         <parameter key="namespace">EasyCorp\Bundle\EasyAdminBundle</parameter>
       </parameter>
     </parameter>
@@ -118,18 +118,18 @@
     <parameter key="asset.request_context.base_path">null</parameter>
     <parameter key="asset.request_context.secure">null</parameter>
     <parameter key="translator.logging">false</parameter>
-    <parameter key="translator.default_path">D:\XAMPP\htdocs\cleanthis2/translations</parameter>
+    <parameter key="translator.default_path">C:\Users\selim\Desktop\projetfr/translations</parameter>
     <parameter key="debug.error_handler.throw_at">-1</parameter>
-    <parameter key="debug.container.dump">D:\XAMPP\htdocs\cleanthis2\var\cache\dev/App_KernelDevDebugContainer.xml</parameter>
+    <parameter key="debug.container.dump">C:/Users/selim/Desktop/projetfr/var/cache/dev/App_KernelDevDebugContainer.xml</parameter>
     <parameter key="router.request_context.host">localhost</parameter>
     <parameter key="router.request_context.scheme">http</parameter>
     <parameter key="router.request_context.base_url"></parameter>
     <parameter key="router.resource">kernel::loadRoutes</parameter>
-    <parameter key="router.cache_dir">D:\XAMPP\htdocs\cleanthis2\var\cache\dev</parameter>
+    <parameter key="router.cache_dir">C:/Users/selim/Desktop/projetfr/var/cache/dev</parameter>
     <parameter key="request_listener.http_port">80</parameter>
     <parameter key="request_listener.https_port">443</parameter>
-    <parameter key="serializer.mapping.cache.file">D:\XAMPP\htdocs\cleanthis2\var\cache\dev/serialization.php</parameter>
-    <parameter key="cache.prefix.seed">_D:\XAMPP\htdocs\cleanthis2.App_KernelDevDebugContainer</parameter>
+    <parameter key="serializer.mapping.cache.file">C:/Users/selim/Desktop/projetfr/var/cache/dev/serialization.php</parameter>
+    <parameter key="cache.prefix.seed">_C:\Users\selim\Desktop\projetfr.App_KernelDevDebugContainer</parameter>
     <parameter key="session.metadata.storage_key">_sf2_meta</parameter>
     <parameter key="session.storage.options" type="collection">
       <parameter key="cache_limiter" type="string">0</parameter>
@@ -142,11 +142,11 @@
     <parameter key="session.metadata.update_threshold">0</parameter>
     <parameter key="form.type_extension.csrf.enabled">true</parameter>
     <parameter key="form.type_extension.csrf.field_name">_token</parameter>
-    <parameter key="validator.mapping.cache.file">D:\XAMPP\htdocs\cleanthis2\var\cache\dev/validation.php</parameter>
+    <parameter key="validator.mapping.cache.file">C:/Users/selim/Desktop/projetfr/var/cache/dev/validation.php</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="profiler_listener.only_exceptions">false</parameter>
     <parameter key="profiler_listener.only_main_requests">false</parameter>
-    <parameter key="profiler.storage.dsn">file:D:\XAMPP\htdocs\cleanthis2\var\cache\dev/profiler</parameter>
+    <parameter key="profiler.storage.dsn">file:C:/Users/selim/Desktop/projetfr/var/cache/dev/profiler</parameter>
     <parameter key="doctrine.dbal.configuration.class">Doctrine\DBAL\Configuration</parameter>
     <parameter key="doctrine.data_collector.class">Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector</parameter>
     <parameter key="doctrine.dbal.connection.event_manager.class">Symfony\Bridge\Doctrine\ContainerAwareEventManager</parameter>
@@ -218,7 +218,7 @@
     <parameter key="doctrine.orm.second_level_cache.regions_configuration.class">Doctrine\ORM\Cache\RegionsConfiguration</parameter>
     <parameter key="doctrine.orm.auto_generate_proxy_classes">true</parameter>
     <parameter key="doctrine.orm.enable_lazy_ghost_objects">true</parameter>
-    <parameter key="doctrine.orm.proxy_dir">D:\XAMPP\htdocs\cleanthis2\var\cache\dev/doctrine/orm/Proxies</parameter>
+    <parameter key="doctrine.orm.proxy_dir">C:/Users/selim/Desktop/projetfr/var/cache/dev/doctrine/orm/Proxies</parameter>
     <parameter key="doctrine.orm.proxy_namespace">Proxies</parameter>
     <parameter key="doctrine.migrations.preferred_em">null</parameter>
     <parameter key="doctrine.migrations.preferred_connection">null</parameter>
@@ -226,7 +226,7 @@
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
     </parameter>
-    <parameter key="twig.default_path">D:\XAMPP\htdocs\cleanthis2/templates</parameter>
+    <parameter key="twig.default_path">C:\Users\selim\Desktop\projetfr/templates</parameter>
     <parameter key="web_profiler.debug_toolbar.intercept_redirects">false</parameter>
     <parameter key="web_profiler.debug_toolbar.mode">2</parameter>
     <parameter key="security.role_hierarchy.roles" type="collection"/>
@@ -370,6 +370,8 @@
       <tag name="ea.dashboard_controller"/>
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
+      <argument type="service" id="security.authorization_checker"/>
+      <argument type="service" id="EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.EjdkWEU.App\Controller\Admin\DashboardController"/>
       </call>
@@ -378,6 +380,7 @@
       <tag name="ea.crud_controller"/>
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
+      <argument type="service" id="security.helper"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.3YFBJbt.App\Controller\Admin\OperationCrudController"/>
       </call>
@@ -391,34 +394,6 @@
         <argument type="service" id=".service_locator.3YFBJbt.App\Controller\Admin\UserCrudController"/>
       </call>
     </service>
-    <service id="App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\Admin\UsersController"/>
-      </call>
-    </service>
-    <service id="App\Controller\MainController" class="App\Controller\MainController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\MainController"/>
-      </call>
-    </service>
-    <service id="App\Controller\OperationsController" class="App\Controller\OperationsController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\OperationsController"/>
-      </call>
-    </service>
-    <service id="App\Controller\ProfileController" class="App\Controller\ProfileController" public="true" autowire="true" autoconfigure="true">
-      <tag name="controller.service_arguments"/>
-      <tag name="container.service_subscriber"/>
-      <call method="setContainer">
-        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\ProfileController"/>
-      </call>
-    </service>
     <service id="App\Controller\RegistrationController" class="App\Controller\RegistrationController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -426,15 +401,32 @@
         <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\RegistrationController"/>
       </call>
     </service>
-    <service id="App\Controller\SecurityController" class="App\Controller\SecurityController" public="true" autowire="true" autoconfigure="true">
+    <service id="App\Controller\UserAuthenticatorController" class="App\Controller\UserAuthenticatorController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
       <call method="setContainer">
-        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\SecurityController"/>
+        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\UserAuthenticatorController"/>
       </call>
+    </service>
+    <service id="App\Controller\UserController" class="App\Controller\UserController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.O2p6Lk7.App\Controller\UserController"/>
+      </call>
+    </service>
+    <service id="App\Form\OperationType" class="App\Form\OperationType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
     </service>
     <service id="App\Form\RegistrationFormType" class="App\Form\RegistrationFormType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
+    </service>
+    <service id="App\Form\UserType" class="App\Form\UserType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="App\Repository\DocumentsRepository" class="App\Repository\DocumentsRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\OperationRepository" class="App\Repository\OperationRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
@@ -477,7 +469,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.x5A.9e_"/>
+      <argument type="service" id=".service_locator.I6iCeor"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -558,7 +550,7 @@
       </argument>
     </service>
     <service id="http_cache.store" class="Symfony\Component\HttpKernel\HttpCache\Store">
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/http_cache</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/http_cache</argument>
     </service>
     <service id="url_helper" class="Symfony\Component\HttpFoundation\UrlHelper">
       <argument type="service" id="request_stack"/>
@@ -568,7 +560,7 @@
       <tag name="container.no_preload"/>
       <argument type="tagged_iterator" tag="kernel.cache_warmer"/>
       <argument>true</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/App_KernelDevDebugContainerDeprecations.log</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/App_KernelDevDebugContainerDeprecations.log</argument>
     </service>
     <service id="cache_clearer" class="Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer">
       <argument type="tagged_iterator" tag="kernel.cache_clearer"/>
@@ -818,7 +810,7 @@
       </argument>
       <argument>UTF-8</argument>
       <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument type="service">
         <service>
           <argument type="service" id="request_stack"/>
@@ -854,7 +846,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="filesystem"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <call method="setName">
         <argument>assets:install</argument>
       </call>
@@ -1043,7 +1035,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument>dev</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <call method="setName">
         <argument>debug:dotenv</argument>
       </call>
@@ -1275,16 +1267,16 @@
       <argument type="service" id="translator.data_collector"/>
       <argument type="service" id="translation.reader"/>
       <argument type="service" id="translation.extractor"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2/translations</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/templates</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/translations</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/templates</argument>
       <argument type="collection">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations</argument>
       </argument>
       <argument type="collection">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Email</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Form</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Email</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Form</argument>
       </argument>
       <argument type="collection"/>
       <call method="setName">
@@ -1301,16 +1293,16 @@
       <argument type="service" id="translation.reader"/>
       <argument type="service" id="translation.extractor"/>
       <argument>en</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/translations</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/templates</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/translations</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/templates</argument>
       <argument type="collection">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations</argument>
       </argument>
       <argument type="collection">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Email</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Form</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Email</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Form</argument>
       </argument>
       <argument type="collection"/>
       <call method="setName">
@@ -1392,7 +1384,9 @@
         <argument>EasyCorp\Bundle\EasyAdminBundle\Form\Type</argument>
       </argument>
       <argument type="collection">
+        <argument>App\Form\OperationType</argument>
         <argument>App\Form\RegistrationFormType</argument>
+        <argument>App\Form\UserType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\ChoiceType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FileType</argument>
@@ -1560,7 +1554,7 @@
       <argument></argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -1579,7 +1573,7 @@
       <tag name="monolog.logger" channel="cache"/>
       <argument></argument>
       <argument>0</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/app</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
@@ -1751,31 +1745,32 @@
     <service id="asset_mapper.cached_mapped_asset_factory" class="Symfony\Component\AssetMapper\Factory\CachedMappedAssetFactory">
       <tag name="container.decorator" id="asset_mapper.mapped_asset_factory" inner="asset_mapper.cached_mapped_asset_factory.inner"/>
       <argument type="service" id="asset_mapper.cached_mapped_asset_factory.inner"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/asset_mapper</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/asset_mapper</argument>
       <argument>true</argument>
     </service>
     <service id="asset_mapper.repository" class="Symfony\Component\AssetMapper\AssetMapperRepository">
       <argument type="collection">
-        <argument key="D:\XAMPP\htdocs\cleanthis2\vendor\symfony\ux-turbo\src\DependencyInjection/../../assets/dist">@symfony/ux-turbo</argument>
-        <argument key="D:\XAMPP\htdocs\cleanthis2\vendor\symfony\stimulus-bundle\src\DependencyInjection/../../assets/dist">@symfony/stimulus-bundle</argument>
+        <argument key="C:\Users\selim\Desktop\projetfr\vendor\symfony\ux-turbo\src\DependencyInjection/../../assets/dist">@symfony/ux-turbo</argument>
+        <argument key="C:\Users\selim\Desktop\projetfr\vendor\symfony\stimulus-bundle\src\DependencyInjection/../../assets/dist">@symfony/stimulus-bundle</argument>
         <argument key="assets/"></argument>
-        <argument key="D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/public">bundles/easyadmin</argument>
+        <argument key="C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/public">bundles/easyadmin</argument>
       </argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument type="collection">
         <argument>#^(?=[^\.]).*\.d\.ts$#</argument>
         <argument>#^(?=[^\.]).*.*/(?=[^\.])controllers\.json$#</argument>
       </argument>
+      <argument>true</argument>
       <argument>true</argument>
     </service>
     <service id="asset_mapper.public_assets_path_resolver" class="Symfony\Component\AssetMapper\Path\PublicAssetsPathResolver">
       <argument>/assets/</argument>
     </service>
     <service id="asset_mapper.local_public_assets_filesystem" class="Symfony\Component\AssetMapper\Path\LocalPublicAssetsFilesystem">
-      <argument>D:\XAMPP\htdocs\cleanthis2/public</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/public</argument>
     </service>
     <service id="asset_mapper.compiled_asset_mapper_config_reader" class="Symfony\Component\AssetMapper\CompiledAssetMapperConfigReader">
-      <argument>D:\XAMPP\htdocs\cleanthis2/public/assets</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/public/assets</argument>
     </service>
     <service id="asset_mapper.asset_package" class="Symfony\Component\AssetMapper\MapperAwareAssetPackage">
       <tag name="container.decorator" id="assets._default_package" inner="asset_mapper.asset_package.inner"/>
@@ -1799,7 +1794,7 @@
       <argument type="service" id="asset_mapper"/>
       <argument type="service" id="asset_mapper.importmap.generator"/>
       <argument type="service" id="asset_mapper.local_public_assets_filesystem"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument>true</argument>
       <argument type="service" id="debug.event_dispatcher" on-invalid="null"/>
       <call method="setName">
@@ -1814,7 +1809,7 @@
       <tag name="container.no_preload"/>
       <argument type="service" id="asset_mapper"/>
       <argument type="service" id="asset_mapper.repository"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <call method="setName">
         <argument>debug:asset-map</argument>
       </call>
@@ -1843,7 +1838,7 @@
       <argument type="service" id="monolog.logger.asset_mapper"/>
     </service>
     <service id="asset_mapper.importmap.config_reader" class="Symfony\Component\AssetMapper\ImportMap\ImportMapConfigReader">
-      <argument>D:\XAMPP\htdocs\cleanthis2/importmap.php</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/importmap.php</argument>
       <argument type="service" id="asset_mapper.importmap.remote_package_storage"/>
     </service>
     <service id="asset_mapper.importmap.manager" class="Symfony\Component\AssetMapper\ImportMap\ImportMapManager">
@@ -1858,7 +1853,7 @@
       <argument type="service" id="asset_mapper.importmap.config_reader"/>
     </service>
     <service id="asset_mapper.importmap.remote_package_storage" class="Symfony\Component\AssetMapper\ImportMap\RemotePackageStorage">
-      <argument>D:\XAMPP\htdocs\cleanthis2/assets/vendor</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/assets/vendor</argument>
     </service>
     <service id="asset_mapper.importmap.remote_package_downloader" class="Symfony\Component\AssetMapper\ImportMap\RemotePackageDownloader">
       <argument type="service" id="asset_mapper.importmap.remote_package_storage"/>
@@ -1929,7 +1924,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="asset_mapper.importmap.remote_package_downloader"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <call method="setName">
         <argument>importmap:install</argument>
       </call>
@@ -2119,372 +2114,372 @@
         </argument>
       </argument>
       <argument type="collection">
-        <argument key="cache_dir">D:\XAMPP\htdocs\cleanthis2\var\cache\dev/translations</argument>
+        <argument key="cache_dir">C:/Users/selim/Desktop/projetfr/var/cache/dev/translations</argument>
         <argument key="debug">true</argument>
         <argument key="resource_files" type="collection">
           <argument key="af" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.af.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.af.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.af.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.af.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.af.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.af.xlf</argument>
           </argument>
           <argument key="ar" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.ar.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.ar.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.ar.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ar.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.ar.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.ar.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.ar.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ar.php</argument>
           </argument>
           <argument key="az" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.az.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.az.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.az.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.az.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.az.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.az.xlf</argument>
           </argument>
           <argument key="be" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.be.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.be.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.be.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.be.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.be.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.be.xlf</argument>
           </argument>
           <argument key="bg" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.bg.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.bg.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.bg.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.bg.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.bg.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.bg.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.bg.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.bg.php</argument>
           </argument>
           <argument key="bs" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.bs.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.bs.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.bs.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.bs.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.bs.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.bs.xlf</argument>
           </argument>
           <argument key="ca" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.ca.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.ca.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.ca.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ca.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.ca.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.ca.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.ca.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ca.php</argument>
           </argument>
           <argument key="cs" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.cs.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.cs.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.cs.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.cs.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.cs.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.cs.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.cs.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.cs.php</argument>
           </argument>
           <argument key="cy" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.cy.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.cy.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.cy.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.cy.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.cy.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.cy.xlf</argument>
           </argument>
           <argument key="da" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.da.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.da.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.da.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.da.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.da.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.da.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.da.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.da.php</argument>
           </argument>
           <argument key="de" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.de.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.de.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.de.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.de.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.de.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.de.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.de.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.de.php</argument>
           </argument>
           <argument key="el" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.el.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.el.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.el.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.el.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.el.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.el.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.el.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.el.php</argument>
           </argument>
           <argument key="en" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.en.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.en.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.en.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.en.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.en.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.en.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.en.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.en.php</argument>
           </argument>
           <argument key="es" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.es.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.es.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.es.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.es.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.es.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.es.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.es.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.es.php</argument>
           </argument>
           <argument key="et" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.et.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.et.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.et.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.et.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.et.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.et.xlf</argument>
           </argument>
           <argument key="eu" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.eu.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.eu.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.eu.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.eu.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.eu.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.eu.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.eu.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.eu.php</argument>
           </argument>
           <argument key="fa" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.fa.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.fa.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.fa.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.fa.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.fa.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.fa.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.fa.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.fa.php</argument>
           </argument>
           <argument key="fi" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.fi.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.fi.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.fi.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.fi.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.fi.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.fi.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.fi.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.fi.php</argument>
           </argument>
           <argument key="fr" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.fr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.fr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.fr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.fr.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.fr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.fr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.fr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.fr.php</argument>
           </argument>
           <argument key="gl" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.gl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.gl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.gl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.gl.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.gl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.gl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.gl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.gl.php</argument>
           </argument>
           <argument key="he" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.he.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.he.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.he.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.he.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.he.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.he.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.he.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.he.php</argument>
           </argument>
           <argument key="hr" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.hr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.hr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.hr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.hr.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.hr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.hr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.hr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.hr.php</argument>
           </argument>
           <argument key="hu" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.hu.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.hu.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.hu.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.hu.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.hu.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.hu.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.hu.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.hu.php</argument>
           </argument>
           <argument key="hy" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.hy.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.hy.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.hy.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.hy.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.hy.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.hy.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.hy.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.hy.php</argument>
           </argument>
           <argument key="id" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.id.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.id.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.id.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.id.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.id.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.id.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.id.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.id.php</argument>
           </argument>
           <argument key="it" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.it.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.it.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.it.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.it.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.it.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.it.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.it.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.it.php</argument>
           </argument>
           <argument key="ja" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.ja.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.ja.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.ja.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.ja.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.ja.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.ja.xlf</argument>
           </argument>
           <argument key="lb" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.lb.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.lb.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.lb.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.lb.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.lb.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.lb.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.lb.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.lb.php</argument>
           </argument>
           <argument key="lt" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.lt.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.lt.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.lt.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.lt.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.lt.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.lt.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.lt.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.lt.php</argument>
           </argument>
           <argument key="lv" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.lv.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.lv.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.lv.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.lv.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.lv.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.lv.xlf</argument>
           </argument>
           <argument key="mk" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.mk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.mk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.mk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.mk.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.mk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.mk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.mk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.mk.php</argument>
           </argument>
           <argument key="mn" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.mn.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.mn.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.mn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.mn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.mn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.mn.xlf</argument>
           </argument>
           <argument key="my" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.my.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.my.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.my.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.my.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.my.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.my.xlf</argument>
           </argument>
           <argument key="nb" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.nb.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.nb.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.nb.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.nb.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.nb.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.nb.xlf</argument>
           </argument>
           <argument key="nl" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.nl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.nl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.nl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.nl.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.nl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.nl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.nl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.nl.php</argument>
           </argument>
           <argument key="nn" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.nn.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.nn.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.nn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.nn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.nn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.nn.xlf</argument>
           </argument>
           <argument key="no" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.no.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.no.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.no.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.no.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.no.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.no.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.no.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.no.php</argument>
           </argument>
           <argument key="pl" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.pl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.pl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.pl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.pl.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.pl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.pl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.pl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.pl.php</argument>
           </argument>
           <argument key="pt" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.pt.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.pt.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.pt.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.pt.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.pt.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.pt.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.pt.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.pt.php</argument>
           </argument>
           <argument key="pt_BR" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.pt_BR.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.pt_BR.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.pt_BR.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.pt_BR.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.pt_BR.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.pt_BR.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.pt_BR.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.pt_BR.php</argument>
           </argument>
           <argument key="ro" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.ro.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.ro.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.ro.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ro.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.ro.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.ro.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.ro.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ro.php</argument>
           </argument>
           <argument key="ru" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.ru.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.ru.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.ru.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ru.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.ru.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.ru.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.ru.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.ru.php</argument>
           </argument>
           <argument key="sk" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.sk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.sk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.sk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sk.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.sk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.sk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.sk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sk.php</argument>
           </argument>
           <argument key="sl" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.sl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.sl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.sl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sl.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.sl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.sl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.sl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sl.php</argument>
           </argument>
           <argument key="sq" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.sq.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.sq.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.sq.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.sq.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.sq.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.sq.xlf</argument>
           </argument>
           <argument key="sr_Cyrl" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.sr_Cyrl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.sr_Cyrl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.sr_Cyrl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.sr_Cyrl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.sr_Cyrl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.sr_Cyrl.xlf</argument>
           </argument>
           <argument key="sr_Latn" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.sr_Latn.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.sr_Latn.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.sr_Latn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.sr_Latn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.sr_Latn.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.sr_Latn.xlf</argument>
           </argument>
           <argument key="sv" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.sv.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.sv.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.sv.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sv.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.sv.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.sv.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.sv.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sv.php</argument>
           </argument>
           <argument key="th" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.th.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.th.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.th.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.th.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.th.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.th.xlf</argument>
           </argument>
           <argument key="tl" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.tl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.tl.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.tl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.tl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.tl.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.tl.xlf</argument>
           </argument>
           <argument key="tr" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.tr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.tr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.tr.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.tr.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.tr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.tr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.tr.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.tr.php</argument>
           </argument>
           <argument key="uk" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.uk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.uk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.uk.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.uk.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.uk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.uk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.uk.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.uk.php</argument>
           </argument>
           <argument key="ur" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.ur.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.ur.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.ur.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.ur.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.ur.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.ur.xlf</argument>
           </argument>
           <argument key="uz" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.uz.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.uz.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.uz.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.uz.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.uz.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.uz.xlf</argument>
           </argument>
           <argument key="vi" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.vi.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.vi.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.vi.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.vi.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.vi.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.vi.xlf</argument>
           </argument>
           <argument key="zh_CN" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.zh_CN.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.zh_CN.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.zh_CN.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.zh_CN.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.zh_CN.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.zh_CN.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.zh_CN.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.zh_CN.php</argument>
           </argument>
           <argument key="zh_TW" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations\validators.zh_TW.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations\validators.zh_TW.xlf</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations\security.zh_TW.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations\validators.zh_TW.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations\validators.zh_TW.xlf</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations\security.zh_TW.xlf</argument>
           </argument>
           <argument key="sr_RS" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sr_RS.php</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations\EasyAdminBundle.sr_RS.php</argument>
           </argument>
         </argument>
         <argument key="scanned_directories" type="collection">
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\framework-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-migrations-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\debug-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\web-profiler-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\stimulus-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\ux-turbo/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\twig\extra-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\monolog-bundle/translations</argument>
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\maker-bundle\src/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\framework-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-migrations-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\debug-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\web-profiler-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\stimulus-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\ux-turbo/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\twig\extra-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\monolog-bundle/translations</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\maker-bundle\src/translations</argument>
         </argument>
         <argument key="cache_vary" type="collection">
           <argument key="scanned_directories" type="collection">
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\validator/Resources/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-core/Resources/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\validator/Resources/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-core/Resources/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/translations</argument>
             <argument>translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\framework-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-migrations-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\debug-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\web-profiler-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\stimulus-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\ux-turbo/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\twig\extra-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\monolog-bundle/translations</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\maker-bundle\src/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\framework-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-migrations-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\debug-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\web-profiler-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\stimulus-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\ux-turbo/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\twig\extra-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\monolog-bundle/translations</argument>
+            <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\maker-bundle\src/translations</argument>
           </argument>
         </argument>
       </argument>
@@ -2815,7 +2810,7 @@
     <service id="debug.file_link_formatter" class="Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter">
       <argument>%env(default::SYMFONY_IDE)%</argument>
       <argument type="service" id="request_stack" on-invalid="ignore"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument type="service_closure" id="debug.file_link_formatter.url_format"/>
     </service>
     <service id="debug.stopwatch" class="Symfony\Component\Stopwatch\Stopwatch" public="true">
@@ -3438,7 +3433,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.x5A.9e_"/>
+      <argument type="service" id=".service_locator.I6iCeor"/>
     </service>
     <service id="debug.log_processor" class="Symfony\Bridge\Monolog\Processor\DebugProcessor">
       <tag name="kernel.reset" method="reset"/>
@@ -3541,7 +3536,7 @@
       <argument type="service" id=".service_locator.bN.V_Nq.router.default"/>
       <argument>kernel::loadRoutes</argument>
       <argument type="collection">
-        <argument key="cache_dir">D:\XAMPP\htdocs\cleanthis2\var\cache\dev</argument>
+        <argument key="cache_dir">C:/Users/selim/Desktop/projetfr/var/cache/dev</argument>
         <argument key="debug">true</argument>
         <argument key="generator_class">Symfony\Component\Routing\Generator\CompiledUrlGenerator</argument>
         <argument key="generator_dumper_class">Symfony\Component\Routing\Generator\Dumper\CompiledUrlGeneratorDumper</argument>
@@ -3590,7 +3585,7 @@
       <argument type="service" id="request_stack"/>
       <argument type="service" id="router.request_context" on-invalid="ignore"/>
       <argument type="service" id="monolog.logger.request" on-invalid="ignore"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument>true</argument>
     </service>
     <service id="Symfony\Bundle\FrameworkBundle\Controller\RedirectController" class="Symfony\Bundle\FrameworkBundle\Controller\RedirectController" public="true">
@@ -3618,7 +3613,7 @@
     </service>
     <service id="secrets.vault" class="Symfony\Bundle\FrameworkBundle\Secrets\SodiumVault">
       <tag name="container.env_var_loader"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2/config/secrets/%env(default:kernel.environment:APP_RUNTIME_ENV)%</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/config/secrets/%env(default:kernel.environment:APP_RUNTIME_ENV)%</argument>
       <argument type="service" id="secrets.decryption_key" on-invalid="ignore"/>
     </service>
     <service id="secrets.decryption_key" class="Symfony\Component\String\LazyString" constructor="fromCallable">
@@ -3626,7 +3621,7 @@
       <argument>base64:default::SYMFONY_DECRYPTION_SECRET</argument>
     </service>
     <service id="secrets.local_vault" class="Symfony\Bundle\FrameworkBundle\Secrets\DotenvVault">
-      <argument>D:\XAMPP\htdocs\cleanthis2/.env.dev.local</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/.env.dev.local</argument>
     </service>
     <service id="serializer.mapping.class_discriminator_resolver" class="Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata">
       <argument type="service" id="serializer.mapping.class_metadata_factory"/>
@@ -3717,10 +3712,10 @@
           </service>
         </argument>
       </argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/serialization.php</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/serialization.php</argument>
     </service>
     <service id="serializer.mapping.cache.symfony" class="Psr\Cache\CacheItemPoolInterface">
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/serialization.php</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/serialization.php</argument>
       <argument type="service" id="cache.serializer"/>
       <factory class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" method="create"/>
     </service>
@@ -3875,7 +3870,7 @@
       <argument>true</argument>
     </service>
     <service id="session.storage.factory.mock_file" class="Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFactory">
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/sessions</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/sessions</argument>
       <argument>MOCKSESSID</argument>
       <argument type="service">
         <service class="Symfony\Component\HttpFoundation\Session\Storage\MetadataBag">
@@ -3943,7 +3938,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.aF0VNrt"/>
+      <argument type="service" id=".service_locator.B4vqKWP"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -4059,7 +4054,7 @@
       </call>
       <call method="addXmlMappings">
         <argument type="collection">
-          <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\form/Resources/config/validation.xml</argument>
+          <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\form/Resources/config/validation.xml</argument>
         </argument>
       </call>
       <call method="enableAttributeMapping">
@@ -4084,10 +4079,10 @@
     <service id="validator.mapping.cache_warmer" class="Symfony\Bundle\FrameworkBundle\CacheWarmer\ValidatorCacheWarmer">
       <tag name="kernel.cache_warmer"/>
       <argument type="service" id="validator.builder"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/validation.php</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/validation.php</argument>
     </service>
     <service id="validator.mapping.cache.adapter" class="Symfony\Component\Cache\Adapter\PhpArrayAdapter" constructor="create">
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/validation.php</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/validation.php</argument>
       <argument type="service" id="cache.validator"/>
     </service>
     <service id="validator.validator_factory" class="Symfony\Component\Validator\ContainerConstraintValidatorFactory">
@@ -4750,7 +4745,7 @@
       </call>
     </service>
     <service id="profiler.storage" class="Symfony\Component\HttpKernel\Profiler\FileProfilerStorage">
-      <argument>file:D:\XAMPP\htdocs\cleanthis2\var\cache\dev/profiler</argument>
+      <argument>file:C:/Users/selim/Desktop/projetfr/var/cache/dev/profiler</argument>
     </service>
     <service id="profiler_listener" class="Symfony\Component\HttpKernel\EventListener\ProfilerListener">
       <tag name="kernel.event_subscriber"/>
@@ -4809,7 +4804,7 @@
       <tag name="monolog.logger" channel="profiler"/>
       <tag name="data_collector" template="@WebProfiler/Collector/logger.html.twig" id="logger" priority="300"/>
       <argument type="service" id="monolog.logger.profiler" on-invalid="ignore"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/App_KernelDevDebugContainer</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/App_KernelDevDebugContainer</argument>
       <argument type="service" id=".virtual_request_stack" on-invalid="ignore"/>
     </service>
     <service id="data_collector.time" class="Symfony\Component\HttpKernel\DataCollector\TimeDataCollector">
@@ -5197,7 +5192,7 @@
       <tag name="doctrine.event_listener" event="onSchemaCreateTable"/>
       <argument type="tagged_iterator" tag="messenger.receiver"/>
     </service>
-    <service id=".1_ServiceLocator~waVmHck" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".1_ServiceLocator~wFKbqCP" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <argument type="collection"/>
     </service>
     <service id="doctrine.orm.proxy_cache_warmer" class="Symfony\Bridge\Doctrine\CacheWarmer\ProxyCacheWarmer">
@@ -5216,7 +5211,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.hyA0oDn"/>
+      <argument type="service" id=".service_locator.5rVWHcS"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -5391,7 +5386,7 @@
         <argument type="service" id=".doctrine.orm.default_metadata_driver"/>
       </call>
       <call method="setProxyDir">
-        <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/doctrine/orm/Proxies</argument>
+        <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/doctrine/orm/Proxies</argument>
       </call>
       <call method="setProxyNamespace">
         <argument>Proxies</argument>
@@ -5426,7 +5421,7 @@
     </service>
     <service id="doctrine.orm.default_attribute_metadata_driver" class="Doctrine\ORM\Mapping\Driver\AttributeDriver">
       <argument type="collection">
-        <argument>D:\XAMPP\htdocs\cleanthis2\src\Entity</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\src\Entity</argument>
       </argument>
       <argument>true</argument>
     </service>
@@ -5490,7 +5485,7 @@
     <service id="doctrine.migrations.configuration" class="Doctrine\Migrations\Configuration\Configuration">
       <call method="addMigrationsDirectory">
         <argument>DoctrineMigrations</argument>
-        <argument>D:\XAMPP\htdocs\cleanthis2/migrations</argument>
+        <argument>C:\Users\selim\Desktop\projetfr/migrations</argument>
       </call>
       <call method="setAllOrNothing">
         <argument>false</argument>
@@ -5710,7 +5705,7 @@
         <argument key="source" type="service">
           <service class="Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider">
             <argument>UTF-8</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+            <argument>C:\Users\selim\Desktop\projetfr</argument>
             <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
           </service>
         </argument>
@@ -5732,7 +5727,7 @@
         <argument key="source" type="service">
           <service class="Symfony\Component\VarDumper\Dumper\ContextProvider\SourceContextProvider">
             <argument>UTF-8</argument>
-            <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+            <argument>C:\Users\selim\Desktop\projetfr</argument>
             <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
           </service>
         </argument>
@@ -5796,7 +5791,7 @@
       <argument type="service" id="twig.loader.native_filesystem"/>
       <argument type="collection">
         <argument key="autoescape">name</argument>
-        <argument key="cache">D:\XAMPP\htdocs\cleanthis2\var\cache\dev/twig</argument>
+        <argument key="cache">C:/Users/selim/Desktop/projetfr/var/cache/dev/twig</argument>
         <argument key="charset">UTF-8</argument>
         <argument key="debug">true</argument>
         <argument key="strict_variables">true</argument>
@@ -5923,10 +5918,10 @@
     <service id="twig.template_iterator" class="Symfony\Bundle\TwigBundle\TemplateIterator">
       <argument type="service" id="kernel"/>
       <argument type="collection">
-        <argument key="D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Email">email</argument>
-        <argument key="D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Form">null</argument>
+        <argument key="C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Email">email</argument>
+        <argument key="C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Form">null</argument>
       </argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/templates</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/templates</argument>
       <argument type="collection">
         <argument>*.twig</argument>
       </argument>
@@ -5940,68 +5935,68 @@
     <service id="twig.loader.native_filesystem" class="Twig\Loader\FilesystemLoader">
       <tag name="twig.loader"/>
       <argument type="collection"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-bundle/Resources/views</argument>
         <argument>Doctrine</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-bundle/Resources/views</argument>
         <argument>!Doctrine</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-migrations-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-migrations-bundle/Resources/views</argument>
         <argument>DoctrineMigrations</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\doctrine\doctrine-migrations-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\doctrine\doctrine-migrations-bundle/Resources/views</argument>
         <argument>!DoctrineMigrations</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\debug-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\debug-bundle/Resources/views</argument>
         <argument>Debug</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\debug-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\debug-bundle/Resources/views</argument>
         <argument>!Debug</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\web-profiler-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\web-profiler-bundle/Resources/views</argument>
         <argument>WebProfiler</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\web-profiler-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\web-profiler-bundle/Resources/views</argument>
         <argument>!WebProfiler</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-bundle/Resources/views</argument>
         <argument>Security</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\security-bundle/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\security-bundle/Resources/views</argument>
         <argument>!Security</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/views</argument>
         <argument>EasyAdmin</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\easycorp\easyadmin-bundle\src/Resources/views</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\easycorp\easyadmin-bundle\src/Resources/views</argument>
         <argument>!EasyAdmin</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2/templates</argument>
+        <argument>C:\Users\selim\Desktop\projetfr/templates</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Email</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Email</argument>
         <argument>email</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Email</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Email</argument>
         <argument>!email</argument>
       </call>
       <call method="addPath">
-        <argument>D:\XAMPP\htdocs\cleanthis2\vendor\symfony\twig-bridge/Resources/views/Form</argument>
+        <argument>C:\Users\selim\Desktop\projetfr\vendor\symfony\twig-bridge/Resources/views/Form</argument>
       </call>
     </service>
     <service id="twig.loader.chain" class="Twig\Loader\ChainLoader"/>
@@ -6027,7 +6022,7 @@
     <service id="twig.extension.code" class="Symfony\Bridge\Twig\Extension\CodeExtension">
       <tag name="twig.extension"/>
       <argument type="service" id="debug.file_link_formatter" on-invalid="ignore"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument>UTF-8</argument>
     </service>
     <service id="twig.extension.routing" class="Symfony\Bridge\Twig\Extension\RoutingExtension">
@@ -6120,9 +6115,9 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="twig"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument>%kernel.bundles_metadata%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/templates</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/templates</argument>
       <argument type="service" id="debug.file_link_formatter" on-invalid="null"/>
       <call method="setName">
         <argument>debug:twig</argument>
@@ -6167,7 +6162,7 @@
       <argument type="service" id="twig"/>
       <argument>%data_collector.templates%</argument>
       <argument type="service" id="web_profiler.csp.handler"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
     </service>
     <service id="web_profiler.controller.router" class="Symfony\Bundle\WebProfilerBundle\Controller\RouterController" public="true">
       <argument type="service" id="profiler" on-invalid="null"/>
@@ -6226,7 +6221,7 @@
       <argument type="service" id="stimulus.helper"/>
     </service>
     <service id="stimulus.asset_mapper.ux_package_reader" class="Symfony\UX\StimulusBundle\Ux\UxPackageReader">
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
     </service>
     <service id="stimulus.ux_controllers_twig_extension" class="Symfony\UX\StimulusBundle\Twig\UxControllersTwigExtension">
       <tag name="twig.extension"/>
@@ -6236,15 +6231,15 @@
       <argument type="service" id="stimulus.asset_mapper.controllers_map_generator"/>
       <argument type="service" id="asset_mapper"/>
       <argument type="service" id="stimulus.asset_mapper.ux_package_reader"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
     </service>
     <service id="stimulus.asset_mapper.controllers_map_generator" class="Symfony\UX\StimulusBundle\AssetMapper\ControllersMapGenerator">
       <argument type="service" id="asset_mapper"/>
       <argument type="service" id="stimulus.asset_mapper.ux_package_reader"/>
       <argument type="collection">
-        <argument>D:\XAMPP\htdocs\cleanthis2/assets/controllers</argument>
+        <argument>C:\Users\selim\Desktop\projetfr/assets/controllers</argument>
       </argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/assets/controllers.json</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/assets/controllers.json</argument>
       <argument type="service" id="stimulus.asset_mapper.auto_import_locator" on-invalid="null"/>
     </service>
     <service id="stimulus.asset_mapper.auto_import_locator" class="Symfony\UX\StimulusBundle\AssetMapper\AutoImportLocator">
@@ -7117,7 +7112,7 @@
     <service id="monolog.processor.psr_log_message" class="Monolog\Processor\PsrLogMessageProcessor"/>
     <service id="monolog.handler.main" class="Monolog\Handler\StreamHandler">
       <tag name="kernel.reset" method="reset"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\log/dev.log</argument>
+      <argument>C:\Users\selim\Desktop\projetfr\var\log/dev.log</argument>
       <argument>debug</argument>
       <argument>true</argument>
       <argument>null</argument>
@@ -7139,8 +7134,8 @@
       <argument type="service" id="filesystem"/>
       <argument type="service" id="maker.autoloader_util"/>
       <argument type="service" id="maker.file_link_formatter"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2/templates</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/templates</argument>
     </service>
     <service id="maker.autoloader_finder" class="Symfony\Bundle\MakerBundle\Util\ComposerAutoloaderFinder">
       <argument>App</argument>
@@ -7210,14 +7205,12 @@
     </service>
     <service id="maker.maker.make_command" class="Symfony\Bundle\MakerBundle\Maker\MakeCommand">
       <tag name="maker.command"/>
-      <argument type="service" id="maker.php_compat_util"/>
     </service>
     <service id="maker.maker.make_twig_component" class="Symfony\Bundle\MakerBundle\Maker\MakeTwigComponent">
       <tag name="maker.command"/>
     </service>
     <service id="maker.maker.make_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeController">
       <tag name="maker.command"/>
-      <argument type="service" id="maker.php_compat_util"/>
     </service>
     <service id="maker.maker.make_crud" class="Symfony\Bundle\MakerBundle\Maker\MakeCrud">
       <tag name="maker.command"/>
@@ -7235,7 +7228,6 @@
       <argument>null</argument>
       <argument type="service" id="maker.generator"/>
       <argument type="service" id="maker.entity_class_generator"/>
-      <argument type="service" id="maker.php_compat_util"/>
     </service>
     <service id="maker.maker.make_fixtures" class="Symfony\Bundle\MakerBundle\Maker\MakeFixtures">
       <tag name="maker.command"/>
@@ -7278,6 +7270,7 @@
     </service>
     <service id="maker.maker.make_serializer_normalizer" class="Symfony\Bundle\MakerBundle\Maker\MakeSerializerNormalizer">
       <tag name="maker.command"/>
+      <argument type="service" id="maker.file_manager"/>
     </service>
     <service id="maker.maker.make_subscriber" class="Symfony\Bundle\MakerBundle\Maker\MakeSubscriber">
       <tag name="maker.command"/>
@@ -7310,7 +7303,7 @@
     </service>
     <service id="maker.maker.make_migration" class="Symfony\Bundle\MakerBundle\Maker\MakeMigration">
       <tag name="maker.command"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument type="service" id="maker.file_link_formatter"/>
     </service>
     <service id="maker.maker.make_stimulus_controller" class="Symfony\Bundle\MakerBundle\Maker\MakeStimulusController">
@@ -7326,7 +7319,7 @@
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
       <argument type="service" id="EasyCorp\Bundle\EasyAdminBundle\Maker\ClassMaker"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <call method="setName">
         <argument>make:admin:dashboard</argument>
       </call>
@@ -7337,7 +7330,7 @@
     <service id="EasyCorp\Bundle\EasyAdminBundle\Command\MakeCrudControllerCommand" class="EasyCorp\Bundle\EasyAdminBundle\Command\MakeCrudControllerCommand" public="true">
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
       <argument type="service" id="EasyCorp\Bundle\EasyAdminBundle\Maker\ClassMaker"/>
       <argument type="service" id="doctrine"/>
       <call method="setName">
@@ -7349,7 +7342,7 @@
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Maker\ClassMaker" class="EasyCorp\Bundle\EasyAdminBundle\Maker\ClassMaker">
       <argument type="service" id="kernel"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Cache\CacheWarmer" class="EasyCorp\Bundle\EasyAdminBundle\Cache\CacheWarmer">
       <tag name="kernel.cache_warmer"/>
@@ -7414,7 +7407,7 @@
       <argument type="service" id="twig"/>
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Factory\AdminContextFactory" class="EasyCorp\Bundle\EasyAdminBundle\Factory\AdminContextFactory">
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev</argument>
       <argument type="service" id="security.token_storage" on-invalid="null"/>
       <argument type="service" id="EasyCorp\Bundle\EasyAdminBundle\Factory\MenuFactory"/>
       <argument type="service" id="EasyCorp\Bundle\EasyAdminBundle\Registry\CrudControllerRegistry"/>
@@ -7493,7 +7486,7 @@
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType" class="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType">
       <tag name="form.type"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator" class="EasyCorp\Bundle\EasyAdminBundle\Filter\Configurator\ChoiceConfigurator">
       <tag name="ea.filter_configurator"/>
@@ -7596,7 +7589,7 @@
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\ImageConfigurator" class="EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\ImageConfigurator">
       <tag name="ea.field_configurator"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2</argument>
+      <argument>C:\Users\selim\Desktop\projetfr</argument>
     </service>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\IntegerConfigurator" class="EasyCorp\Bundle\EasyAdminBundle\Field\Configurator\IntegerConfigurator">
       <tag name="ea.field_configurator"/>
@@ -7656,26 +7649,23 @@
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\UserCrudController" class="App\Controller\Admin\UserCrudController" autowire="true" abstract="true"/>
     <service id=".instanceof.EasyCorp\Bundle\EasyAdminBundle\Contracts\Controller\CrudControllerInterface.0.App\Controller\Admin\UserCrudController" class="App\Controller\Admin\UserCrudController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\Admin\UserCrudController" class="App\Controller\Admin\UserCrudController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\Admin\UsersController" class="App\Controller\Admin\UsersController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\MainController" class="App\Controller\MainController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\MainController" class="App\Controller\MainController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\MainController" class="App\Controller\MainController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\OperationsController" class="App\Controller\OperationsController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\OperationsController" class="App\Controller\OperationsController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\OperationsController" class="App\Controller\OperationsController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ProfileController" class="App\Controller\ProfileController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ProfileController" class="App\Controller\ProfileController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\ProfileController" class="App\Controller\ProfileController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\RegistrationController" class="App\Controller\RegistrationController" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
-    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\Controller\SecurityController" class="App\Controller\SecurityController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UserAuthenticatorController" class="App\Controller\UserAuthenticatorController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UserAuthenticatorController" class="App\Controller\UserAuthenticatorController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\UserAuthenticatorController" class="App\Controller\UserAuthenticatorController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\UserController" class="App\Controller\UserController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\UserController" class="App\Controller\UserController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\OperationType" class="App\Form\OperationType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\OperationType" class="App\Form\OperationType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\RegistrationFormType" class="App\Form\RegistrationFormType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\RegistrationFormType" class="App\Form\RegistrationFormType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\UserType" class="App\Form\UserType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\UserType" class="App\Form\UserType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\DocumentsRepository" class="App\Repository\DocumentsRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\DocumentsRepository" class="App\Repository\DocumentsRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\OperationRepository" class="App\Repository\OperationRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\OperationRepository" class="App\Repository\OperationRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
@@ -8151,6 +8141,15 @@
         <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
+    <service id=".service_locator.yR6jqeD" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entityDto" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto"/>
+        <argument key="fields" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection"/>
+        <argument key="filters" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection"/>
+        <argument key="searchDto" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto"/>
+      </argument>
+    </service>
     <service id=".service_locator.wvbCcwL" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -8182,15 +8181,6 @@
         <argument key="context" type="service_closure" id=".errored..service_locator.jwjltq_.EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext"/>
       </argument>
     </service>
-    <service id=".service_locator.yR6jqeD" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="entityDto" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto"/>
-        <argument key="fields" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection"/>
-        <argument key="filters" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection"/>
-        <argument key="searchDto" type="service_closure" id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto"/>
-      </argument>
-    </service>
     <service id=".service_locator.jG5xrFj" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -8203,12 +8193,6 @@
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="responseParameters" type="service_closure" id=".errored..service_locator.vMUOjiq.EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore"/>
-      </argument>
-    </service>
-    <service id=".service_locator.vUH4mMr" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="id" type="service_closure" id=".errored..service_locator.vUH4mMr.App\Entity\Operation"/>
       </argument>
     </service>
     <service id=".service_locator.xVV8u.q" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -8226,7 +8210,26 @@
         <argument key="authenticationUtils" type="service_closure" id="security.authentication_utils"/>
       </argument>
     </service>
-    <service id=".service_locator.x5A.9e_" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.kPUOGb8" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="userRepository" type="service_closure" id="App\Repository\UserRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.Hz5btge" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="user" type="service_closure" id=".errored..service_locator.Hz5btge.App\Entity\User"/>
+      </argument>
+    </service>
+    <service id=".service_locator.rvMNZGh" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="user" type="service_closure" id=".errored..service_locator.rvMNZGh.App\Entity\User"/>
+      </argument>
+    </service>
+    <service id=".service_locator.I6iCeor" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\Admin\DashboardController::configureUserMenu" type="service_closure" id=".service_locator.t7nLwyX"/>
@@ -8272,9 +8275,13 @@
         <argument key="App\Controller\Admin\UserCrudController::persistEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\Admin\UserCrudController::renderFilters" type="service_closure" id=".service_locator.t9B7cZ4"/>
         <argument key="App\Controller\Admin\UserCrudController::updateEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
-        <argument key="App\Controller\OperationsController::details" type="service_closure" id=".service_locator.vUH4mMr"/>
         <argument key="App\Controller\RegistrationController::register" type="service_closure" id=".service_locator.xVV8u.q"/>
-        <argument key="App\Controller\SecurityController::login" type="service_closure" id=".service_locator.rSTd.nA"/>
+        <argument key="App\Controller\UserAuthenticatorController::login" type="service_closure" id=".service_locator.rSTd.nA"/>
+        <argument key="App\Controller\UserController::delete" type="service_closure" id=".service_locator.rvMNZGh"/>
+        <argument key="App\Controller\UserController::edit" type="service_closure" id=".service_locator.rvMNZGh"/>
+        <argument key="App\Controller\UserController::index" type="service_closure" id=".service_locator.kPUOGb8"/>
+        <argument key="App\Controller\UserController::new" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\UserController::show" type="service_closure" id=".service_locator.Hz5btge"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
@@ -8322,9 +8329,13 @@
         <argument key="App\Controller\Admin\UserCrudController:persistEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
         <argument key="App\Controller\Admin\UserCrudController:renderFilters" type="service_closure" id=".service_locator.t9B7cZ4"/>
         <argument key="App\Controller\Admin\UserCrudController:updateEntity" type="service_closure" id=".service_locator.CsMkqUa"/>
-        <argument key="App\Controller\OperationsController:details" type="service_closure" id=".service_locator.vUH4mMr"/>
         <argument key="App\Controller\RegistrationController:register" type="service_closure" id=".service_locator.xVV8u.q"/>
-        <argument key="App\Controller\SecurityController:login" type="service_closure" id=".service_locator.rSTd.nA"/>
+        <argument key="App\Controller\UserAuthenticatorController:login" type="service_closure" id=".service_locator.rSTd.nA"/>
+        <argument key="App\Controller\UserController:delete" type="service_closure" id=".service_locator.rvMNZGh"/>
+        <argument key="App\Controller\UserController:edit" type="service_closure" id=".service_locator.rvMNZGh"/>
+        <argument key="App\Controller\UserController:index" type="service_closure" id=".service_locator.kPUOGb8"/>
+        <argument key="App\Controller\UserController:new" type="service_closure" id=".service_locator.CsMkqUa"/>
+        <argument key="App\Controller\UserController:show" type="service_closure" id=".service_locator.Hz5btge"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.y4_Zrx."/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.y4_Zrx."/>
       </argument>
@@ -8498,10 +8509,12 @@
       <argument type="service" id="argument_resolver.query_parameter_value_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.aF0VNrt" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.B4vqKWP" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Form\OperationType" type="service_closure" id="App\Form\OperationType"/>
         <argument key="App\Form\RegistrationFormType" type="service_closure" id="App\Form\RegistrationFormType"/>
+        <argument key="App\Form\UserType" type="service_closure" id="App\Form\UserType"/>
         <argument key="EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudFormType" type="service_closure" id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\CrudFormType"/>
         <argument key="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType" type="service_closure" id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FileUploadType"/>
         <argument key="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FiltersFormType" type="service_closure" id="EasyCorp\Bundle\EasyAdminBundle\Form\Type\FiltersFormType"/>
@@ -8630,9 +8643,10 @@
         <argument key="turbo.doctrine.event_listener" type="service_closure" id="turbo.doctrine.event_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.hyA0oDn" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.5rVWHcS" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\DocumentsRepository" type="service_closure" id="App\Repository\DocumentsRepository"/>
         <argument key="App\Repository\OperationRepository" type="service_closure" id="App\Repository\OperationRepository"/>
         <argument key="App\Repository\UserRepository" type="service_closure" id="App\Repository\UserRepository"/>
       </argument>
@@ -8839,7 +8853,7 @@
     </service>
     <service id="monolog.handler.null_internal" class="Monolog\Handler\NullHandler"/>
     <service id="EasyCorp\Bundle\EasyAdminBundle\Registry\DashboardControllerRegistry" class="EasyCorp\Bundle\EasyAdminBundle\Registry\DashboardControllerRegistry">
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev</argument>
       <argument type="collection">
         <argument key="App\Controller\Admin\DashboardController">2faf3d6</argument>
       </argument>
@@ -9097,39 +9111,21 @@
         <argument key="web_link.http_header_serializer" type="service_closure" id="web_link.http_header_serializer" on-invalid="ignore"/>
       </argument>
     </service>
-    <service id=".service_locator.O2p6Lk7.App\Controller\Admin\UsersController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\Admin\UsersController"/>
-      <argument>App\Controller\Admin\UsersController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
-    </service>
-    <service id=".service_locator.O2p6Lk7.App\Controller\MainController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\MainController"/>
-      <argument>App\Controller\MainController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
-    </service>
-    <service id=".service_locator.O2p6Lk7.App\Controller\OperationsController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\OperationsController"/>
-      <argument>App\Controller\OperationsController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
-    </service>
-    <service id=".service_locator.O2p6Lk7.App\Controller\ProfileController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\ProfileController"/>
-      <argument>App\Controller\ProfileController</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
-    </service>
     <service id=".service_locator.O2p6Lk7.App\Controller\RegistrationController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\RegistrationController"/>
       <argument>App\Controller\RegistrationController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.O2p6Lk7" method="withContext"/>
     </service>
-    <service id=".service_locator.O2p6Lk7.App\Controller\SecurityController" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\SecurityController"/>
-      <argument>App\Controller\SecurityController</argument>
+    <service id=".service_locator.O2p6Lk7.App\Controller\UserAuthenticatorController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\UserAuthenticatorController"/>
+      <argument>App\Controller\UserAuthenticatorController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.O2p6Lk7" method="withContext"/>
+    </service>
+    <service id=".service_locator.O2p6Lk7.App\Controller\UserController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\UserController"/>
+      <argument>App\Controller\UserController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.O2p6Lk7" method="withContext"/>
     </service>
@@ -9295,7 +9291,7 @@
     <service id="asset_mapper.cached_mapped_asset_factory.inner" class="Symfony\Component\AssetMapper\Factory\MappedAssetFactory">
       <argument type="service" id="asset_mapper.public_assets_path_resolver"/>
       <argument type="service" id="asset_mapper_compiler"/>
-      <argument>D:\XAMPP\htdocs\cleanthis2/assets/vendor</argument>
+      <argument>C:\Users\selim\Desktop\projetfr/assets/vendor</argument>
     </service>
     <service id="asset_mapper.asset_package.inner" class="Symfony\Component\Asset\PathPackage">
       <argument></argument>
@@ -9310,6 +9306,18 @@
         <argument type="collection">
           <argument>Symfony\Bundle\FrameworkBundle\Controller\AbstractController</argument>
           <argument>Symfony\Bundle\FrameworkBundle\Controller\TemplateController</argument>
+        </argument>
+      </call>
+      <call method="allowControllers">
+        <argument type="collection">
+          <argument>App\Kernel</argument>
+          <argument>App\Controller\Admin\DashboardController</argument>
+          <argument>App\Controller\Admin\OperationCrudController</argument>
+          <argument>App\Controller\Admin\UserCrudController</argument>
+          <argument>App\Controller\RegistrationController</argument>
+          <argument>App\Controller\UserAuthenticatorController</argument>
+          <argument>App\Controller\UserController</argument>
+          <argument>Doctrine\Bundle\DoctrineBundle\Controller\ProfilerController</argument>
         </argument>
       </call>
     </service>
@@ -9519,6 +9527,18 @@
     <service id=".errored..service_locator.Nb584vp.EasyCorp\Bundle\EasyAdminBundle\Config\Crud" class="EasyCorp\Bundle\EasyAdminBundle\Config\Crud">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.Nb584vp&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Config\Crud&quot; but no such service exists."/>
     </service>
+    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto" class="EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto&quot; but no such service exists."/>
+    </service>
+    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection" class="EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection&quot; but no such service exists."/>
+    </service>
+    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection" class="EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection&quot; but no such service exists."/>
+    </service>
+    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto" class="EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto&quot; but no such service exists."/>
+    </service>
     <service id=".errored..service_locator.wvbCcwL.EasyCorp\Bundle\EasyAdminBundle\Config\Assets" class="EasyCorp\Bundle\EasyAdminBundle\Config\Assets">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.wvbCcwL&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Config\Assets&quot; but no such service exists."/>
     </service>
@@ -9537,18 +9557,6 @@
     <service id=".errored..service_locator.jwjltq_.EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext" class="EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.jwjltq_&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext&quot; but no such service exists."/>
     </service>
-    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto" class="EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto&quot; but no such service exists."/>
-    </service>
-    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection" class="EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection&quot; but no such service exists."/>
-    </service>
-    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection" class="EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection&quot; but no such service exists."/>
-    </service>
-    <service id=".errored..service_locator.yR6jqeD.EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto" class="EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.yR6jqeD&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto&quot; but no such service exists."/>
-    </service>
     <service id=".errored..service_locator.jG5xrFj.EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext" class="EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.jG5xrFj&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext&quot; but no such service exists."/>
     </service>
@@ -9561,8 +9569,11 @@
     <service id=".errored..service_locator.vMUOjiq.EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore" class="EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.vMUOjiq&quot;: it references class &quot;EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore&quot; but no such service exists."/>
     </service>
-    <service id=".errored..service_locator.vUH4mMr.App\Entity\Operation" class="App\Entity\Operation">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.vUH4mMr&quot;: it needs an instance of &quot;App\Entity\Operation&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
+    <service id=".errored..service_locator.Hz5btge.App\Entity\User" class="App\Entity\User">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.Hz5btge&quot;: it needs an instance of &quot;App\Entity\User&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
+    </service>
+    <service id=".errored..service_locator.rvMNZGh.App\Entity\User" class="App\Entity\User">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.rvMNZGh&quot;: it needs an instance of &quot;App\Entity\User&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
     <service id=".console.command.about.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>about</argument>
@@ -10471,102 +10482,102 @@
       </argument>
     </service>
     <service id="cache.app.recorder_inner" class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
-      <argument>Kt6IVG5GUX</argument>
+      <argument>reM1MSbz1M</argument>
       <argument>0</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/app</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.system.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>K01ANprpwi</argument>
+      <argument>Iol4Dp25wk</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.validator.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>-PTevh0Xms</argument>
+      <argument>E600f3HmQ0</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.serializer.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>Jqs2a+Vl--</argument>
+      <argument>NoVAFbcVwh</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.annotations.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>cBqpCLGnNs</argument>
+      <argument>RRE-7dZneb</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.property_info.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>Rr1ajwdY1D</argument>
+      <argument>c+2GSCv3zT</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.asset_mapper.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>2tcTVXN4Fe</argument>
+      <argument>Zu2U8rmSRY</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.messenger.restart_workers_signal.recorder_inner" class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
-      <argument>mRNfqK9NsX</argument>
+      <argument>+yNWzij2YH</argument>
       <argument>0</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/app</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/app</argument>
       <argument type="service" id="cache.default_marshaller" on-invalid="ignore"/>
       <call method="setLogger">
         <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       </call>
     </service>
     <service id="cache.validator_expression_language.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>OD7lTlgYYn</argument>
+      <argument>nvJB+av+mB</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.doctrine.orm.default.result.recorder_inner" class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
     <service id="cache.doctrine.orm.default.query.recorder_inner" class="Symfony\Component\Cache\Adapter\ArrayAdapter"/>
     <service id="cache.security_expression_language.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>skuj+3sVtk</argument>
+      <argument>Slrid3IGT8</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.security_is_granted_attribute_expression_language.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>Fg4QCvzeBA</argument>
+      <argument>sygnyvIo+z</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
     <service id="cache.security_token_verifier.recorder_inner" class="Symfony\Component\Cache\Adapter\AdapterInterface">
-      <argument>sH1Vc-JR-h</argument>
+      <argument>FlgpL7Pb3o</argument>
       <argument>0</argument>
       <argument>%container.build_id%</argument>
-      <argument>D:\XAMPP\htdocs\cleanthis2\var\cache\dev/pools/system</argument>
+      <argument>C:/Users/selim/Desktop/projetfr/var/cache/dev/pools/system</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
     </service>
@@ -10754,7 +10765,7 @@
     <service id="EasyCorp\Bundle\EasyAdminBundle\Contracts\Orm\EntityPaginatorInterface" alias="EasyCorp\Bundle\EasyAdminBundle\Orm\EntityPaginator"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.w7.f4fT" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.x5A.9e_"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.I6iCeor"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.KLVvNIq"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="Psr\Log\LoggerInterface $requestLogger" alias="monolog.logger.request"/>
@@ -10779,13 +10790,14 @@
     <service id=".service_locator.h8Jkkd2" alias="messenger.retry_strategy_locator"/>
     <service id=".service_locator.Mo0FXEU" alias="service_locator_EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator"/>
     <service id=".service_locator.bJ.4HC5" alias=".service_locator.w7.f4fT"/>
-    <service id=".service_locator.twrFs.m" alias=".service_locator.jwjltq_"/>
     <service id=".service_locator.lng3o3t" alias=".service_locator.yR6jqeD"/>
+    <service id=".service_locator.twrFs.m" alias=".service_locator.jwjltq_"/>
     <service id=".service_locator.Lazlz4J" alias=".service_locator.jG5xrFj"/>
     <service id=".service_locator.i55Vd0x" alias=".service_locator.xVV8u.q"/>
-    <service id=".service_locator.e7YSzok" alias=".service_locator.x5A.9e_"/>
+    <service id=".service_locator.R0Sb2kd" alias=".service_locator.rvMNZGh"/>
+    <service id=".service_locator.0McvuRL" alias=".service_locator.I6iCeor"/>
     <service id=".service_locator.BFrsqsn" alias=".service_locator.F9PKc.7"/>
-    <service id=".service_locator.zOEDDkY" alias=".service_locator.aF0VNrt"/>
+    <service id=".service_locator.CvMYP01" alias=".service_locator.B4vqKWP"/>
     <service id=".service_locator.XtmiKbi" alias=".service_locator.MfxSDRP"/>
     <service id=".service_locator.O24_MAy" alias=".service_locator.yY.p4P7"/>
     <service id=".service_locator.yTMp7CA" alias=".service_locator.EjdkWEU"/>
@@ -10814,17 +10826,19 @@
     <service id=".service_locator.uoBNKjJ" alias=".service_locator.t7nLwyX"/>
     <service id=".service_locator.b4Agcrj" alias=".service_locator.Nb584vp"/>
     <service id=".service_locator.9e2t_lq" alias=".service_locator.CsMkqUa"/>
+    <service id=".service_locator.4MX1q0S" alias=".service_locator.yR6jqeD"/>
     <service id=".service_locator.rr8g6a9" alias=".service_locator.wvbCcwL"/>
     <service id=".service_locator.1aiqmLQ" alias=".service_locator.UrOEf8r"/>
     <service id=".service_locator.A1CG8fu" alias=".service_locator.kud45L1"/>
     <service id=".service_locator.AMJoP_V" alias=".service_locator.t9B7cZ4"/>
     <service id=".service_locator.bznA3Sd" alias=".service_locator.jwjltq_"/>
-    <service id=".service_locator.4MX1q0S" alias=".service_locator.yR6jqeD"/>
     <service id=".service_locator.dMQbl2t" alias=".service_locator.jG5xrFj"/>
     <service id=".service_locator.z_typH5" alias=".service_locator.vMUOjiq"/>
-    <service id=".service_locator.YJ8lDyp" alias=".service_locator.vUH4mMr"/>
     <service id=".service_locator.JbBQMAg" alias=".service_locator.xVV8u.q"/>
     <service id=".service_locator.7NIAq8D" alias=".service_locator.rSTd.nA"/>
+    <service id=".service_locator.025Wi8b" alias=".service_locator.kPUOGb8"/>
+    <service id=".service_locator.EmZ4cZI" alias=".service_locator.Hz5btge"/>
+    <service id=".service_locator.ICTRhpx" alias=".service_locator.rvMNZGh"/>
     <service id=".service_locator.8dJpptH" alias=".service_locator.EjdkWEU"/>
     <service id=".service_locator.Tvu22ko" alias=".service_locator.3YFBJbt"/>
     <service id=".service_locator.Q1z.f9O" alias=".service_locator.O2p6Lk7"/>

@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -22,6 +23,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    /**
+     * @var list<string> The user roles
+     */
     #[ORM\Column]
     private array $roles = [];
 
@@ -49,26 +53,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 25)]
     private ?string $phone = null;
 
-    #[ORM\Column]
-    private ?bool $is_confirmed = null;
-
     #[ORM\OneToMany(targetEntity: Operation::class, mappedBy: 'customer')]
     private Collection $operations;
-
-    #[ORM\OneToMany(targetEntity: Operation::class, mappedBy: 'employe')]
-    private Collection $ope_employe;
 
     public function __construct()
     {
         $this->operations = new ArrayCollection();
-        $this->ope_employe = new ArrayCollection();
-        $this->is_confirmed = false;
-        $this->roles = ['ROLE_USER'];
     }
+    private $plainPassword;
 
     public function __toString()
     {
         return $this->email;
+    }
+
+    // Ajoutez les getters et setters pour ce champ
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+    
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
     }
 
     public function getId(): ?int
@@ -100,21 +108,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @see UserInterface
+     *
+     * @return list<string>
      */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
-    }
+    } 
 
+    /**
+     * @param list<string> $roles
+     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
 
         return $this;
+
     }
 
     /**
@@ -213,18 +224,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isIsConfirmed(): ?bool
-    {
-        return $this->is_confirmed;
-    }
-
-    public function setIsConfirmed(bool $is_confirmed): static
-    {
-        $this->is_confirmed = $is_confirmed;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Operation>
      */
@@ -254,34 +253,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Operation>
-     */
-    public function getOpeEmploye(): Collection
-    {
-        return $this->ope_employe;
+    public function getSingleRole(): ?string {
+        return $this->roles[0] ?? null;
     }
 
-    public function addOpeEmploye(Operation $opeEmploye): static
-    {
-        if (!$this->ope_employe->contains($opeEmploye)) {
-            $this->ope_employe->add($opeEmploye);
-            $opeEmploye->setEmploye($this);
-        }
-
+    public function setSingleRole(string $role): self {
+        $this->roles = [$role];
         return $this;
     }
 
-    public function removeOpeEmploye(Operation $opeEmploye): static
-    {
-        if ($this->ope_employe->removeElement($opeEmploye)) {
-            // set the owning side to null (unless already changed)
-            if ($opeEmploye->getEmploye() === $this) {
-                $opeEmploye->setEmploye(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -24,7 +24,7 @@
         "composer-runtime-api": "^2",
         "ext-ctype": "*",
         "doctrine/collections": "^2.1",
-        "doctrine/dbal": "^3.6 || ^4",
+        "doctrine/dbal": "^3.8.2 || ^4",
         "doctrine/deprecations": "^0.5.3 || ^1",
         "doctrine/event-manager": "^1.2 || ^2",
         "doctrine/inflector": "^1.4 || ^2.0",
@@ -45,7 +45,6 @@
         "symfony/cache": "^5.4 || ^6.2 || ^7.0",
         "vimeo/psalm": "5.16.0"
     },
-    "minimum-stability": "RC",
     "suggest": {
         "ext-dom": "Provides support for XSD validation for XML mapping files",
         "symfony/cache": "Provides cache support for Setup Tool with doctrine/cache 2.0"

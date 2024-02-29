@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\OperationRepository;
+use App\Entity\User;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OperationRepository;
 
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
 class Operation
@@ -14,19 +16,19 @@ class Operation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 100)]
     private ?string $type = null;
 
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
     #[ORM\Column]
     private ?int $price = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $status = null;
 
     #[ORM\Column]
@@ -38,25 +40,39 @@ class Operation
     #[ORM\Column(length: 10)]
     private ?string $zipcode_ope = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $city_ope = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     private ?string $street_ope = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $customer = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ope_employe')]
-    private ?User $employe = null;
+    #[ORM\ManyToOne(inversedBy: 'operations')]
+    private ?User $salarie = null;
+/**
+*@ORM\ManyToOne(targetEntity=User::class)
+*@ORM\JoinColumn(nullable=false)
+ */
+private $createdBy;
 
-    // public function __toString()
-    // {
-    //     return $this->getCustomer();
-    //     return $this->getEmploye();
-    // }
+#[ORM\Column(nullable: true)]
+private ?\DateTimeImmutable $finished_at = null;
 
-    
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(User $user): self
+    {
+        $this->createdBy = $user;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,18 +102,6 @@ class Operation
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): static
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getPrice(): ?int
     {
         return $this->price;
@@ -106,6 +110,18 @@ class Operation
     public function setPrice(int $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -194,15 +210,39 @@ class Operation
         return $this;
     }
 
-    public function getEmploye(): ?User
+    public function getSalarie(): ?User
     {
-        return $this->employe;
+        return $this->salarie;
     }
 
-    public function setEmploye(?User $employe): static
+    public function setSalarie(?User $salarie): static
     {
-        $this->employe = $employe;
+        $this->salarie = $salarie;
 
         return $this;
+    }
+
+    public function getFinishedAt(): ?\DateTimeImmutable
+    {
+        return $this->finished_at;
+    }
+
+    public function setFinishedAt(?\DateTimeImmutable $finished_at): static
+    {
+        $this->finished_at = $finished_at;
+
+        return $this;
+    }
+    public function getCustomerFullName(): ?string
+    {
+        if (!$this->customer) {
+            return null;
+        }
+    
+        return $this->customer->getFirstname() . ' ' . $this->customer->getName();
+    }
+
+    public function __construct() {
+        $this->created_at = new DateTimeImmutable();
     }
 }

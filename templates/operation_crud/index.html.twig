@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Operation index{% endblock %}
+
+{% block body %}
+    <h1>Operation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created_at</th>
+                <th>Rdv_at</th>
+                <th>Zipcode_ope</th>
+                <th>City_ope</th>
+                <th>Street_ope</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for operation in operations %}
+            <tr>
+                <td>{{ operation.id }}</td>
+                <td>{{ operation.type }}</td>
+                <td>{{ operation.name }}</td>
+                <td>{{ operation.price }}</td>
+                <td>{{ operation.description }}</td>
+                <td>{{ operation.status }}</td>
+                <td>{{ operation.createdAt ? operation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ operation.rdvAt ? operation.rdvAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ operation.zipcodeOpe }}</td>
+                <td>{{ operation.cityOpe }}</td>
+                <td>{{ operation.streetOpe }}</td>
+                <td>
+                    <a href="{{ path('app_operation_crud_show', {'id': operation.id}) }}">show</a>
+                    <a href="{{ path('app_operation_crud_edit', {'id': operation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_operation_crud_new') }}">Create new</a>
+{% endblock %}
