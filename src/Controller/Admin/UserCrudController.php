@@ -52,9 +52,12 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email'),
             TextField::new('name'),
             TextField::new('firstname'),
-            TextField::new('zipcode'),
-            TextField::new('city'),
-            TextField::new('street'),
+            TextField::new('zipcode', 'Code Postal')
+            ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+            TextField::new('city', 'Ville')
+            ->setFormTypeOption('attr', ['class' => 'city_ope']),
+            TextField::new('street', 'Rue')
+            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('phone'),
             ChoiceField::new('singleRole', 'Role')
                 ->setChoices([
@@ -96,8 +99,8 @@ class UserCrudController extends AbstractCrudController
 
     private function addPasswordEventListener(FormBuilderInterface $formBuilder): FormBuilderInterface
     {
-        return $formBuilder->addEventListener(FormEvents::POST_SUBMIT, $this->hashPassword());
-    }
+        return $formBuilder->addEventListener(FormEvents::POST_SUBMIT, $this->hashPassword());   
+    } 
 
     private function hashPassword() {
         return function($event) {
