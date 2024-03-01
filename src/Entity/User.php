@@ -109,9 +109,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     } 
 
@@ -123,6 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = $roles;
 
         return $this;
+
     }
 
     /**
@@ -250,6 +248,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getSingleRole(): ?string {
+        return $this->roles[0] ?? null;
+    }
 
+    public function setSingleRole(string $role): self {
+        $this->roles = [$role];
+        return $this;
+    }
 
 }

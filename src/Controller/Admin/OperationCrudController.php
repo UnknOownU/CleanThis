@@ -35,6 +35,9 @@ class OperationCrudController extends AbstractCrudController {
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
+            ->overrideTemplate('crud/new', 'user/new.html.twig')
+            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            
             ->setSearchFields(null);
     }
 
@@ -65,7 +68,6 @@ class OperationCrudController extends AbstractCrudController {
                 'Petite' => 'little',
                 'Moyenne' => 'medium',
                 'Grande' => 'big',
-                'Très Grande' => 'very_big',
                 'Custom' => 'custom',
             ]),
             TextField::new('name', 'Nom de l’opération'),
@@ -80,9 +82,12 @@ class OperationCrudController extends AbstractCrudController {
             ]),
             DateTimeField::new('created_at', 'Créé le'),
             DateTimeField::new('rdv_at', 'Rendez-vous le'),
-            TextField::new('zipcode_ope', 'Code Postal'),
-            TextField::new('city_ope', 'Ville'),
-            TextField::new('street_ope', 'Rue'),
+            TextField::new('zipcode_ope', 'Code Postal')
+            ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+            TextField::new('city_ope', 'Ville')
+            ->setFormTypeOption('attr', ['class' => 'city_ope']),
+            TextField::new('street_ope', 'Rue')
+            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             DateTimeField::new('finished_at', 'Terminé le'),
         ];
     }
@@ -95,13 +100,13 @@ class OperationCrudController extends AbstractCrudController {
     ): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
-        if ($this->isGranted('ROLE_USER')) {
+        if ($this->isGranted('a')) {
         if ($user) {
             $qb->andWhere('entity.customer = :user')
                ->setParameter('user', $user);
         }
-
+    }
         return $qb;
     }
-    }
+
 }

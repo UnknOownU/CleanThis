@@ -51,7 +51,7 @@ class DashboardController extends AbstractDashboardController
  
     public function configureMenuItems(): iterable
     {
-        if ($this->isGranted('ROLE_USER')) {
+        if ($this->isGranted('ROLE_SENIOR')) {
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
             yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
             yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
@@ -68,7 +68,7 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
             yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
             yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
-            yield MenuItem::linkToRoute('Profil', 'fa fa-user', 'profile_route');
+            yield MenuItem::linkToCrud('Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
 
             yield MenuItem::section('Support');
