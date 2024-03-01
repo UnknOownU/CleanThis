@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+// src/Controller/Admin/DashboardController.php
 
 class DashboardController extends AbstractDashboardController
 {
@@ -29,7 +30,6 @@ class DashboardController extends AbstractDashboardController
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
-        // Utilisez les noms de contrôleurs corrects et vérifiez les rôles
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $url = $this->adminUrlGenerator
                 ->setController(OperationCrudController::class) // Contrôleur d'opération pour l'admin
@@ -51,11 +51,24 @@ class DashboardController extends AbstractDashboardController
  
     public function configureMenuItems(): iterable
     {
-        if ($this->isGranted('ROLE_USER')) {
+        if ($this->isGranted('ROLE_SENIOR')) {
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
             yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
             yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
-            yield MenuItem::linkToRoute('Profil', 'fa fa-user', 'profile_route');
+            yield MenuItem::linkToCrud('Profil', 'fa fa-user', User::class);
+            yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
+            
+
+            yield MenuItem::section('Support');
+            yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
+            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
+            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
+        }
+        if ($this->isGranted('ROLE_ADMIN')) {
+            yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+            yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
+            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
+            yield MenuItem::linkToCrud('Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
 
             yield MenuItem::section('Support');
@@ -63,6 +76,7 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
             yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
         }
+
 
 
     }
@@ -73,4 +87,5 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Cleanthis');
 
     }
+
 }
