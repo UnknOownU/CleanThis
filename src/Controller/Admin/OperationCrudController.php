@@ -35,7 +35,7 @@ class OperationCrudController extends AbstractCrudController {
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/dnew', 'user/new.html.twig')
+            ->overrideTemplate('crud/new', 'user/new.html.twig')
             ->overrideTemplate('crud/edit', 'user/edit.html.twig')
             
             ->setSearchFields(null);
