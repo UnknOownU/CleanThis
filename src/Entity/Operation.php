@@ -135,31 +135,6 @@ private ?\DateTimeImmutable $finished_at = null;
         return $this;
     }
 
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getRdvAt(): ?\DateTimeImmutable
-    {
-        return $this->rdv_at;
-    }
-
-    public function setRdvAt(?\DateTimeImmutable $rdv_at): static
-    {
-        $this->rdv_at = $rdv_at;
-
-        return $this;
-    }
-
     public function getZipcodeOpe(): ?string
     {
         return $this->zipcode_ope;
