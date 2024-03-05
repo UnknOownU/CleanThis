@@ -7,3 +7,12 @@ controllers:
 
 auth_oauth_check:
   path: oauth/check/{service}
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+api_adresse_search:
+    path: ../src/Controller/
+    controller: App\Controller\AdresseApiController::search
+    methods: GET

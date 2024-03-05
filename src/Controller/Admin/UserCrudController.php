@@ -3,25 +3,27 @@
 
 namespace App\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Controller\OperationCrudController;
-use App\Entity\Operation;
 use App\Entity\User;
+use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\OperationCrudController;
+use Symfony\Component\HttpFoundation\Request;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
+use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
 class UserCrudController extends AbstractCrudController
 {
@@ -32,6 +34,14 @@ class UserCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return User::class;
+    }
+
+    public function configureCrud(Crud $crud): Crud {
+        return $crud
+            ->overrideTemplate('crud/new', 'user/new.html.twig')
+            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            
+            ->setSearchFields(null);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -50,11 +60,22 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email'),
             TextField::new('name'),
             TextField::new('firstname'),
-            TextField::new('zipcode'),
-            TextField::new('city'),
-            TextField::new('street'),
+            TextField::new('zipcode', 'Code Postal')
+            ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+            TextField::new('city', 'Ville')
+            ->setFormTypeOption('attr', ['class' => 'city_ope']),
+            TextField::new('street', 'Rue')
+            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('phone'),
-        ];
+            ChoiceField::new('singleRole', 'Role')
+                ->setChoices([
+                    'Admin' => 'ROLE_ADMIN',
+                    'Senior' => 'ROLE_SENIOR',
+                    'Apprenti' => 'ROLE_APPRENTI',
+                    'Client' => 'ROLE_CUSTOMER'
+                ]),
+    ];
+
 
         $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
@@ -86,8 +107,8 @@ class UserCrudController extends AbstractCrudController
 
     private function addPasswordEventListener(FormBuilderInterface $formBuilder): FormBuilderInterface
     {
-        return $formBuilder->addEventListener(FormEvents::POST_SUBMIT, $this->hashPassword());
-    }
+        return $formBuilder->addEventListener(FormEvents::POST_SUBMIT, $this->hashPassword());   
+    } 
 
     private function hashPassword() {
         return function($event) {

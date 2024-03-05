@@ -4,9 +4,10 @@ namespace App\Entity;
 
 use App\Entity\User;
 use DateTimeImmutable;
+use App\Repository\OperationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\OperationRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
 class Operation
@@ -31,11 +32,6 @@ class Operation
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $rdv_at = null;
 
     #[ORM\Column(length: 10)]
     private ?string $zipcode_ope = null;
@@ -52,6 +48,7 @@ class Operation
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
     private ?User $salarie = null;
+
 /**
 *@ORM\ManyToOne(targetEntity=User::class)
 *@ORM\JoinColumn(nullable=false)
@@ -138,6 +135,7 @@ private ?\DateTimeImmutable $finished_at = null;
         return $this;
     }
 
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
@@ -220,7 +218,8 @@ private ?\DateTimeImmutable $finished_at = null;
         $this->salarie = $salarie;
 
         return $this;
-    }
+
+    }   
 
     public function getFinishedAt(): ?\DateTimeImmutable
     {
@@ -241,8 +240,39 @@ private ?\DateTimeImmutable $finished_at = null;
     
         return $this->customer->getFirstname() . ' ' . $this->customer->getName();
     }
+  
+    #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $created_at;
 
-    public function __construct() {
-        $this->created_at = new DateTimeImmutable();
+    #[ORM\Column(nullable: true)]
+    #[Assert\GreaterThanOrEqual(propertyPath: "created_at")]
+    private ?\DateTimeImmutable $rdv_at = null;
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    public function getRdvAt(): ?\DateTimeImmutable
+    {
+        return $this->rdv_at;
+    }
+
+    public function setRdvAt(?\DateTimeImmutable $rdv_at): self
+    {
+        $this->rdv_at = $rdv_at;
+        return $this;
+
     }
 }
