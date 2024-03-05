@@ -1,18 +1,16 @@
-# config/routes.yaml
 controllers:
-  resource:
-    path: ../src/Controller/
-    namespace: App\Controller
+  resource: '../src/Controller/'
   type: attribute
 
 auth_oauth_check:
-  path: oauth/check/{service}
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  path: /oauth/check/{service}
+  controller: App\Controller\AbstractOAuthAuthenticator.php::authenticate
+
+app_login:
+  path: /login
+  controller: App\Controller\SecurityController::login
 
 api_adresse_search:
-    path: ../src/Controller/
-    controller: App\Controller\AdresseApiController::search
-    methods: GET
+  path: /api/adresse/search
+  controller: App\Controller\AdresseApiController::search
+  methods: GET
