@@ -1,27 +1,141 @@
-{% extends 'base.html.twig' %}
+{% block stylesheets %}
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			background-color: #e9ecef;
+			color: #212529;
+		}
 
-{% block title %}Register{% endblock %}
+		.container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		.form-container {
+			width: 100%;
+			max-width: 400px;
+			background: #ffffff;
+			padding: 25px;
+			border-radius: 8px;
+			box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+		}
+
+		h1 {
+			color: #007bff;
+			margin-bottom: 24px;
+			font-size: 2rem;
+		}
+
+		.form-group {
+			margin-bottom: 1rem;
+		}
+
+		label {
+			margin-bottom: 0.5rem;
+			font-weight: bold;
+			display: inline-block;
+		}
+
+		input[type='text'],
+		input[type='email'],
+		input[type='password'],
+		input[type='tel'] {
+			display: block;
+			width: 100%;
+			padding: 0.375rem 0.75rem;
+			font-size: 1rem;
+			line-height: 1.5;
+			color: #495057;
+			background-color: #fff;
+			background-clip: padding-box;
+			border: 1px solid #ced4da;
+			border-radius: 0.25rem;
+			transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		}
+
+		input[type='checkbox'] {
+			margin-right: 0.25rem;
+		}
+
+		button[type='submit'] {
+			color: #fff;
+			background-color: #007bff;
+			border-color: #007bff;
+			padding: 0.375rem 0.75rem;
+			font-size: 1rem;
+			line-height: 1.5;
+			border-radius: 0.25rem;
+			cursor: pointer;
+		}
+
+		button[type='submit']:hover {
+			background-color: #0069d9;
+			border-color: #0062cc;
+		}
+
+		.form-error {
+			color: #dc3545;
+		}
+	</style>
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+	<div class="container">
+		<div class="form-container">
+			<h1>Inscription</h1>
+			{{ form_start(registrationForm) }}
+			<div class="form-group">
+				{{ form_label(registrationForm.name) }}
+				{{ form_widget(registrationForm.name, {'attr': {'class': 'form-control'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.firstname) }}
+				{{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.zipcode) }}
+				{{ form_widget(registrationForm.zipcode, {'attr': {'class': 'form-control zipcode_ope'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.city) }}
+				{{ form_widget(registrationForm.city, {'attr': {'class': 'form-control city_ope'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.street) }}
+				{{ form_widget(registrationForm.street, {'attr': {'class': 'form-control adresse-autocomplete'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.phone) }}
+				{{ form_widget(registrationForm.phone, {'attr': {'class': 'form-control'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.email) }}
+				{{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+			</div>
+			<div class="form-group">
+				{{ form_label(registrationForm.plainPassword, 'Password') }}
+				{{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+			</div>
 
-    {{ form_errors(registrationForm) }}
+			<div class="form-group form-check">
+				{{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+				{{ form_label(registrationForm.agreeTerms, 'Agree to terms', {'label_attr': {'class': 'form-check-label'}}) }}
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary">S'inscrire</button>
+			</div>
+			{{ form_end(registrationForm) }}
+		</div>
+	</div>
+{% endblock %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.firstname) }}
-        {{ form_row(registrationForm.zipcode) }}
-        {{ form_row(registrationForm.city) }}
-        {{ form_row(registrationForm.street) }}    
-        {{ form_row(registrationForm.phone) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-    
-     <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+{% block body_javascript %}
+	<script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
 {% endblock %}
