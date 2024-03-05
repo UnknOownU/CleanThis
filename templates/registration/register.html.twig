@@ -99,6 +99,10 @@
 				{{ form_label(registrationForm.firstname) }}
 				{{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control'}}) }}
 			</div>
+            <div class="form-group">
+				{{ form_label(registrationForm.street) }}
+				{{ form_widget(registrationForm.street, {'attr': {'class': 'form-control adresse-autocomplete'}}) }}
+			</div>
 			<div class="form-group">
 				{{ form_label(registrationForm.zipcode) }}
 				{{ form_widget(registrationForm.zipcode, {'attr': {'class': 'form-control zipcode_ope'}}) }}
@@ -106,10 +110,6 @@
 			<div class="form-group">
 				{{ form_label(registrationForm.city) }}
 				{{ form_widget(registrationForm.city, {'attr': {'class': 'form-control city_ope'}}) }}
-			</div>
-			<div class="form-group">
-				{{ form_label(registrationForm.street) }}
-				{{ form_widget(registrationForm.street, {'attr': {'class': 'form-control adresse-autocomplete'}}) }}
 			</div>
 			<div class="form-group">
 				{{ form_label(registrationForm.phone) }}

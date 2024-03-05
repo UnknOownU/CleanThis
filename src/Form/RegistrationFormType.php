@@ -4,14 +4,13 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -46,18 +45,9 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('name')
             ->add('firstname')
-            ->add('zipcode', TextType::class, [
-                'label' => 'Code Postal',
-                'attr' => ['class' => 'zipcode_ope']
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Ville',
-                'attr' => ['class' => 'city_ope']
-            ])
-            ->add('street', TextType::class, [
-                'label' => 'Rue',
-                'attr' => ['class' => 'adresse-autocomplete']
-            ])
+            ->add('zipcode')
+            ->add('city')
+            ->add('street')
             ->add('phone')
         
         
