@@ -83,6 +83,15 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <button class="btn login-btn" type="submit">Se Connecter</button>
+        
+
+
+<body>
+    <h1>Connexion avec Google</h1>
+    <a href="{{ path('auth_oauth_connect', {service: 'google'}) }}"
+	 class="btn-google">Se connecter avec Google</a>
+</body>
+
     </form>
 </div>
 {% endblock %}
