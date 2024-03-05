@@ -20,6 +20,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use Symfony\Component\Security\Core\Security;
 
 class OperationCrudController extends AbstractCrudController {
@@ -60,35 +64,40 @@ class OperationCrudController extends AbstractCrudController {
 
     public function configureFields(string $pageName): iterable {
         return [
-            TextField::new('customerFullName', 'Nom Prénom ')
-                ->formatValue(function ($value, $entity) {
-                    return $entity->getCustomerFullName();
-            }),
-            ChoiceField::new('Type', 'type')->setChoices([
-                'Petite' => 'little',
-                'Moyenne' => 'medium',
-                'Grande' => 'big',
-                'Custom' => 'custom',
-            ]),
-            TextField::new('name', 'Nom de l’opération'),
+            FormField::addTab('Mission'),
+            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
+
+            FormField::addColumn('col-lg-8 col-xl-3'),
+            IdField::new('id', 'Nº de commande')->hideOnForm(),
+            AssociationField::new('customer', 'Client')->hideOnForm(),
+            TextField::new('name', 'Intitulé de l’opération')
+            ->setLabel('Mission'),
+            ChoiceField::new('type')->setChoices([
+                'Little' => 'Petite',
+                'Medium' => 'Moyenne',
+                'Big' => 'Grande',
+                'Custom' => 'Custom',
+            ])->hideOnIndex(),
+            TextField::new('type')->hideOnForm(),
             MoneyField::new('price', 'Prix')->setCurrency('EUR'),
-            TextareaField::new('description', 'Description'),
-            ChoiceField::new('status', 'Statut')->setChoices([
-                'Envoyé' => 'sent',
-                'En attente' => 'pending',
-                'En cours' => 'in_progress',
-                'Terminé' => 'finished',
-                'Annulé' => 'canceled',
-            ]),
-            DateTimeField::new('created_at', 'Créé le'),
-            DateTimeField::new('rdv_at', 'Rendez-vous le'),
+            FormField::addColumn('col-lg-4 col-xl-4'),
+            DateTimeField::new('rdv_at', 'Date de RDV'),
+            FormField::addColumn('col-lg-3 col-xl-6'),
+            TextEditorField::new('description', 'Description'),
+            ChoiceField::new('status')->setChoices([
+                'En Attente de Validation' => 'En Attente de Validation',
+                'Validée' => 'Validée',
+                'En cours' => 'En cours',
+                'Terminée' => 'Terminée',
+            ])->hideOnIndex(),
+
+            TextField::new('street_ope', 'Rue')
+            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('zipcode_ope', 'Code Postal')
             ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
             TextField::new('city_ope', 'Ville')
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
-            TextField::new('street_ope', 'Rue')
-            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
-            DateTimeField::new('finished_at', 'Terminé le'),
+            DateTimeField::new('finished_at', 'Terminé le')->hideOnForm(),
         ];
     }
 
