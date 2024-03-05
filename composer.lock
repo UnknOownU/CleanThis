@@ -1307,6 +1307,7 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
+
             "version": "v4.9.3",
             "source": {
                 "type": "git",
@@ -1398,6 +1399,7 @@
                     "type": "github"
                 }
             ],
+
             "time": "2024-02-29T19:23:49+00:00"
         },
         {

@@ -32,6 +32,7 @@ class Operation
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+
     #[ORM\Column(length: 10)]
     private ?string $zipcode_ope = null;
 
@@ -134,17 +135,30 @@ private ?\DateTimeImmutable $finished_at = null;
         return $this;
     }
 
-    // public function getCreatedAt(): ?\DateTimeImmutable
-    // {
-    //     return $this->created_at;
-    // }
 
-    // public function setCreatedAt(\DateTimeImmutable $created_at): static
-    // {
-    //     $this->created_at = $created_at;
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
 
-    //     return $this;
-    // }
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getRdvAt(): ?\DateTimeImmutable
+    {
+        return $this->rdv_at;
+    }
+
+    public function setRdvAt(?\DateTimeImmutable $rdv_at): static
+    {
+        $this->rdv_at = $rdv_at;
+
+        return $this;
+    }
 
     public function getZipcodeOpe(): ?string
     {
@@ -204,6 +218,7 @@ private ?\DateTimeImmutable $finished_at = null;
         $this->salarie = $salarie;
 
         return $this;
+
     }   
 
     public function getFinishedAt(): ?\DateTimeImmutable
@@ -225,8 +240,7 @@ private ?\DateTimeImmutable $finished_at = null;
     
         return $this->customer->getFirstname() . ' ' . $this->customer->getName();
     }
-    
-
+  
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $created_at;
 
@@ -259,5 +273,6 @@ private ?\DateTimeImmutable $finished_at = null;
     {
         $this->rdv_at = $rdv_at;
         return $this;
+
     }
 }
