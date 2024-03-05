@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,8 +34,8 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
         private readonly ClientRegistry $clientRegistry, 
         private readonly RouterInterface $router,
         private readonly UserRepository $repository,
-        private readonly OAuthRegistrationService $registrationService
-
+        private readonly OAuthRegistrationService $registrationService,
+        private EntityManagerInterface $entityManager 
         )
     {
     }
@@ -77,6 +78,8 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
             if ($existingUser->getIdGoogle() !== $googleUser->getId()) {
                 $existingUser->setIdGoogle($googleUser->getId());
                 // Enregistrez l'utilisateur mis à jour dans la base de données
+                $this->entityManager->persist($existingUser);
+                $this->entityManager->flush();
             }
     
             // Connectez l'utilisateur
