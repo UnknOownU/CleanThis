@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;  
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,7 +36,7 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
         private readonly UserRepository $repository,
         private readonly OAuthRegistrationService $registrationService,
         private EntityManagerInterface $entityManager 
-        )
+        ) 
     {
     }
 
@@ -77,6 +77,7 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
             // Associez l'ID Google à l'utilisateur existant si nécessaire
             if ($existingUser->getIdGoogle() !== $googleUser->getId()) {
                 $existingUser->setIdGoogle($googleUser->getId());
+
                 $this->entityManager->persist($existingUser);
                 $this->entityManager->flush(); 
             }
@@ -85,8 +86,7 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
         } else {
             throw new CustomUserMessageAuthenticationException('Aucun utilisateur associé à cet e-mail Google.');
         }
-    }
-
+    } 
 protected function getResourceownerFromCredentials(AccessToken $credentials): ResourceOwnerInterface{
     return $this->getClient()->fetchUserFromToken($credentials);
 }
