@@ -1,10 +1,12 @@
+# config/routes.yaml
+
 controllers:
   resource: '../src/Controller/'
-  type: attribute
+  type: annotation
 
 auth_oauth_check:
   path: /oauth/check/{service}
-  controller: App\Controller\AbstractOAuthAuthenticator.php::authenticate
+  controller: App\Controller\OAuthController::authenticate
 
 app_login:
   path: /login

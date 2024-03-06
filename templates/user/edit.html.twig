@@ -2,6 +2,6 @@
 
 {% block body_javascript %}
     {{ parent() }}
-
+    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
     <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
 {% endblock %}

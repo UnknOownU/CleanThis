@@ -1,0 +1,70 @@
+/* admin-custom.css */
+
+/* Style de base de la sidebar */
+.sidebar {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Séparateur par défaut avant de personnaliser pour chaque mode */
+#main-menu .menu .menu-header::before {
+    content: "";
+    position: absolute;
+    top:-6px;
+    left: 38%;
+    transform: translateX(-50%);
+    width: 80%;
+}
+
+/* ... autres styles ... */
+
+/* Mode clair */
+[data-bs-theme="light"] .sidebar {
+    background-color: #ffffff; /* Fond blanc pour le mode clair */
+}
+
+[data-bs-theme="light"] #main-menu .menu .menu-header::before {
+    border-top: 1px solid #666; /* Séparateur sombre pour le mode clair */
+}
+
+/* Styles du texte et des icônes pour le mode clair */
+[data-bs-theme="light"] .sidebar .menu-item a,
+[data-bs-theme="light"] .sidebar .menu-icon,
+[data-bs-theme="light"] .sidebar .main-header .logo-custom {
+    color: #333333; /* Texte en noir pour le mode clair */
+}
+
+/* Mode sombre */
+[data-bs-theme="dark"] .sidebar {
+    background-color: #000000; /* Fond noir pour le mode sombre */
+}
+[data-bs-theme="light"] .sidebar {
+    background-color: #c4c4c4; /* Fond noir pour le mode sombre */
+}
+
+[data-bs-theme="dark"] #main-menu .menu .menu-header::before {
+    border-top: 1px solid #ffffff; /* Séparateur blanc pour le mode sombre */
+}
+
+/* Styles du texte et des icônes pour le mode sombre */
+[data-bs-theme="dark"] .sidebar .menu-item a,
+[data-bs-theme="dark"] .sidebar .menu-icon,
+[data-bs-theme="dark"] .sidebar .main-header .logo-custom {
+    color: #ffffff; /* Texte en blanc pour le mode sombre */
+}
+
+/* Effet de survol sur les éléments du menu pour le mode clair */
+[data-bs-theme="light"] .sidebar .menu-item:hover,
+[data-bs-theme="light"] .sidebar .menu-item:focus {
+    background-color: #eaeaea; /* Couleur de fond au survol pour le mode clair */
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2); /* Ombre portée pour l'effet de survol */
+    border-radius: 5px; /* Bordures arrondies pour l'effet de survol */
+}
+
+/* Effet de survol sur les éléments du menu pour le mode sombre */
+[data-bs-theme="dark"] .sidebar .menu-item:hover,
+[data-bs-theme="dark"] .sidebar .menu-item:focus {
+    background-color: #111111; /* Couleur de fond au survol pour le mode sombre */
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.2); /* Ombre portée pour l'effet de survol */
+    border-radius: 5px; /* Bordures arrondies pour l'effet de survol */
+}
