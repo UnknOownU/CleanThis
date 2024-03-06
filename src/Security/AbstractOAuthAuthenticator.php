@@ -36,7 +36,8 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
         private readonly UserRepository $repository,
         private readonly OAuthRegistrationService $registrationService,
         private EntityManagerInterface $entityManager 
-        )
+
+        ) 
     {
     }
 
@@ -88,8 +89,7 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
             // Gérer le cas où l'utilisateur n'existe pas
             throw new CustomUserMessageAuthenticationException('Aucun utilisateur associé à cet e-mail Google.');
         }
-    }
-
+    } 
 protected function getResourceownerFromCredentials(AccessToken $credentials): ResourceOwnerInterface{
     return $this->getClient()->fetchUserFromToken($credentials);
 }
