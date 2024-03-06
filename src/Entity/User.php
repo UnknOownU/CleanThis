@@ -60,6 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->operations = new ArrayCollection();
     }
+    public function __toString()
+    {
+        return $this->email;
+    }
+
     private $plainPassword;
 
     #[ORM\Column(length: 255, nullable: true)]
