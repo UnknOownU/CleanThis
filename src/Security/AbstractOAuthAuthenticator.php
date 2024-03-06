@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouterInterface;  
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,6 +36,7 @@ abstract class  AbstractOAuthAuthenticator extends OAuth2Authenticator
         private readonly UserRepository $repository,
         private readonly OAuthRegistrationService $registrationService,
         private EntityManagerInterface $entityManager 
+
         ) 
     {
     }

@@ -28,7 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    private array $roles = ["ROLE_USER"];
+    private array $roles = ["ROLE_ADMIN"];
+
 
     /**
      * @var string The hashed password
@@ -62,6 +63,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->operations = new ArrayCollection();
         
     }
+    public function __toString()
+    {
+        return $this->email;
+    }
+
     private $plainPassword;
 
     #[ORM\Column(length: 255, nullable: true)]

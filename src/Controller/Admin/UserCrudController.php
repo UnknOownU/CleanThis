@@ -60,12 +60,12 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email'),
             TextField::new('name'),
             TextField::new('firstname'),
+            TextField::new('street', 'Rue')
+            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('zipcode', 'Code Postal')
             ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
             TextField::new('city', 'Ville')
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
-            TextField::new('street', 'Rue')
-            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('phone'),
             ChoiceField::new('singleRole', 'Role')
                 ->setChoices([
