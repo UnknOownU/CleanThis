@@ -112,7 +112,7 @@ class OperationCrudController extends AbstractCrudController {
     ): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
-        if ($this->isGranted('a')) {
+        if ($this->isGranted('ROLE_CUSTOM')) {
         if ($user) {
             $qb->andWhere('entity.customer = :user')
                ->setParameter('user', $user);
