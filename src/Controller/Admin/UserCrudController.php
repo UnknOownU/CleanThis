@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
@@ -77,18 +78,21 @@ class UserCrudController extends AbstractCrudController
     ];
 
 
-        $password = TextField::new('password')
-            ->setFormType(RepeatedType::class)
-            ->setFormTypeOptions([
-                'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => '(Repeat)'],
-                'mapped' => false,
-            ])
+    $password = TextField::new('password')
+    ->setFormType(RepeatedType::class)
+    ->setFormTypeOptions([
+        'type' => PasswordType::class,
+        'first_options' => ['label' => 'Password'],
+        'second_options' => ['label' => '(Repeat)'],
+        'mapped' => false,
+        'constraints' => [
+            new Regex('/^(?=.[a-z])(?=.[A-Z])(?=.*\d).{8,}$/', "Il faut un mot de passe de 8 caractères, une majuscule et un chiffre")
+        ]
+    ])
             ->setRequired($pageName === Crud::PAGE_NEW)
             ->onlyOnForms()
             ;
-        $fields[] = $password;
+        $fields[] = $password; 
 
         return $fields;
     }
