@@ -33,13 +33,20 @@ class DashboardController extends AbstractDashboardController
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
-        if ($this->authorizationChecker->isGranted('ROLE_ADMIN','ROLE_SENIOR','ROLE_APPRENTI','ROLE_CUSTOMER')) {
+        if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             $url = $this->adminUrlGenerator
+                ->setController(OperationCrudController::class) // Contrôleur d'opération pour l'admin
+                ->generateUrl();
+
+            return $this->redirect($url);
+        } elseif ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            $url = $this->adminUrlGenerator
+                ->setController(OperationCrudController::class)
                 ->generateUrl();
 
             return $this->redirect($url);
         } else {
-            throw new AccessDeniedException("Vous N'avez Pas Accès A Cette Page.");
+            throw new AccessDeniedException('You do not have access to this section.');
         }
     }
 
@@ -55,12 +62,25 @@ class DashboardController extends AbstractDashboardController
         if ($this->isGranted('ROLE_ADMIN')) {
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-            yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
-            yield MenuItem::linkToCrud('Profil', 'fa fa-user', User::class);
+            yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
+                MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
+                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
+                ->setQueryParameter('status', 'En cours'),
+                MenuItem::linkToCrud('En attentes', 'fa fa-clock-o', Operation::class)
+                ->setQueryParameter('status', 'En attente de Validation'),
+                MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
+                ->setQueryParameter('status', 'Terminée'),
+            ]);
+            yield MenuItem::submenu('Profil', 'fa fa-user', User::class);
+            yield MenuItem::subMenu('Profil', 'fa fa-user')->setSubItems([
+                MenuItem::linkToCrud('Tous les profils', 'fa fa-address-book', User::class),
+                MenuItem::linkToCrud('Employés', 'fa fa-address-book-o', User::class)
+                ->setQueryParameter('status', 'En cours'),
+                MenuItem::linkToCrud('Clients', 'fa fa-address-book-o', User::class)
+                ->setQueryParameter('status', 'En attente de Validation'),
+            ]);
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
             
-
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
             yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
