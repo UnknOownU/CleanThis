@@ -2,10 +2,17 @@
 
 /* Style de base de la sidebar */
 .sidebar {
-    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.main-header #header-logo{
+    color: #8fcdff;
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    line-height: 24px;
+    padding: 17px 0 28px;
+}
 /* Séparateur par défaut avant de personnaliser pour chaque mode */
 #main-menu .menu .menu-header::before {
     content: "";
@@ -14,6 +21,14 @@
     left: 38%;
     transform: translateX(-50%);
     width: 80%;
+}
+/* Texte section selectionné */
+#main-menu .menu .menu-item.active:not(.expanded) .menu-icon, #main-menu .menu .menu-item.active:not(.expanded) a {
+    color: #ffffff;
+}
+/*section selectionné */
+#main-menu .menu .menu-item.active {
+    background: #8fcdff;
 }
 
 /* ... autres styles ... */
@@ -32,6 +47,7 @@
 [data-bs-theme="light"] .sidebar .menu-icon,
 [data-bs-theme="light"] .sidebar .main-header .logo-custom {
     color: #333333; /* Texte en noir pour le mode clair */
+
 }
 
 /* Mode sombre */
@@ -39,7 +55,7 @@
     background-color: #000000; /* Fond noir pour le mode sombre */
 }
 [data-bs-theme="light"] .sidebar {
-    background-color: #c4c4c4; /* Fond noir pour le mode sombre */
+    background-color: #ffffff; /* Fond noir pour le mode sombre */
 }
 
 [data-bs-theme="dark"] #main-menu .menu .menu-header::before {
@@ -56,9 +72,14 @@
 /* Effet de survol sur les éléments du menu pour le mode clair */
 [data-bs-theme="light"] .sidebar .menu-item:hover,
 [data-bs-theme="light"] .sidebar .menu-item:focus {
-    background-color: #eaeaea; /* Couleur de fond au survol pour le mode clair */
+    background-color: #ffffff; /* Couleur de fond au survol pour le mode clair */
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2); /* Ombre portée pour l'effet de survol */
     border-radius: 5px; /* Bordures arrondies pour l'effet de survol */
+}
+[data-bs-theme="light"] .sidebar .menu-item:active {
+    background-color: #ffffff; /* Couleur de fond au survol ou au clic pour le mode clair */
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.2); /* Ombre portée pour l'effet de survol ou au clic */
+    border-radius: 5px; /* Bordures arrondies pour l'effet de survol ou au clic */
 }
 
 /* Effet de survol sur les éléments du menu pour le mode sombre */
@@ -68,3 +89,4 @@
     box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.2); /* Ombre portée pour l'effet de survol */
     border-radius: 5px; /* Bordures arrondies pour l'effet de survol */
 }
+
