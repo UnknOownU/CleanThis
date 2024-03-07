@@ -24,6 +24,7 @@ use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use Symfony\Component\Validator\Constraints\Regex;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -84,6 +85,9 @@ class UserCrudController extends AbstractCrudController
                 'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => '(Repeat)'],
                 'mapped' => false,
+                'constraints' => [
+                    new Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', "Il faut un mot de passe de 8 caractères, une majuscule et un chiffre")
+                ]
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
             ->onlyOnForms()

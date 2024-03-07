@@ -86,12 +86,10 @@ class DashboardController extends AbstractDashboardController
 
 
     }
-    public function configureDashboard(): Dashboard
+public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-
-            ->setTitle('Cleanthis');
-
+        ->setTitle('<img src="images/cleanThis.png" class="img-fluid d-flex" style="max-width:220px; width:300%; padding-right:40px">');
     }
 
 }
