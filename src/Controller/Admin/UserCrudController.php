@@ -78,7 +78,6 @@ class UserCrudController extends AbstractCrudController
                 ]),
     ];
 
-
         $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
