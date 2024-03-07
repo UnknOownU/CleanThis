@@ -33,7 +33,7 @@ class DashboardController extends AbstractDashboardController
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
-        if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+        if ($this->authorizationChecker->isGranted("ROLE_ADMIN","ROLE_SENIOR","ROLE_APPRENTI","ROLE_CUSTOMER")) {
             $url = $this->adminUrlGenerator
                 ->setController(OperationCrudController::class) // Contrôleur d'opération pour l'admin
                 ->generateUrl();
@@ -48,7 +48,7 @@ class DashboardController extends AbstractDashboardController
         } else {
             throw new AccessDeniedException('You do not have access to this section.');
         }
-    } 
+    }
 
 
     public function configureAssets(): Assets
