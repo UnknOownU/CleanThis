@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
@@ -92,7 +93,7 @@ class UserCrudController extends AbstractCrudController
             ->setRequired($pageName === Crud::PAGE_NEW)
             ->onlyOnForms()
             ;
-        $fields[] = $password;
+        $fields[] = $password; 
 
         return $fields;
     }

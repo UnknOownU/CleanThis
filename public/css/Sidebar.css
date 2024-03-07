@@ -47,6 +47,7 @@
 [data-bs-theme="light"] .sidebar .menu-icon,
 [data-bs-theme="light"] .sidebar .main-header .logo-custom {
     color: #333333; /* Texte en noir pour le mode clair */
+
 }
 
 /* Mode sombre */
