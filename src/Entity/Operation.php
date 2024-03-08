@@ -21,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource]
 class Operation
 {
+
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

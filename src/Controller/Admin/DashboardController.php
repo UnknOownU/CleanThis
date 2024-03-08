@@ -33,8 +33,9 @@ class DashboardController extends AbstractDashboardController
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response {
-        if ($this->authorizationChecker->isGranted('ROLE_ADMIN','ROLE_SENIOR','ROLE_APPRENTI','ROLE_CUSTOMER')) {
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SENIOR')||$this->isGranted('ROLE_APPRENTI')||$this->isGranted('ROLE_CUSTOMER')) {
             $url = $this->adminUrlGenerator
+                ->setController(OperationCrudController::class) // Contrôleur d'opération pour l'admin
                 ->generateUrl();
 
             return $this->redirect($url);

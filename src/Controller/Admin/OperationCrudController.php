@@ -7,24 +7,28 @@ use DateTimeImmutable;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use Symfony\Component\Security\Core\Security;
 
 class OperationCrudController extends AbstractCrudController {
     private $security;
@@ -41,6 +45,7 @@ class OperationCrudController extends AbstractCrudController {
         return $crud
             ->overrideTemplate('crud/new', 'user/new.html.twig')
             ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            ->overrideTemplate('crud/index', 'user/show.html.twig')
             
             ->setSearchFields(null);
     }
@@ -120,5 +125,39 @@ class OperationCrudController extends AbstractCrudController {
     }
         return $qb;
     }
+/**
+  @Route("/operation/{id}/accept", name="operation_accept")
+ */
+public function accept(Operation $operation, EntityManagerInterface $entityManager): Response {
+    // Vérifier que l'utilisateur est un employé
+    if ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) {
+        $operation->setStatus('accepted'); 
+        $operation->setSalarie($this->getUser()); 
+        $entityManager->flush();
+        
+        $this->addFlash('success', 'L\'opération a été acceptée.');
+    } else {
+        $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour accepter l\'opération.');
+    }
+
+    return $this->redirectToRoute('admin');
+}
+
+/**
+  @Route("/operation/{id}/decline", name="operation_decline")
+ */
+public function decline(Operation $operation, EntityManagerInterface $entityManager): Response {
+    // Vérifier que l'utilisateur est un employé
+    if ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) {
+        $operation->setStatus('declined'); // Utilisez la constante appropriée ou la chaîne directe
+        $entityManager->flush();
+
+        $this->addFlash('success', 'L\'opération a été refusée.');
+    } else {
+        $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour refuser l\'opération.');
+    }
+
+    return $this->redirectToRoute('admin');
+}
 
 }
