@@ -63,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Operation::class, mappedBy: 'customer')]
     private Collection $operations;
 
+    
     public function __construct()
     {
         $this->operations = new ArrayCollection();
@@ -77,6 +78,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $id_google = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $resetToken = null;
 
     // Ajoutez les getters et setters pour ce champ
     public function getPlainPassword(): ?string
@@ -283,6 +287,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setSingleRole(string $role): self {
         $this->roles = [$role];
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
+
         return $this;
     }
 
