@@ -43,6 +43,10 @@ class UserCrudController extends AbstractCrudController
             ->overrideTemplate('crud/edit', 'user/edit.html.twig')
             
             ->setSearchFields(null);
+            $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
+            if ($rolesFilter) {
+                $crud->setDefaultSort(['roles' => $rolesFilter]);
+            }
     }
 
     public function configureActions(Actions $actions): Actions
@@ -130,5 +134,15 @@ class UserCrudController extends AbstractCrudController
 
     }
 
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder {
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+    
+        $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
+        if ($rolesFilter) {
+            $qb->andWhere('entity.roles = :roles')->setParameter('roles', $rolesFilter);
+        }
+    
+        return $qb;
+    } 
 }
 

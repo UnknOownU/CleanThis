@@ -75,9 +75,10 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::subMenu('Profil', 'fa fa-user')->setSubItems([
                 MenuItem::linkToCrud('Tous les profils', 'fa fa-address-book', User::class),
                 MenuItem::linkToCrud('Employés', 'fa fa-address-book-o', User::class)
-                ->setQueryParameter('status', 'En cours'),
+                ->setQueryParameter('roles', '["ROLE_ADMIN"]')
+                ->setQueryParameter('roles', '["ROLE_SENIOR"]'),
                 MenuItem::linkToCrud('Clients', 'fa fa-address-book-o', User::class)
-                ->setQueryParameter('status', 'En attente de Validation'),
+                ->setQueryParameter('roles', '["ROLE_USER"]'),
             ]);
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
             
