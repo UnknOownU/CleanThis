@@ -1,62 +1,14 @@
-{% extends 'base.html.twig' %}
+{# templates/admin/operation/index.html.twig #}
 
-{% block title %}User{% endblock %}
+{% extends '@EasyAdmin/crud/index.html.twig' %}
 
-{% block body %}
-    <h1>User</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.name }}</td>
-            </tr>
-            <tr>
-                <th>Firstname</th>
-                <td>{{ user.firstname }}</td>
-            </tr>
-            <tr>
-                <th>Zipcode</th>
-                <td>{{ user.zipcode }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ user.city }}</td>
-            </tr>
-            <tr>
-                <th>Street</th>
-                <td>{{ user.street }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ user.phone }}</td>
-            </tr>
-            <tr>
-                <th>Cpt_ope</th>
-                <td>{{ user.cptOpe }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+{% block main %}
+    {% for entity in entities %}
+        {# ... #}
+        {% if is_granted('ROLE_SENIOR') or is_granted('ROLE_APPRENTI') %}
+            {# Ici, vous pouvez mettre vos boutons pour accepter ou refuser les opérations #}
+            <a href="{{ path('operation_accept', {id: entity.primaryKeyValue}) }}" class="btn btn-success">Accepter</a>
+            <a href="{{ path('operation_decline', {id: entity.primaryKeyValue}) }}" class="btn btn-danger">Refuser</a>
+        {% endif %}
+    {% endfor %}
 {% endblock %}
