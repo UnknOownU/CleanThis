@@ -6,14 +6,23 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
+
 use Symfony\Component\HttpFoundation\Request;
+
+
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+
 use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+
+
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
@@ -21,7 +30,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
@@ -43,6 +52,10 @@ class UserCrudController extends AbstractCrudController
             ->overrideTemplate('crud/edit', 'user/edit.html.twig')
             
             ->setSearchFields(null);
+            $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
+            if ($rolesFilter) {
+                $crud->setDefaultSort(['roles' => $rolesFilter]);
+            }
     }
 
     public function configureActions(Actions $actions): Actions
@@ -130,5 +143,15 @@ class UserCrudController extends AbstractCrudController
 
     }
 
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder {
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+    
+        $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
+        if ($rolesFilter) {
+            $qb->andWhere('entity.roles = :roles')->setParameter('roles', $rolesFilter);
+        }
+    
+        return $qb;
+    } 
 }
 

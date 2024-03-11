@@ -48,6 +48,10 @@ class OperationCrudController extends AbstractCrudController {
             ->overrideTemplate('crud/index', 'user/show.html.twig')
             
             ->setSearchFields(null);
+            $statusFilter = $this->getContext()->getRequest()->query->get('status');
+            if ($statusFilter) {
+                $crud->setDefaultSort(['status' => $statusFilter]);
+            }
     }
 
     public function createEntity(string $entityFqcn) {
@@ -90,11 +94,10 @@ class OperationCrudController extends AbstractCrudController {
             FormField::addColumn('col-lg-3 col-xl-6'),
             TextEditorField::new('description', 'Description'),
             ChoiceField::new('status')->setChoices([
-                'En Attente de Validation' => 'En Attente de Validation',
-                'Validée' => 'Validée',
+                'En attente' => 'En attente de Validation',
                 'En cours' => 'En cours',
                 'Terminée' => 'Terminée',
-            ])->hideOnIndex(),
+            ]),
 
             TextField::new('street_ope', 'Rue')
             ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
@@ -117,6 +120,10 @@ class OperationCrudController extends AbstractCrudController {
     ): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
+        $statusFilter = $this->getContext()->getRequest()->query->get('status');
+        if ($statusFilter) {
+            $qb->andWhere('entity.status = :status')->setParameter('status', $statusFilter);
+        }
         if ($this->isGranted('ROLE_CUSTOM')) {
         if ($user) {
             $qb->andWhere('entity.customer = :user')
