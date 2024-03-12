@@ -15,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 
 // src/Controller/Admin/DashboardController.php
 
@@ -59,24 +61,20 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
             yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
                 MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
-                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
-                ->setQueryParameter('status', 'En cours'),
-                MenuItem::linkToCrud('En attentes', 'fa fa-clock-o', Operation::class)
+                MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
                 ->setQueryParameter('status', 'En attente de Validation'),
+                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
+                    ->setQueryParameter('status', 'En cours'),
                 MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
-                ->setQueryParameter('status', 'Terminée'),
+                    ->setQueryParameter('status', 'Terminée'),
             ]);
-            yield MenuItem::submenu('Profil', 'fa fa-user', User::class);
-            yield MenuItem::subMenu('Profil', 'fa fa-user')->setSubItems([
-                MenuItem::linkToCrud('Tous les profils', 'fa fa-address-book', User::class),
-                MenuItem::linkToCrud('Employés', 'fa fa-address-book-o', User::class)
-                ->setQueryParameter('roles', '["ROLE_ADMIN"]')
-                ->setQueryParameter('roles', '["ROLE_SENIOR"]'),
-                MenuItem::linkToCrud('Clients', 'fa fa-address-book-o', User::class)
-                ->setQueryParameter('roles', '["ROLE_USER"]'),
-            ]);
+            yield MenuItem::subMenu('Membres', 'fa fa-users')->setSubItems([
+                MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)
+                    ->setQueryParameter('userType', 'customer'),
+                MenuItem::linkToCrud('Employés', 'fa fa-briefcase', User::class)
+                    ->setQueryParameter('userType', 'employee'),
+            ]);        
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
-            
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
             yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
@@ -89,12 +87,12 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
             yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
                 MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
-                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
-                ->setQueryParameter('status', 'En cours'),
-                MenuItem::linkToCrud('En attentes', 'fa fa-clock-o', Operation::class)
+                MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
                 ->setQueryParameter('status', 'En attente de Validation'),
+                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
+                    ->setQueryParameter('status', 'En cours'),
                 MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
-                ->setQueryParameter('status', 'Terminée'),
+                    ->setQueryParameter('status', 'Terminée'),
             ]);
 
             yield MenuItem::section('Support');
@@ -103,12 +101,19 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
         }
         if ($this->isGranted('ROLE_APPRENTI')) {
-            
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-            yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
+            yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
+                MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
+                MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
+                ->setQueryParameter('status', 'En attente de Validation'),
+                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
+                    ->setQueryParameter('status', 'En cours'),
+                MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
+                    ->setQueryParameter('status', 'Terminée'),
+            ]);
+
             yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
-            yield MenuItem::linkToCrud('Profil', 'fa fa-user', User::class);;
 
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
@@ -119,7 +124,16 @@ class DashboardController extends AbstractDashboardController
             
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-            yield MenuItem::linkToCrud('Nettoyage', 'fa fa-broom', Operation::class);
+            yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
+                MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
+                MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
+                ->setQueryParameter('status', 'En attente de Validation'),
+                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
+                    ->setQueryParameter('status', 'En cours'),
+                MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
+                    ->setQueryParameter('status', 'Terminée'),
+            ]);
+
             yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
 
             yield MenuItem::section('Support');
