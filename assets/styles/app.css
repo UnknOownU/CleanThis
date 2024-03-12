@@ -278,7 +278,7 @@
 .form-control {
     border: 1px solid #ced4da;
     border-radius: 10px;
-    padding: 1rem;
+    padding: 0.5rem;
     font-size: 16px;
     background: rgba(0, 0, 0, 0.05);
     margin-bottom: 1rem;
@@ -314,7 +314,72 @@ label {
 .login-logo {
     margin-right: 20px; /* Ajouter de l'espace entre le logo et le formulaire */
     width: 40%; /* Réduire la largeur de l'image de moitié */
+    height: 40%;
     border-radius: 20px;
-    height: auto;
+   
+}
+
+/* //////////register//////////////// */
+
+.registration-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 4px 4px 20px rgba(0,0,0,0.1);
+    width: 800px;
+    max-width: 90%;
+    display: flex; /* Utiliser flexbox */
+    margin-left: 20rem;
+}
+
+.registration-form {
+    flex: 1; /* Le formulaire prendra tout l'espace restant */
+    display: flex;
+    flex-direction: column;
+}
+
+.registration-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.registration-form .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    padding: 0.2rem;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.registration-form .form-control:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.registration-form .login-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.registration-form .login-btn:hover {
+    background-color: #555;
+}
+
+.registration-form label {
+    font-size: 18px;
+}
+
+.register-logo {
+    margin-top: 15%;
+    margin-right: 20px; /* Ajouter de l'espace entre le logo et le formulaire */
+    width: 40%; /* Réduire la largeur de l'image de moitié */
+    height: 40%;
+    border-radius: 20px;
 }
 
