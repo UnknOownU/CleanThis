@@ -1,3 +1,78 @@
-body {
-    background-color: skyblue;
-}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .left-content {
+    margin-left: 100px;
+    flex-grow: 1; /* Permet à ce conteneur de prendre tout l'espace disponible */
+  }
+  
+  .right-content {
+    margin: 44px;
+    display: flex;
+    gap: 10px; /* Espacement entre les boutons */
+    padding-right: 5%;
+  }
+  
+  .header-content h1 {
+    margin: 0;
+  }
+  
+  .header-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .header-content button {
+    margin: 10px 50px 0 0;
+    padding: 5px 10px;
+    background-color: #1985B4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  nav {
+    background-color: rgba(118, 232, 214, 0.2);
+    padding: 3px;
+  }
+  
+  ul.nav-content{
+    justify-content: space-evenly;
+  }
+
+ .nav-content {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .nav-content a {
+    color: white;
+    text-decoration: none;
+  }
+  .nav-content li {
+    display: inline;
+    margin-right: 20px;
+    margin-top: 15px;
+  }
+  
+  .nav-content li a {
+    text-decoration: none;
+    color: #333; /* Couleur de texte par défaut */
+    background-color: rgba(118, 232, 214, 0.5);
+    padding: 20px;
+    border-radius: 1rem;
+  }
+  
+  .nav-content li a:hover {
+    color: #007bff; /* Couleur de texte au survol */
+  }
+  
+  .nav-content li a:active {
+    color: #ff7b00; /* Nouvelle couleur de texte lorsqu'il est sélectionné */
+  }
