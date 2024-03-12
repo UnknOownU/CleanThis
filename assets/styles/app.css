@@ -50,7 +50,8 @@
   }
   
   ul.nav-content{
-    justify-content: space-evenly;
+    justify-content: center;
+    gap: 3rem;
   }
 
  .nav-content {
@@ -58,26 +59,34 @@
     padding: 0;
     display: flex;
     justify-content: space-around;
+   
   }
   
   .nav-content a {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.2rem;
-  }
-  .nav-content li {
-    display: inline;
-    margin:0.5rem;
-    
+    font-size: 1.2rem; 
   }
 
-  .nav-content li a {
-    text-decoration: none;
-    color: #ffffff; /* Couleur de texte par défaut */
-    background-color: #6fccc44b;
-    padding: 10px;
-    border-radius: 1rem;
+    .nav-content li {
+        flex: 1;
+        display: flex; /* Ajout de flexbox */
+        align-items: stretch; /* Étirer les éléments enfants verticalement */
+      }
+
+.nav-content li a {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #6fccc44b;
+  padding: 10px;
+  border-radius: 1rem;
+  width: 80%; /* Tous les éléments a ont la même largeur */
+  display: flex; /* Ajouter flexbox */
+  justify-content: center; /* Centrer le contenu horizontalement */
+}
+.nav-content li:first-child {
+    margin-left: 2rem; /* Enlevez la marge du premier élément */
   }
   
   .nav-content li a:hover {
