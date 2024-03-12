@@ -54,23 +54,24 @@
   .nav-content a {
     color: white;
     text-decoration: none;
+    font-weight: bold;
   }
   .nav-content li {
     display: inline;
     margin-right: 20px;
     margin-top: 15px;
   }
-  
+
   .nav-content li a {
     text-decoration: none;
-    color: #333; /* Couleur de texte par défaut */
-    background-color: rgba(118, 232, 214, 0.5);
+    color: #ffffff; /* Couleur de texte par défaut */
+    background-color: #6fccc44b;
     padding: 20px;
     border-radius: 1rem;
   }
   
   .nav-content li a:hover {
-    color: #007bff; /* Couleur de texte au survol */
+    background-color: #69D9D0;
   }
   
   .nav-content li a:active {
