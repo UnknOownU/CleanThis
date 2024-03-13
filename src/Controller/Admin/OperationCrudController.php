@@ -31,7 +31,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OperationCrudController extends AbstractCrudController {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security) {
         $this->security = $security;
@@ -43,32 +43,9 @@ class OperationCrudController extends AbstractCrudController {
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/new', 'user/new.html.twig')
-            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
-            ->overrideTemplate('crud/index', 'user/show.html.twig')
-            
-            ->setSearchFields(null);
-            $statusFilter = $this->getContext()->getRequest()->query->get('status');
-            if ($statusFilter) {
-                $crud->setDefaultSort(['status' => $statusFilter]);
-            }
-    }
-
-    public function createEntity(string $entityFqcn) {
-        $operation = new Operation();
-        $operation->setCustomer($this->getUser());
-        $operation->setCreatedAt(new DateTimeImmutable());
-
-        $operation->setCustomer($this->getUser());
-        $operation->setSalarie($this->getUser());
-        return $operation;
-    }
-
-    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation) {
-            $entityInstance->setCustomer($this->getUser());
-        }
-        parent::updateEntity($entityManager, $entityInstance);
+            // Chemins des templates pour les actions CRUD
+           ->overrideTemplate('crud/new', 'user/new.html.twig')
+           ->overrideTemplate('crud/edit', 'user/edit.html.twig');
     }
 
     public function configureFields(string $pageName): iterable {
@@ -112,59 +89,70 @@ class OperationCrudController extends AbstractCrudController {
         ];
     }
 
-    public function createIndexQueryBuilder(
-        SearchDto $searchDto,
-        EntityDto $entityDto,
-        FieldCollection $fields,
-        FilterCollection $filters
-    ): QueryBuilder {
-        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-        $user = $this->security->getUser();
-        $statusFilter = $this->getContext()->getRequest()->query->get('status');
-        if ($statusFilter) {
-            $qb->andWhere('entity.status = :status')->setParameter('status', $statusFilter);
+    public function createEntity(string $entityFqcn) {
+        $operation = new Operation();
+        $operation->setCustomer($this->getUser());
+        $operation->setCreatedAt(new DateTimeImmutable());
+        return $operation;
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
+        if ($entityInstance instanceof Operation) {
+            $entityInstance->setCustomer($this->getUser());
         }
-        if ($this->isGranted('ROLE_CUSTOM')) {
-        if ($user) {
-            $qb->andWhere('entity.customer = :user')
-               ->setParameter('user', $user);
+        parent::updateEntity($entityManager, $entityInstance);
+    }
+
+    public function configureActions(Actions $actions): Actions {
+        $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
+            ->displayIf(function (Operation $operation) {
+                return $operation->getStatus() === 'En attente de Validation' && 
+                       ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI'));
+            })
+            ->linkToCrudAction('acceptOperation');
+
+        $declineAction = Action::new('decline', 'Refuser', 'fa fa-times')
+            ->displayIf(function (Operation $operation) {
+                return $operation->getStatus() === 'En attente de Validation' && 
+                       ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI'));
+            })
+            ->linkToCrudAction('declineOperation');
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, $acceptAction)
+            ->add(Crud::PAGE_INDEX, $declineAction);
+    }
+
+    /**
+     * @Route("/operation/{id}/accept", name="operation_accept")
+     */
+    public function acceptOperation(Operation $operation, EntityManagerInterface $entityManager): Response {
+        if ($operation->getStatus() !== 'En attente de Validation') {
+            $this->addFlash('error', 'Cette opération ne peut pas être acceptée.');
+            return new Response('<script>window.location.reload();</script>');
         }
-    }
-        return $qb;
-    }
-/**
-  @Route("/operation/{id}/accept", name="operation_accept")
- */
-public function accept(Operation $operation, EntityManagerInterface $entityManager): Response {
-    // Vérifier que l'utilisateur est un employé
-    if ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) {
-        $operation->setStatus('accepted'); 
-        $operation->setSalarie($this->getUser()); 
-        $entityManager->flush();
-        
-        $this->addFlash('success', 'L\'opération a été acceptée.');
-    } else {
-        $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour accepter l\'opération.');
-    }
 
-    return $this->redirectToRoute('admin');
-}
-
-/**
-  @Route("/operation/{id}/decline", name="operation_decline")
- */
-public function decline(Operation $operation, EntityManagerInterface $entityManager): Response {
-    // Vérifier que l'utilisateur est un employé
-    if ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) {
-        $operation->setStatus('declined'); // Utilisez la constante appropriée ou la chaîne directe
+        $operation->setStatus('En cours');
+        $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
 
-        $this->addFlash('success', 'L\'opération a été refusée.');
-    } else {
-        $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour refuser l\'opération.');
+        $this->addFlash('success', 'Opération acceptée avec succès.');
+        return new Response('<script>window.location.reload();</script>');
     }
 
-    return $this->redirectToRoute('admin');
-}
+    /**
+     * @Route("/operation/{id}/decline", name="operation_decline")
+     */
+    public function declineOperation(Operation $operation, EntityManagerInterface $entityManager): Response {
+        if ($operation->getStatus() !== 'En attente de Validation') {
+            $this->addFlash('error', 'Cette opération ne peut pas être refusée.');
+            return new Response('<script>window.location.reload();</script>');
+        }
 
+        $operation->setStatus('Refusée');
+        $entityManager->flush();
+
+        $this->addFlash('error', 'Opération refusée.');
+        return new Response('<script>window.location.reload();</script>');
+    }
 }
