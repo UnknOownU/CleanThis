@@ -3,13 +3,15 @@
 
 namespace App\Controller\Admin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\User;
 use App\Entity\Operation;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
 use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -17,9 +19,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
+
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +39,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
-use function PHPUnit\Framework\throwException;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -52,7 +60,10 @@ class UserCrudController extends AbstractCrudController
         return $crud
             ->overrideTemplate('crud/new', 'user/new.html.twig')
             ->overrideTemplate('crud/edit', 'user/edit.html.twig')
-            
+            ->setPageTitle(Crud::PAGE_INDEX, 'Membres')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Modifier le Membre')
+            ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un Membre')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du Membre')
             ->setSearchFields(null);
             $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
             if ($rolesFilter) {
@@ -152,27 +163,25 @@ class UserCrudController extends AbstractCrudController
 
     }
 
-    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-    {
-            $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-    
-            $entityAlias = $qb->getRootAliases()[0];
-    
-            $request = $this->container->get('request_stack')->getCurrentRequest();
-            $userType = $request->query->get('userType');
-    
-            if ($userType === 'customer') {
-                $qb->andWhere($entityAlias . '.roles LIKE :role')
-                   ->setParameter('role', '%"ROLE_CUSTOMER"%');
-            } elseif ($userType === 'employee') {
-                $qb->andWhere($entityAlias . '.roles LIKE :roleAdmin OR ' . $entityAlias . '.roles LIKE :roleSenior OR ' . $entityAlias . '.roles LIKE :roleApprenti')
-                   ->setParameter('roleAdmin', '%"ROLE_ADMIN"%')
-                   ->setParameter('roleSenior', '%"ROLE_SENIOR"%')
-                   ->setParameter('roleApprenti', '%"ROLE_APPRENTI"%');
-            }
-    
-            return $qb;
+public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+{
+        $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+
+        $entityAlias = $qb->getRootAliases()[0];
+
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $userType = $request->query->get('userType');
+
+        if ($userType === 'customer') {
+            $qb->andWhere($entityAlias . '.roles LIKE :role')
+               ->setParameter('role', '%"ROLE_CUSTOMER"%');
+        } elseif ($userType === 'employee') {
+            $qb->andWhere($entityAlias . '.roles LIKE :roleAdmin OR ' . $entityAlias . '.roles LIKE :roleSenior OR ' . $entityAlias . '.roles LIKE :roleApprenti')
+               ->setParameter('roleAdmin', '%"ROLE_ADMIN"%')
+               ->setParameter('roleSenior', '%"ROLE_SENIOR"%')
+               ->setParameter('roleApprenti', '%"ROLE_APPRENTI"%');
         }
-    } 
-    
- 
+
+        return $qb;
+    }
+}
