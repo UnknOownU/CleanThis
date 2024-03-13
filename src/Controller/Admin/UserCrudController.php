@@ -11,11 +11,19 @@ use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
 use Symfony\Component\HttpFoundation\Request;
+
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
+
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
@@ -24,9 +32,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
@@ -34,14 +42,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore
 
 class UserCrudController extends AbstractCrudController
 {
+    private Security $security;
     public function __construct(
-        public UserPasswordHasherInterface $userPasswordHasher
-    ) {}
+        public UserPasswordHasherInterface $userPasswordHasher,
+        Security $security
+    ) {
+        $this->security = $security;
+    }
 
     public static function getEntityFqcn(): string
     {
         return User::class;
     }
+
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
@@ -58,13 +71,20 @@ class UserCrudController extends AbstractCrudController
             }
     }
 
-    public function configureActions(Actions $actions): Actions
-    {
-        return $actions
-            ->add(Crud::PAGE_EDIT, Action::INDEX)
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DETAIL)
-            ;
+    public function configureActions(Actions $actions): Actions {
+        $actions = parent::configureActions($actions);
+    
+        // Désactiver toutes les actions si l'utilisateur n'a pas les rôles nécessaires
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_SENIOR') && !$this->isGranted('ROLE_APPRENTI')) {
+            $actions->disable(Action::DETAIL);
+            $actions->disable(Action::INDEX);
+            $actions->disable(Action::NEW);
+            $actions->disable(Action::EDIT);
+            $actions->disable(Action::DELETE);
+            throw new AccessDeniedException('Accès refusé. Vous n\'avez pas les droits nécessaires pour accéder à cette page.');
+        }
+    
+        return $actions;
     }
 
     public function configureFields(string $pageName): iterable
@@ -109,15 +129,15 @@ class UserCrudController extends AbstractCrudController
         return $fields;
     }
 
-    public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $actions): FormBuilderInterface
     {
-        $formBuilder = parent::createNewFormBuilder($entityDto, $formOptions, $context);
+        $formBuilder = parent::createNewFormBuilder($entityDto, $formOptions, $actions);
         return $this->addPasswordEventListener($formBuilder);
     }
 
-    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $actions): FormBuilderInterface
     {
-        $formBuilder = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        $formBuilder = parent::createEditFormBuilder($entityDto, $formOptions, $actions);
         return $this->addPasswordEventListener($formBuilder);
     }
 
@@ -143,9 +163,6 @@ class UserCrudController extends AbstractCrudController
 
     }
 
-
-// Dans UserCrudController.php
-
 public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
 {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
@@ -168,4 +185,3 @@ public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityD
         return $qb;
     }
 }
-

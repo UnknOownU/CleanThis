@@ -66,8 +66,9 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
                     ->setQueryParameter('status', 'En cours'),
                 MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
-                    ->setQueryParameter('status', 'Terminée'),
+                ->setQueryParameter('status', 'Terminée'),
             ]);
+            yield MenuItem::submenu('Profil', 'fa fa-user', User::class);
             yield MenuItem::subMenu('Membres', 'fa fa-users')->setSubItems([
                 MenuItem::linkToCrud('Clients', 'fa fa-user', User::class)
                     ->setQueryParameter('userType', 'customer'),

@@ -31,7 +31,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OperationCrudController extends AbstractCrudController {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security) {
         $this->security = $security;
@@ -108,7 +108,6 @@ class OperationCrudController extends AbstractCrudController {
 
         ];
     }
-
     public function createIndexQueryBuilder(
         SearchDto $searchDto,
         EntityDto $entityDto,
@@ -193,5 +192,4 @@ class OperationCrudController extends AbstractCrudController {
         return $this->redirect($referrerUrl);
     }
     
-
 }
