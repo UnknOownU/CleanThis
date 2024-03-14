@@ -1,3 +1,395 @@
-body {
-    background-color: skyblue;
+/* //////////Racine ////////// */
+:root {
+    --bg-color: #6fccc44b;
+    --second-bg-color: #1985B4;
+    --text-color: #69D9D0;
+    --main-color:#69D9D0;
+  }
+/*////////////////////// Header et navbar ///////////////////// */
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .left-content {
+    margin-left: 100px;
+    flex-grow: 1; /* Permet à ce conteneur de prendre tout l'espace disponible */
+  }
+  
+  .right-content {
+    margin: 44px;
+    display: flex;
+    gap: 10px; /* Espacement entre les boutons */
+    padding-right: 5%;
+  }
+  
+  .header-content h1 {
+    margin: 0;
+  }
+  
+  .header-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .header-content button {
+    margin: 10px 50px 0 0;
+    padding: 5px 10px;
+    background-color: #1985B4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  nav {
+    background-color: rgba(118, 232, 214, 0.2);
+    
+  }
+  
+  ul.nav-content{
+    justify-content: center;
+    gap: 3rem;
+  }
+
+ .nav-content {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+   
+  }
+  
+  .nav-content a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem; 
+  }
+
+    .nav-content li {
+        flex: 1;
+        display: flex; /* Ajout de flexbox */
+        align-items: stretch; /* Étirer les éléments enfants verticalement */
+      }
+
+.nav-content li a {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #6fccc44b;
+  padding: 10px;
+  border-radius: 1rem;
+  width: 80%; /* Tous les éléments a ont la même largeur */
+  display: flex; /* Ajouter flexbox */
+  justify-content: center; /* Centrer le contenu horizontalement */
 }
+.nav-content li:first-child {
+    margin-left: 2rem; /* Enlevez la marge du premier élément */
+  }
+  
+  .nav-content li a:hover {
+    background-color: #69D9D0;
+  }
+  
+  .nav-content li a:active {
+    color: #ff7b00; /* Nouvelle couleur de texte lorsqu'il est sélectionné */
+  }
+/*///////////////////////////// Footer///////////////////// */
+
+.site-footer
+{
+  background-color:var(--bg-color);
+  padding:45px 0 20px;
+  font-size:15px;
+  line-height:24px;
+  color:#737373;
+}
+.site-footer hr
+{
+  border-top-color:#bbb;
+  opacity:0.5
+}
+.site-footer hr.small
+{
+  margin:20px 0
+}
+.site-footer h6
+{
+  color:#fff;
+  font-size:16px;
+  text-transform:uppercase;
+  margin-top:5px;
+  letter-spacing:2px
+}
+.site-footer a
+{
+  color:#737373;
+}
+.site-footer a:hover
+{
+  color:#3366cc;
+  text-decoration:none;
+}
+.footer-links
+{
+  padding-left:0;
+  list-style:none
+}
+.footer-links li
+{
+  display:block
+}
+.footer-links a
+{
+  color:#737373
+}
+.footer-links a:active,.footer-links a:focus,.footer-links a:hover
+{
+  color:#3366cc;
+  text-decoration:none;
+}
+.footer-links.inline li
+{
+  display:inline-block
+}
+.site-footer .social-icons
+{
+  text-align:right
+}
+.site-footer .social-icons a
+{
+  width:40px;
+  height:40px;
+  line-height:40px;
+  margin-left:6px;
+  margin-right:0;
+  border-radius:100%;
+  background-color:#33353d
+}
+.copyright-text
+{
+  margin:0
+}
+@media (max-width:991px)
+{
+  .site-footer [class^=col-]
+  {
+    margin-bottom:30px
+  }
+}
+@media (max-width:767px)
+{
+  .site-footer
+  {
+    padding-bottom:0
+  }
+  .site-footer .copyright-text,.site-footer .social-icons
+  {
+    text-align:center
+  }
+}
+.social-icons
+{
+  padding-left:0;
+  margin-bottom:0;
+  list-style:none
+}
+.social-icons li
+{
+  display:inline-block;
+  margin-bottom:4px
+}
+.social-icons li.title
+{
+  margin-right:15px;
+  text-transform:uppercase;
+  color:#96a2b2;
+  font-weight:700;
+  font-size:13px
+}
+.social-icons a{
+  background-color:#eceeef;
+  color:#818a91;
+  font-size:16px;
+  display:inline-block;
+  line-height:44px;
+  width:44px;
+  height:44px;
+  text-align:center;
+  margin-right:8px;
+  border-radius:100%;
+  -webkit-transition:all .2s linear;
+  -o-transition:all .2s linear;
+  transition:all .2s linear
+}
+.social-icons a:active,.social-icons a:focus,.social-icons a:hover
+{
+  color:#fff;
+  background-color:#29aafe
+}
+.social-icons.size-sm a
+{
+  line-height:34px;
+  height:34px;
+  width:34px;
+  font-size:14px
+}
+.social-icons a.facebook:hover
+{
+  background-color:#3b5998
+}
+.social-icons a.twitter:hover
+{
+  background-color:#00aced
+}
+.social-icons a.linkedin:hover
+{
+  background-color:#007bb6
+}
+.social-icons a.dribbble:hover
+{
+  background-color:#ea4c89
+}
+@media (max-width:767px)
+{
+  .social-icons li.title
+  {
+    display:block;
+    margin-right:0;
+    font-weight:600
+  }
+}
+
+/* /////////////////Login///////////////// */
+
+.login-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 4px 4px 20px rgba(0,0,0,0.1);
+    width: 800px;
+    max-width: 90%;
+    display: flex; /* Utiliser flexbox */
+    margin-left: 20rem;
+}
+
+.login-form {
+    flex: 1; /* Le formulaire prendra tout l'espace restant */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    padding: 0.5rem;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.login-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.logogoogle{
+    width: 30px;
+}
+.login-btn:hover {
+    background-color: #555;
+}
+
+label {
+    font-size: 18px;
+}
+
+.login-logo {
+    margin-right: 20px; /* Ajouter de l'espace entre le logo et le formulaire */
+    width: 40%; /* Réduire la largeur de l'image de moitié */
+    height: 40%;
+    border-radius: 20px;
+   
+}
+
+/* //////////register//////////////// */
+
+.registration-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 4px 4px 20px rgba(0,0,0,0.1);
+    width: 800px;
+    max-width: 90%;
+    display: flex; /* Utiliser flexbox */
+    margin-left: 20rem;
+}
+
+.registration-form {
+    flex: 1; /* Le formulaire prendra tout l'espace restant */
+    display: flex;
+    flex-direction: column;
+}
+
+.registration-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.registration-form .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    padding: 0.2rem;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+}
+
+.registration-form .form-control:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.registration-form .login-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.registration-form .login-btn:hover {
+    background-color: #555;
+}
+
+.registration-form label {
+    font-size: 18px;
+}
+
+.register-logo {
+    margin-top: 15%;
+    margin-right: 20px; /* Ajouter de l'espace entre le logo et le formulaire */
+    width: 40%; /* Réduire la largeur de l'image de moitié */
+    height: 40%;
+    border-radius: 20px;
+}
+

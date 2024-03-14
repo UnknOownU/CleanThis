@@ -25,3 +25,22 @@ operation_decline:
     path: /operation/{id}/decline
     controller: App\Controller\OperationController::decline
     
+accueil:
+    path: /
+    controller: App\Controller\HomeController::index
+
+services:
+    path: /services
+    controller: App\Controller\ServicesController::index
+
+equipe:
+    path: /equipe
+    controller: App\Controller\EquipeController::index
+
+contact:
+    path: /contact
+    controller: App\Controller\ContactController::index
+
+recrutement:
+    path: /recrutement
+    controller: App\Controller\RecrutementController::index
