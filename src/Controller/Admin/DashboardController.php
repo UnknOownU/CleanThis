@@ -78,8 +78,6 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
-            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
-            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
         if ($this->isGranted('ROLE_SENIOR')) {
@@ -114,12 +112,8 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'Terminée'),
             ]);
 
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
-
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
-            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
-            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
             
@@ -135,12 +129,8 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'Terminée'),
             ]);
 
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
-
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
-            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
-            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
         }
 
     }
