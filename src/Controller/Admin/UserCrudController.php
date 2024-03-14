@@ -19,11 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
-
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
