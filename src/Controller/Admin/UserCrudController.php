@@ -2,7 +2,6 @@
 // src/Controller/Admin/UserCrudController.php
 
 namespace App\Controller\Admin;
-
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use App\Entity\User;
@@ -11,7 +10,6 @@ use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -71,7 +69,7 @@ class UserCrudController extends AbstractCrudController
         $actions = parent::configureActions($actions);
     
         // Désactiver toutes les actions si l'utilisateur n'a pas les rôles nécessaires
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_SENIOR') && !$this->isGranted('ROLE_APPRENTI')) {
+        if (!$this->isGranted('ROLE_ADMIN')) {
             $actions->disable(Action::DETAIL);
             $actions->disable(Action::INDEX);
             $actions->disable(Action::NEW);
