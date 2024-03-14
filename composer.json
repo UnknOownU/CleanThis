@@ -12,6 +12,7 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.0",
+        "dompdf/dompdf": "^2.0",
         "easycorp/easyadmin-bundle": "^4.9",
         "guzzlehttp/guzzle": "^7.8",
         "knpuniversity/oauth2-client-bundle": "^2.18",
@@ -49,7 +50,8 @@
         "symfony/web-link": "6.4.*",
         "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "vich/uploader-bundle": "^2.3"
     },
     "config": {
         "allow-plugins": {

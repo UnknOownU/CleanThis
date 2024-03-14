@@ -27,8 +27,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class OperationCrudController extends AbstractCrudController {
     private Security $security;
@@ -80,6 +84,8 @@ class OperationCrudController extends AbstractCrudController {
             AssociationField::new('customer', 'Client')->hideOnForm(),
             TextField::new('name', 'Intitulé de l’opération')
             ->setLabel('Mission'),
+            TextField::new('attachmentFile')->setFormType(VichImageType::class)->onlyWhenCreating(),
+            ImageField::new('attachment')->setBasePath('/images/products')->onlyOnIndex(),
             ChoiceField::new('type')->setChoices([
                 'Little' => 'Petite',
                 'Medium' => 'Moyenne',
@@ -148,10 +154,17 @@ class OperationCrudController extends AbstractCrudController {
                 return ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) && $operation->getStatus() === 'En attente de Validation';
             })
             ->linkToCrudAction('declineOperation');
-    
+        $downloadInvoice = Action::new('downloadInvoice', 'Télécharger Facture', 'fa fa-download')
+            ->linkToRoute('operation_download_invoice', function (Operation $operation) {
+                return ['id' => $operation->getId()];
+            })
+            ->displayIf(static function (Operation $operation) {
+                return $operation->getStatus() === 'Terminée';
+            });
         return $actions
             ->add(Crud::PAGE_INDEX, $acceptAction)
-            ->add(Crud::PAGE_INDEX, $declineAction);
+            ->add(Crud::PAGE_INDEX, $declineAction)
+            ->add(Crud::PAGE_INDEX, $downloadInvoice);
     }
     
     
@@ -172,7 +185,7 @@ class OperationCrudController extends AbstractCrudController {
         $this->addFlash('success', 'La mission a été acceptée et est maintenant "En cours".');
     
         return new Response('<script>window.location.reload();</script>');
-    }
+    } 
     
     public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager): Response {
         $operation = $context->getEntity()->getInstance();
@@ -191,5 +204,6 @@ class OperationCrudController extends AbstractCrudController {
     
         return $this->redirect($referrerUrl);
     }
+
     
 }

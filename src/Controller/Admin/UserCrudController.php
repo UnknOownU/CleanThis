@@ -2,7 +2,6 @@
 // src/Controller/Admin/UserCrudController.php
 
 namespace App\Controller\Admin;
-
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use App\Entity\User;
@@ -11,7 +10,6 @@ use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -19,11 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use Symfony\Component\Validator\Constraints\Regex;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
-
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
@@ -75,7 +69,7 @@ class UserCrudController extends AbstractCrudController
         $actions = parent::configureActions($actions);
     
         // Désactiver toutes les actions si l'utilisateur n'a pas les rôles nécessaires
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_SENIOR') && !$this->isGranted('ROLE_APPRENTI')) {
+        if (!$this->isGranted('ROLE_ADMIN')) {
             $actions->disable(Action::DETAIL);
             $actions->disable(Action::INDEX);
             $actions->disable(Action::NEW);
