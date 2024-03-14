@@ -77,4 +77,7 @@ public function add(User $user,bool $flush=false):void
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+// Dans UserRepository.php
+
 }

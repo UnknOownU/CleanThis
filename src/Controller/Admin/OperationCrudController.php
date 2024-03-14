@@ -31,7 +31,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OperationCrudController extends AbstractCrudController {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security) {
         $this->security = $security;
@@ -45,8 +45,7 @@ class OperationCrudController extends AbstractCrudController {
         return $crud
             ->overrideTemplate('crud/new', 'user/new.html.twig')
             ->overrideTemplate('crud/edit', 'user/edit.html.twig')
-            ->overrideTemplate('crud/index', 'user/show.html.twig')
-            
+
             ->setSearchFields(null);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
@@ -107,11 +106,8 @@ class OperationCrudController extends AbstractCrudController {
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
             DateTimeField::new('finished_at', 'Terminé le')->hideOnForm(),
 
-            AssociationField::new('customer'),       
-            AssociationField::new('salarie'), 
         ];
     }
-
     public function createIndexQueryBuilder(
         SearchDto $searchDto,
         EntityDto $entityDto,
@@ -121,50 +117,79 @@ class OperationCrudController extends AbstractCrudController {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
         $statusFilter = $this->getContext()->getRequest()->query->get('status');
+    
         if ($statusFilter) {
             $qb->andWhere('entity.status = :status')->setParameter('status', $statusFilter);
         }
-        if ($this->isGranted('ROLE_CUSTOM')) {
-        if ($user) {
-            $qb->andWhere('entity.customer = :user')
+    
+        // Vérifiez si l'utilisateur actuel a le rôle qui lui permet de voir toutes les missions.
+        // Par exemple, vous pouvez utiliser `ROLE_ADMIN` pour tester si l'utilisateur est un administrateur.
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            // Restriction pour les utilisateurs qui ne sont pas administrateurs.
+            $qb->andWhere('entity.status = :statusPending OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+               ->setParameter('statusPending', 'En attente de Validation')
+               ->setParameter('statusAccepted', 'En cours')
                ->setParameter('user', $user);
         }
-    }
+    
         return $qb;
     }
-/**
-  @Route("/operation/{id}/accept", name="operation_accept")
- */
-public function accept(Operation $operation, EntityManagerInterface $entityManager): Response {
-    // Vérifier que l'utilisateur est un employé
-    if ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) {
-        $operation->setStatus('accepted'); 
-        $operation->setSalarie($this->getUser()); 
-        $entityManager->flush();
-        
-        $this->addFlash('success', 'L\'opération a été acceptée.');
-    } else {
-        $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour accepter l\'opération.');
+    
+
+    public function configureActions(Actions $actions): Actions {
+        $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
+            ->displayIf(function (Operation $operation) {
+                return ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) && $operation->getStatus() === 'En attente de Validation';
+            })
+            ->linkToCrudAction('acceptOperation');
+    
+        $declineAction = Action::new('decline', 'Refuser', 'fa fa-times')
+            ->displayIf(function (Operation $operation) {
+                return ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) && $operation->getStatus() === 'En attente de Validation';
+            })
+            ->linkToCrudAction('declineOperation');
+    
+        return $actions
+            ->add(Crud::PAGE_INDEX, $acceptAction)
+            ->add(Crud::PAGE_INDEX, $declineAction);
     }
-
-    return $this->redirectToRoute('admin');
-}
-
-/**
-  @Route("/operation/{id}/decline", name="operation_decline")
- */
-public function decline(Operation $operation, EntityManagerInterface $entityManager): Response {
-    // Vérifier que l'utilisateur est un employé
-    if ($this->isGranted('ROLE_SENIOR') || $this->isGranted('ROLE_APPRENTI')) {
-        $operation->setStatus('declined'); // Utilisez la constante appropriée ou la chaîne directe
+    
+    
+    /**
+     * Méthode personnalisée pour l'action "Accepter".
+     */
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager): Response {
+        $operation = $context->getEntity()->getInstance();
+        if (!$operation) {
+            throw $this->createNotFoundException('Opération non trouvée');
+        }
+    
+        // Logique pour accepter l'opération
+        $operation->setStatus('En cours');
+        $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-
-        $this->addFlash('success', 'L\'opération a été refusée.');
-    } else {
-        $this->addFlash('error', 'Vous n\'avez pas les droits nécessaires pour refuser l\'opération.');
+    
+        $this->addFlash('success', 'La mission a été acceptée et est maintenant "En cours".');
+    
+        return new Response('<script>window.location.reload();</script>');
     }
-
-    return $this->redirectToRoute('admin');
-}
-
+    
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager): Response {
+        $operation = $context->getEntity()->getInstance();
+        if (!$operation) {
+            throw $this->createNotFoundException('Opération non trouvée');
+        }
+    
+        // Logique pour refuser l'opération
+        $operation->setStatus('Refusée');
+        $entityManager->flush();
+    
+        $this->addFlash('error', 'La mission a été refusée.');
+    
+        // Utilisez l'URL de referrer, ou redirigez vers une route par défaut si aucun referrer n'est disponible
+        $referrerUrl = $context->getReferrer() ?: $this->adminUrlGenerator->setDashboard()->generateUrl();
+    
+        return $this->redirect($referrerUrl);
+    }
+    
 }

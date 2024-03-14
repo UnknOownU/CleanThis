@@ -24,7 +24,7 @@ operation_accept:
 operation_decline:
     path: /operation/{id}/decline
     controller: App\Controller\OperationController::decline
-
+    
 accueil:
     path: /
     controller: App\Controller\HomeController::index
