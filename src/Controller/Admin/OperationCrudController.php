@@ -31,6 +31,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class OperationCrudController extends AbstractCrudController {
     private Security $security;
@@ -82,6 +84,8 @@ class OperationCrudController extends AbstractCrudController {
             AssociationField::new('customer', 'Client')->hideOnForm(),
             TextField::new('name', 'Intitulé de l’opération')
             ->setLabel('Mission'),
+            TextField::new('attachmentFile')->setFormType(VichImageType::class)->onlyWhenCreating(),
+            ImageField::new('attachment')->setBasePath('/images/products')->onlyOnIndex(),
             ChoiceField::new('type')->setChoices([
                 'Little' => 'Petite',
                 'Medium' => 'Moyenne',
