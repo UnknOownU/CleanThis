@@ -2,10 +2,9 @@
 // src/Controller/Admin/UserCrudController.php
 
 namespace App\Controller\Admin;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use App\Entity\User;
 use App\Entity\Operation;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
@@ -15,14 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use Symfony\Component\Validator\Constraints\Regex;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
+use Symfony\Component\Validator\Constraints\Regex;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,18 +31,24 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
 
 
 class UserCrudController extends AbstractCrudController
 {
     private Security $security;
+    private AuthorizationCheckerInterface $authChecker;
+    
     public function __construct(
         public UserPasswordHasherInterface $userPasswordHasher,
-        Security $security
+        Security $security,
+        AuthorizationCheckerInterface $authChecker
     ) {
         $this->security = $security;
+        $this->authChecker = $authChecker;
     }
+    
 
     public static function getEntityFqcn(): string
     {
@@ -64,22 +70,40 @@ class UserCrudController extends AbstractCrudController
                 $crud->setDefaultSort(['roles' => $rolesFilter]);
             }
     }
-
-    public function configureActions(Actions $actions): Actions {
+    
+    
+    public function configureActions(Actions $actions): Actions
+    {
         $actions = parent::configureActions($actions);
     
-        // Désactiver toutes les actions si l'utilisateur n'a pas les rôles nécessaires
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            $actions->disable(Action::DETAIL);
-            $actions->disable(Action::INDEX);
-            $actions->disable(Action::NEW);
-            $actions->disable(Action::EDIT);
-            $actions->disable(Action::DELETE);
-            throw new AccessDeniedException('Accès refusé. Vous n\'avez pas les droits nécessaires pour accéder à cette page.');
-        }
+        $actions->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
+            return $action->linkToCrudAction('edit');
+        });
+    
+        // ...
     
         return $actions;
     }
+    
+    // src/Controller/Admin/UserCrudController.php
+
+// ...
+
+public function edit(AdminContext $context)
+{
+    $entity = $context->getEntity()->getInstance();
+    $currentUser = $this->security->getUser();
+
+    if (!$this->security->isGranted('ROLE_ADMIN') && $entity->getId() !== $currentUser->getId()) {
+        throw new AccessDeniedException('Vous n\'avez pas les droits pour modifier ce profil.');
+    }
+
+    return parent::edit($context);
+}
+
+// ...
+
+    
 
     public function configureFields(string $pageName): iterable
     {
@@ -157,25 +181,33 @@ class UserCrudController extends AbstractCrudController
 
     }
 
-public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
-{
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
-
         $entityAlias = $qb->getRootAliases()[0];
-
-        $request = $this->container->get('request_stack')->getCurrentRequest();
-        $userType = $request->query->get('userType');
-
-        if ($userType === 'customer') {
-            $qb->andWhere($entityAlias . '.roles LIKE :role')
-               ->setParameter('role', '%"ROLE_CUSTOMER"%');
-        } elseif ($userType === 'employee') {
-            $qb->andWhere($entityAlias . '.roles LIKE :roleAdmin OR ' . $entityAlias . '.roles LIKE :roleSenior OR ' . $entityAlias . '.roles LIKE :roleApprenti')
-               ->setParameter('roleAdmin', '%"ROLE_ADMIN"%')
-               ->setParameter('roleSenior', '%"ROLE_SENIOR"%')
-               ->setParameter('roleApprenti', '%"ROLE_APPRENTI"%');
+        $currentUser = $this->security->getUser();
+    
+        // Filtre pour les administrateurs
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $userType = $this->container->get('request_stack')->getCurrentRequest()->query->get('userType');
+    
+            if ($userType === 'customer') {
+                $qb->andWhere($entityAlias . '.roles LIKE :role')
+                    ->setParameter('role', '%"ROLE_CUSTOMER"%');
+            } elseif ($userType === 'employee') {
+                $qb->andWhere($entityAlias . '.roles LIKE :roleAdmin OR ' . $entityAlias . '.roles LIKE :roleSenior OR ' . $entityAlias . '.roles LIKE :roleApprenti')
+                    ->setParameter('roleAdmin', '%"ROLE_ADMIN"%')
+                    ->setParameter('roleSenior', '%"ROLE_SENIOR"%')
+                    ->setParameter('roleApprenti', '%"ROLE_APPRENTI"%');
+            }
+        } else {
+            // Limiter les utilisateurs non-administrateurs à voir uniquement leur propre profil
+            if ($currentUser instanceof User) {
+                $qb->andWhere($entityAlias . '.id = :current_user_id')
+                    ->setParameter('current_user_id', $currentUser->getId());
+            }
         }
-
+    
         return $qb;
     }
+    
 }

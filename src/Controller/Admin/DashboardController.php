@@ -119,6 +119,7 @@ class DashboardController extends AbstractDashboardController
             
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+
             yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
                 MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
                 MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
@@ -130,7 +131,7 @@ class DashboardController extends AbstractDashboardController
             ]);
 
             yield MenuItem::section('Support');
-            yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
+            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
         }
 
     }
