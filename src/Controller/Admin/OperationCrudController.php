@@ -55,16 +55,42 @@ class OperationCrudController extends AbstractCrudController {
         $operation = new Operation();
         $operation->setCustomer($this->getUser());
         $operation->setCreatedAt(new DateTimeImmutable());
-        $operation->setCustomer($this->getUser());
         $operation->setSalarie($this->getUser());
         return $operation;
     }
-
+    
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void {
+        if ($entityInstance instanceof Operation) {
+            // Vous pouvez ajuster cette logique pour définir le prix en fonction de la valeur du champ 'type'
+            $this->setOperationPrice($entityInstance);
+        }
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+    
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
         if ($entityInstance instanceof Operation) {
-            $entityInstance->setCustomer($this->getUser());
+            // Même logique pour ajuster le prix lors de la mise à jour
+            $this->setOperationPrice($entityInstance);
         }
         parent::updateEntity($entityManager, $entityInstance);
+    }
+    
+    private function setOperationPrice(Operation $operation) {
+        // Assurez-vous que le type est bien défini
+        switch ($operation->getType()) {
+            case 'Little':
+                $operation->setPrice(2500);
+                break;
+            case 'Medium':
+                $operation->setPrice(5000);
+                break;
+            case 'Big':
+                $operation->setPrice(750000);
+                break;
+            case 'Custom':
+                // Implémentez ici votre logique pour un prix personnalisé
+                break;
+        }
     }
 
     public function configureFields(string $pageName): iterable {
@@ -76,14 +102,18 @@ class OperationCrudController extends AbstractCrudController {
             AssociationField::new('customer', 'Client')->hideOnForm(),
             TextField::new('name', 'Intitulé de l’opération')
             ->setLabel('Mission'),
-            ChoiceField::new('type')->setChoices([
-                'Little' => 'Petite',
-                'Medium' => 'Moyenne',
-                'Big' => 'Grande',
-                'Custom' => 'Custom',
-            ])->hideOnIndex(),
-            TextField::new('type')->hideOnForm(),
-            MoneyField::new('price', 'Prix')->setCurrency('EUR'),
+            TextField::new('attachmentFile')->setFormType(VichImageType::class)->onlyWhenCreating(),
+            ImageField::new('attachment')->setBasePath('/images/products')->onlyOnIndex(),
+            ChoiceField::new('type')
+            ->setChoices([
+                'Petite' => 'Little',
+                'Moyenne' => 'Medium',
+                'Grande' => 'Big',
+                'Personnalisée' => 'Custom',
+            ]),
+        MoneyField::new('price', 'Prix')
+            ->setCurrency('EUR')
+            ->hideOnForm(), // Cacher le champ prix dans le formulaire
             FormField::addColumn('col-lg-4 col-xl-4'),
             DateTimeField::new('rdv_at', 'Date de RDV'),
             FormField::addColumn('col-lg-3 col-xl-6'),
