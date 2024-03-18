@@ -110,7 +110,7 @@ class OperationCrudController extends AbstractCrudController {
             ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
             TextField::new('city_ope', 'Ville')
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
-            DateTimeField::new('finished_at', 'Terminé le')->hideOnForm(),
+            DateTimeField::new('finished_at', 'Terminée le')->hideOnForm(),
 
         ];
     }

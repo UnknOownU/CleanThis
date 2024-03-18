@@ -116,23 +116,31 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
-            
-            yield MenuItem::section('Principal');
-            yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-            yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
-                MenuItem::linkToCrud('Toutes les opérations', 'fa fa-tags', Operation::class),
-                MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
-                ->setQueryParameter('status', 'En attente de Validation'),
-                MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
-                    ->setQueryParameter('status', 'En cours'),
-                MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
-                    ->setQueryParameter('status', 'Terminée'),
-            ]);
+            // Récupérer l'utilisateur connecté
+            $user = $this->getUser();
 
-            yield MenuItem::section('Support');
-            yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
+            // Vérifier si l'utilisateur est connecté
+            if ($user) {
+                yield MenuItem::section('Principal');
+                yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+                yield MenuItem::subMenu('Opérations', 'fa fa-broom')->setSubItems([
+                    MenuItem::linkToCrud('Toutes mes opérations', 'fa fa-tags', Operation::class)
+                        ->setQueryParameter('customer', $user),
+                    MenuItem::linkToCrud('En attente de Validation', 'fa fa-clock-o', Operation::class)
+                        ->setQueryParameter('status', 'En attente de Validation')
+                        ->setQueryParameter('customer', $user),
+                    MenuItem::linkToCrud('En cours', 'fa fa-arrow-right', Operation::class)
+                        ->setQueryParameter('status', 'En cours')
+                        ->setQueryParameter('customer', $user),
+                    MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
+                        ->setQueryParameter('status', 'Terminée')
+                        ->setQueryParameter('customer', $user),
+                ]);
+    
+                yield MenuItem::section('Support');
+                yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
+            }
         }
-
     }
 public function configureDashboard(): Dashboard
     {
