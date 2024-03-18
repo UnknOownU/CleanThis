@@ -93,10 +93,10 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'Terminée'),
             ]);
 
+            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
+
             yield MenuItem::section('Support');
-            yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
-            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
-            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
+            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
         }
         if ($this->isGranted('ROLE_APPRENTI')) {
             yield MenuItem::section('Principal');
@@ -114,9 +114,7 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
 
             yield MenuItem::section('Support');
-            yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
-            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
-            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
+            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
             

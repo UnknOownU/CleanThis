@@ -81,13 +81,13 @@ class OperationCrudController extends AbstractCrudController {
         // Assurez-vous que le type est bien défini
         switch ($operation->getType()) {
             case 'Little':
-                $operation->setPrice(2500);
+                $operation->setPrice(100000);
                 break;
             case 'Medium':
-                $operation->setPrice(5000);
+                $operation->setPrice(250000);
                 break;
             case 'Big':
-                $operation->setPrice(750000);
+                $operation->setPrice(500000);
                 break;
             case 'Custom':
                 // Implémentez ici votre logique pour un prix personnalisé
