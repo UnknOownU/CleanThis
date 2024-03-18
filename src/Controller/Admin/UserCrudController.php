@@ -35,7 +35,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
-use Symfony\Component\Form\Extension\Core\Type\{EmailType, PasswordType, RepeatedType};
+use Symfony\Component\Form\Extension\Core\Type\{EmailType};
 
 
 class UserCrudController extends AbstractCrudController
