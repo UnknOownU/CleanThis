@@ -2,27 +2,33 @@
 // src/Controller/Admin/UserCrudController.php
 
 namespace App\Controller\Admin;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
+
 use App\Entity\User;
 use App\Entity\Operation;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use Symfony\Component\Validator\Constraints\Regex;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
+use Symfony\Component\Validator\Constraints\Regex;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,8 +36,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
-use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use Symfony\Component\Form\Extension\Core\Type\{EmailType, PasswordType, RepeatedType};
 
 
 class UserCrudController extends AbstractCrudController
@@ -49,7 +55,6 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-
     public function configureCrud(Crud $crud): Crud {
         return $crud
             ->overrideTemplate('crud/new', 'user/new.html.twig')
@@ -62,14 +67,14 @@ class UserCrudController extends AbstractCrudController
             $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
             if ($rolesFilter) {
                 $crud->setDefaultSort(['roles' => $rolesFilter]);
-            }
+        }
     }
 
     public function configureActions(Actions $actions): Actions {
         $actions = parent::configureActions($actions);
     
         // Désactiver toutes les actions si l'utilisateur n'a pas les rôles nécessaires
-        if (!$this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_SENIOR') && !$this->isGranted('ROLE_APPRENTI')) {
             $actions->disable(Action::DETAIL);
             $actions->disable(Action::INDEX);
             $actions->disable(Action::NEW);
@@ -77,7 +82,6 @@ class UserCrudController extends AbstractCrudController
             $actions->disable(Action::DELETE);
             throw new AccessDeniedException('Accès refusé. Vous n\'avez pas les droits nécessaires pour accéder à cette page.');
         }
-    
         return $actions;
     }
 
@@ -85,7 +89,8 @@ class UserCrudController extends AbstractCrudController
     {
         $fields = [  
             IdField::new('id')->hideOnForm(),
-            EmailField::new('email'),
+            TextareaField::new('email')
+            ->setFormType(EmailType::class),
             TextField::new('name'),
             TextField::new('firstname'),
             TextField::new('street', 'Rue')
@@ -101,8 +106,8 @@ class UserCrudController extends AbstractCrudController
                     'Senior' => 'ROLE_SENIOR',
                     'Apprenti' => 'ROLE_APPRENTI',
                     'Client' => 'ROLE_CUSTOMER'
-                ]),
-    ];
+                    ]),
+            ];
 
         $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
@@ -116,8 +121,8 @@ class UserCrudController extends AbstractCrudController
                 ]
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
-            ->onlyOnForms()
-            ;
+            ->onlyOnForms();
+
         $fields[] = $password; 
 
         return $fields;
