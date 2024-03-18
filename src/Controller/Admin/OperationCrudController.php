@@ -144,24 +144,32 @@ class OperationCrudController extends AbstractCrudController {
         EntityDto $entityDto,
         FieldCollection $fields,
         FilterCollection $filters
-        ): QueryBuilder {
+    ): QueryBuilder {
         $qb = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
         $user = $this->security->getUser();
         $statusFilter = $this->getContext()->getRequest()->query->get('status');
+    
         if ($statusFilter) {
             $qb->andWhere('entity.status = :status')->setParameter('status', $statusFilter);
         }
-        // Vérifiez si l'utilisateur actuel a le rôle qui lui permet de voir toutes les missions.
-        // Par exemple, vous pouvez utiliser `ROLE_ADMIN` pour tester si l'utilisateur est un administrateur.
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            // Restriction pour les utilisateurs qui ne sont pas administrateurs.
+    
+        if ($this->isGranted('ROLE_CUSTOMER')) {
+            // Restreindre les opérations aux celles du client connecté
+            $qb->andWhere('entity.customer = :currentUser')
+               ->setParameter('currentUser', $user);
+        } elseif ($this->isGranted('ROLE_ADMIN')) {
+            // Laisser l'administrateur voir toutes les opérations
+        } else {
+            // Restreindre les utilisateurs qui ne sont pas administrateurs.
             $qb->andWhere('entity.status = :statusPending OR (entity.status = :statusAccepted AND entity.salarie = :user)')
                ->setParameter('statusPending', 'En attente de Validation')
                ->setParameter('statusAccepted', 'En cours')
                ->setParameter('user', $user);
         }
+    
         return $qb;
     }
+    
     
     public function configureActions(Actions $actions): Actions {
         $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
