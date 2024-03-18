@@ -2,6 +2,7 @@
 // src/Controller/Admin/UserCrudController.php
 
 namespace App\Controller\Admin;
+
 use App\Entity\User;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
@@ -10,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\OperationCrudController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
@@ -33,6 +35,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use Symfony\Component\Form\Extension\Core\Type\{EmailType, PasswordType, RepeatedType};
 
 
 class UserCrudController extends AbstractCrudController
@@ -55,7 +58,6 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-
     public function configureCrud(Crud $crud): Crud {
         return $crud
             ->overrideTemplate('crud/new', 'user/new.html.twig')
@@ -68,7 +70,7 @@ class UserCrudController extends AbstractCrudController
             $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
             if ($rolesFilter) {
                 $crud->setDefaultSort(['roles' => $rolesFilter]);
-            }
+        }
     }
     
     
@@ -76,12 +78,10 @@ class UserCrudController extends AbstractCrudController
     {
         $actions = parent::configureActions($actions);
     
+
         $actions->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
             return $action->linkToCrudAction('edit');
         });
-    
-        // ...
-    
         return $actions;
     }
     
@@ -109,7 +109,8 @@ public function edit(AdminContext $context)
     {
         $fields = [  
             IdField::new('id')->hideOnForm(),
-            EmailField::new('email'),
+            TextareaField::new('email')
+            ->setFormType(EmailType::class),
             TextField::new('name'),
             TextField::new('firstname'),
             TextField::new('street', 'Rue')
@@ -125,8 +126,8 @@ public function edit(AdminContext $context)
                     'Senior' => 'ROLE_SENIOR',
                     'Apprenti' => 'ROLE_APPRENTI',
                     'Client' => 'ROLE_CUSTOMER'
-                ]),
-    ];
+                    ]),
+            ];
 
         $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
@@ -140,8 +141,8 @@ public function edit(AdminContext $context)
                 ]
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
-            ->onlyOnForms()
-            ;
+            ->onlyOnForms();
+
         $fields[] = $password; 
 
         return $fields;
