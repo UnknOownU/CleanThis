@@ -119,7 +119,9 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
-            
+
+            // Récupérer l'utilisateur connecté
+            $user = $this->getUser();
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
@@ -137,6 +139,7 @@ class DashboardController extends AbstractDashboardController
 
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
+
         }
     }
 
