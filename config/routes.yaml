@@ -16,14 +16,6 @@ api_adresse_search:
   path: /api/adresse/search
   controller: App\Controller\AdresseApiController::search
   methods: GET
-
-operation_accept:
-    path: /operation/{id}/accept
-    controller: App\Controller\OperationController::accept
-
-operation_decline:
-    path: /operation/{id}/decline
-    controller: App\Controller\OperationController::decline
     
 accueil:
     path: /
