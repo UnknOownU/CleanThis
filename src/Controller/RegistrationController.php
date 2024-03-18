@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
             
+            try {
                 $mail->send(
                     'no-reply@cleanthis.fr',
                     $user->getEmail(),
@@ -46,6 +48,12 @@ class RegistrationController extends AbstractController
                         'user' => $user
                     ]
                 );
+            } catch (Exception $e) {
+                
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+                
+            }
+
             
             return $userAuthenticator->authenticateUser(
                 $user,

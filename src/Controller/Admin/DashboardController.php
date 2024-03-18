@@ -15,10 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 
-// src/Controller/Admin/DashboardController.php
 
 class DashboardController extends AbstractDashboardController
 {
@@ -78,6 +75,8 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
+            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
+            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
         if ($this->isGranted('ROLE_SENIOR')) {
@@ -112,8 +111,12 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'Terminée'),
             ]);
 
+            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
+
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Paramètres', 'fa fa-cogs', 'settings_route');
+            yield MenuItem::linkToRoute('Besoin D’aide ?', 'fa fa-question-circle', 'help_route');
+            yield MenuItem::linkToRoute('Chat', 'fa fa-comments', 'chat_route');
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
             
@@ -130,18 +133,21 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'Terminée'),
             ]);
 
+            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
+
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
         }
-
     }
+
 public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
 
         ->setTitle('<img src="images/cleanThis.png" class="img-fluid d-flex" style="max-width:200px; width:200%; padding-right:40px">');
     }
-    public function configureUserMenu(UserInterface $user): UserMenu
+
+public function configureUserMenu(UserInterface $user): UserMenu
     {
         // Usually it's better to call the parent method because that gives you a
         // user menu with some menu items already created ("sign out", "exit impersonation", etc.)
