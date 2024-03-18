@@ -241,9 +241,10 @@ private ?\DateTimeImmutable $finished_at = null;
     #[ORM\Column(length: 255, type: 'string')]
     private ?string $attachment = null;
 
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty:'attachment')]
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'attachment')]
+    #[Assert\File(maxSize: '1024k')]
     private ?File $attachmentFile = null;
-
+    
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $UpdatedAt = null;
 
