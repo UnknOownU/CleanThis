@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -20,15 +21,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class OperationCrudController extends AbstractCrudController {
 
@@ -57,13 +59,12 @@ class OperationCrudController extends AbstractCrudController {
         $operation = new Operation();
         $operation->setCustomer($this->getUser());
         $operation->setCreatedAt(new DateTimeImmutable());
-        $operation->setSalarie($this->getUser());
+        $operation->setSalarie(null);
         return $operation;
     }
     
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void {
         if ($entityInstance instanceof Operation) {
-            // Vous pouvez ajuster cette logique pour définir le prix en fonction de la valeur du champ 'type'
             $this->setOperationPrice($entityInstance);
         }
         parent::persistEntity($entityManager, $entityInstance);
@@ -71,14 +72,12 @@ class OperationCrudController extends AbstractCrudController {
     
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
         if ($entityInstance instanceof Operation) {
-            // Même logique pour ajuster le prix lors de la mise à jour
             $this->setOperationPrice($entityInstance);
         }
         parent::updateEntity($entityManager, $entityInstance);
     }
     
     private function setOperationPrice(Operation $operation) {
-        // Assurez-vous que le type est bien défini
         switch ($operation->getType()) {
             case 'Little':
                 $operation->setPrice(100000);
@@ -96,47 +95,105 @@ class OperationCrudController extends AbstractCrudController {
     }
 
     public function configureFields(string $pageName): iterable {
-        return [
-            FormField::addTab('Mission'),
-            DateTimeField::new('created_at', 'Créé le')->hideOnForm(),
-            FormField::addColumn('col-lg-8 col-xl-3'),
-            IdField::new('id', 'Nº')->hideOnForm(),
-            AssociationField::new('customer', 'Client')->hideOnForm(),
-            TextField::new('name', 'Intitulé de l’opération')
-            ->setLabel('Mission'),
-            TextField::new('attachmentFile')->setFormType(VichImageType::class)->onlyWhenCreating(),
-            ImageField::new('attachment')->setBasePath('/images/products')->onlyOnIndex(),
-            ChoiceField::new('type')
-            ->setChoices([
-                'Petite' => 'Little',
-                'Moyenne' => 'Medium',
-                'Grande' => 'Big',
-                'Personnalisée' => 'Custom',
-            ]),
-        MoneyField::new('price', 'Prix')
-            ->setCurrency('EUR')
-            ->hideOnForm(), // Cacher le champ prix dans le formulaire
-            FormField::addColumn('col-lg-4 col-xl-4'),
-            DateTimeField::new('rdv_at', 'Date de RDV'),
-            FormField::addColumn('col-lg-3 col-xl-6'),
-            TextEditorField::new('description', 'Description')
-            ->hideOnForm(),
-            TextareaField::new('description', 'Description')
-            ->renderAsHtml()
-            ->hideOnIndex(),
-            ChoiceField::new('status')->setChoices([
-                'En attente' => 'En attente de Validation',
-                'En cours' => 'En cours',
-                'Terminée' => 'Terminée',
-            ]),
-            TextField::new('street_ope', 'Rue')
-            ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
-            TextField::new('zipcode_ope', 'Code Postal')
-            ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
-            TextField::new('city_ope', 'Ville')
-            ->setFormTypeOption('attr', ['class' => 'city_ope']),
-            DateTimeField::new('finished_at', 'Terminé le')->hideOnForm(),
-        ];
+        //Formulaire creation operation pour client
+        if ($this->isGranted('ROLE_CUSTOMER')) {
+            return [
+                FormField::addTab('Mission'),
+                DateTimeField::new('created_at', 'Créé le')
+                    ->hideOnForm(),
+                FormField::addColumn('col-lg-8 col-xl-3'),
+                IdField::new('id', 'Nº')
+                    ->hideOnForm(),
+                AssociationField::new('customer', 'Client')
+                    ->hideOnForm(),
+                TextField::new('name', 'Intitulé de l’opération')
+                    ->setLabel('Mission'),
+                TextField::new('attachmentFile')
+                    ->setFormType(VichImageType::class)
+                    ->onlyWhenCreating(),
+                ImageField::new('attachment')
+                    ->setBasePath('/images/products')
+                    ->onlyOnIndex(),
+                ChoiceField::new('type')
+                    ->setChoices([
+                        'Petite' => 'Little',
+                        'Moyenne' => 'Medium',
+                        'Grande' => 'Big',
+                        'Personnalisée' => 'Custom',
+                ]),
+                MoneyField::new('price', 'Prix')
+                    ->setCurrency('EUR')
+                    ->hideOnForm(),
+                FormField::addColumn('col-lg-4 col-xl-4'),
+                DateTimeField::new('rdv_at', 'Date de RDV'),
+                FormField::addColumn('col-lg-3 col-xl-6'),
+                TextEditorField::new('description', 'Description')
+                    ->hideOnForm(),
+                TextareaField::new('description', 'Description')
+                    ->renderAsHtml()
+                    ->hideOnIndex(),
+                TextField::new('street_ope', 'Rue')
+                    ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
+                TextField::new('zipcode_ope', 'Code Postal')
+                    ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+                TextField::new('city_ope', 'Ville')
+                    ->setFormTypeOption('attr', ['class' => 'city_ope']),
+                DateTimeField::new('finished_at', 'Terminé le')
+                    ->hideOnForm() 
+                ];
+        } else { 
+        //Formulaire creation operation pour salariés
+            return [
+                FormField::addTab('Mission'),
+                DateTimeField::new('created_at', 'Créé le')
+                    ->hideOnForm(),
+                FormField::addColumn('col-lg-8 col-xl-3'),
+                IdField::new('id', 'Nº')
+                    ->hideOnForm(),
+                AssociationField::new('customer', 'Client')
+                    ->hideOnForm(),
+                TextField::new('name', 'Intitulé de l’opération')
+                    ->setLabel('Mission'),
+                TextField::new('attachmentFile')
+                    ->setFormType(VichImageType::class)
+                    ->onlyWhenCreating(),
+                ImageField::new('attachment')
+                    ->setBasePath('/images/products')
+                    ->onlyOnIndex(),
+                ChoiceField::new('type')
+                    ->setChoices([
+                        'Petite' => 'Little',
+                        'Moyenne' => 'Medium',
+                        'Grande' => 'Big',
+                        'Personnalisée' => 'Custom',
+                ]),
+                MoneyField::new('price', 'Prix')
+                    ->setCurrency('EUR')
+                    ->hideOnForm(),
+                FormField::addColumn('col-lg-4 col-xl-4'),
+                DateTimeField::new('rdv_at', 'Date de RDV'),
+                FormField::addColumn('col-lg-3 col-xl-6'),
+                TextEditorField::new('description', 'Description')
+                    ->hideOnForm(),
+                TextareaField::new('description', 'Description')
+                    ->renderAsHtml()
+                    ->hideOnIndex(),
+                ChoiceField::new('status')
+                    ->setChoices([
+                        'En attente' => 'En attente de Validation',
+                        'En cours' => 'En cours',
+                        'Terminée' => 'Terminée',
+                        'Refusée' => 'Refusée',
+                    ]),
+                TextField::new('street_ope', 'Rue')
+                    ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
+                TextField::new('zipcode_ope', 'Code Postal')
+                    ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+                TextField::new('city_ope', 'Ville')
+                    ->setFormTypeOption('attr', ['class' => 'city_ope']),
+                DateTimeField::new('finished_at', 'Terminé le')
+                    ->hideOnForm(),
+            ];}
     }
 
     public function createIndexQueryBuilder(
@@ -150,20 +207,21 @@ class OperationCrudController extends AbstractCrudController {
         $statusFilter = $this->getContext()->getRequest()->query->get('status');
     
         if ($statusFilter) {
-            $qb->andWhere('entity.status = :status')->setParameter('status', $statusFilter);
+            $qb->andWhere('entity.status = :status')
+                ->setParameter('status', $statusFilter);
         }
     
         if ($this->isGranted('ROLE_CUSTOMER')) {
-            // Restreindre les opérations aux celles du client connecté
             $qb->andWhere('entity.customer = :currentUser')
                ->setParameter('currentUser', $user);
         } elseif ($this->isGranted('ROLE_ADMIN')) {
             // Laisser l'administrateur voir toutes les opérations
         } else {
             // Restreindre les utilisateurs qui ne sont pas administrateurs.
-            $qb->andWhere('entity.status = :statusPending OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+            $qb->andWhere('entity.status = :statusPending OR statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
                ->setParameter('statusPending', 'En attente de Validation')
                ->setParameter('statusAccepted', 'En cours')
+               ->setParameter('statusCancelled', 'Refusée')
                ->setParameter('user', $user);
         }
     
@@ -196,20 +254,29 @@ class OperationCrudController extends AbstractCrudController {
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
         $operation = $context->getEntity()->getInstance();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
+        
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-        $this->addFlash('success', 'La mission a été acceptée et est maintenant "En cours".');
+
+        
+        // Vérifier si le message flash a déjà été affiché dans la session
+        if (!$session->getFlashBag()->has('success')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
+                    return new RedirectResponse('/admin');
+        }
+    
         return new Response('<script>window.location.reload();</script>');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager): Response {
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
         $operation = $context->getEntity()->getInstance();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
@@ -217,9 +284,13 @@ class OperationCrudController extends AbstractCrudController {
         // Logique pour refuser l'opération
         $operation->setStatus('Refusée');
         $entityManager->flush();
-        $this->addFlash('error', 'La mission a été refusée.');
-        // Utilisez l'URL de referrer, ou redirigez vers une route par défaut si aucun referrer n'est disponible
-        $referrerUrl = $context->getReferrer() ?: $this->adminUrlGenerator->setDashboard()->generateUrl();
-        return $this->redirect($referrerUrl);
+                if (!$session->getFlashBag()->has('error')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('error', 'La mission a été refusée et est maintenant "Annulée".');
+                    return new RedirectResponse('/admin');
+        }
+    
+        return new Response('<script>window.location.reload();</script>');
+
     }
 }
