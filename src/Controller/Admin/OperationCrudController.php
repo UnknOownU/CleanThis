@@ -105,6 +105,9 @@ class OperationCrudController extends AbstractCrudController {
                 IdField::new('id', 'Nº')
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
+                    ->hideOnForm()
+                    ->hideOnIndex(),
+                AssociationField::new('salarie', 'Salarié')
                     ->hideOnForm(),
                 TextField::new('name', 'Intitulé de l’opération')
                     ->setLabel('Mission'),
@@ -287,7 +290,7 @@ class OperationCrudController extends AbstractCrudController {
         $entityManager->flush();
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('error', 'La mission a été refusée et est maintenant "Annulée".');
+            $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
                     return new RedirectResponse('/admin');
         }
     
