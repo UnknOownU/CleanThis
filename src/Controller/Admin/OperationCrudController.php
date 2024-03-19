@@ -89,7 +89,7 @@ class OperationCrudController extends AbstractCrudController {
                 $operation->setPrice(500000);
                 break;
             case 'Custom':
-                // Implémentez ici votre logique pour un prix personnalisé
+                $operation->setPrice(true);
                 break;
         }
     }
@@ -283,6 +283,7 @@ class OperationCrudController extends AbstractCrudController {
         }
         // Logique pour refuser l'opération
         $operation->setStatus('Refusée');
+        $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
