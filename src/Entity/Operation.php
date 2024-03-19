@@ -252,6 +252,7 @@ private ?\DateTimeImmutable $finished_at = null;
     public function __construct()
     {
         $this->created_at = new \DateTimeImmutable();
+        $this->status = 'En attente de Validation';
     }
 
     public function getCreatedAt(): \DateTimeImmutable
