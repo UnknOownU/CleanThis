@@ -46,6 +46,7 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets {
         return parent::configureAssets()
             ->addCssFile('css/Sidebar.css');
+
     }
     
     public function configureMenuItems(): iterable {

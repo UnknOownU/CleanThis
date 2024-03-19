@@ -89,7 +89,6 @@ class OperationCrudController extends AbstractCrudController {
                 $operation->setPrice(500000);
                 break;
             case 'Custom':
-                $operation->setPrice(true);
                 break;
         }
     }
@@ -119,9 +118,9 @@ class OperationCrudController extends AbstractCrudController {
                     ->onlyOnIndex(),
                 ChoiceField::new('type')
                     ->setChoices([
-                        'Petite' => 'Little',
-                        'Moyenne' => 'Medium',
-                        'Grande' => 'Big',
+                        'Petite - 1000€' => 'Little',
+                        'Moyenne - 2500€' => 'Medium',
+                        'Grande - 5000€' => 'Big',
                         'Personnalisée' => 'Custom',
                 ]),
                 MoneyField::new('price', 'Prix')
@@ -168,11 +167,11 @@ class OperationCrudController extends AbstractCrudController {
                         'Petite' => 'Little',
                         'Moyenne' => 'Medium',
                         'Grande' => 'Big',
-                        'Personnalisée' => 'Custom',
+                        'Personnalisée' => 'Custom', //TODO:
                 ]),
                 MoneyField::new('price', 'Prix')
                     ->setCurrency('EUR')
-                    ->hideOnForm(),
+                    ->setLabel('Prix si opération custom'),
                 FormField::addColumn('col-lg-4 col-xl-4'),
                 DateTimeField::new('rdv_at', 'Date de RDV'),
                 FormField::addColumn('col-lg-3 col-xl-6'),
