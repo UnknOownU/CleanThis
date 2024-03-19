@@ -37,6 +37,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use Symfony\Component\Form\Extension\Core\Type\{EmailType};
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
 
 class UserCrudController extends AbstractCrudController
@@ -75,32 +77,39 @@ class UserCrudController extends AbstractCrudController
     }
     
     
-    public function configureActions(Actions $actions): Actions
-    {
+    public function configureActions(Actions $actions): Actions {
         $actions = parent::configureActions($actions);
     
-
-        $actions->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
-            return $action->linkToCrudAction('edit');
+        // Obtenez l'utilisateur actuellement connecté
+        $currentUser = $this->security->getUser();
+    
+        // Vérifiez si l'utilisateur actuel est un administrateur
+        $isAdmin = $this->security->isGranted('ROLE_ADMIN');
+    
+        // Mise à jour de l'action DELETE
+        $actions->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) use ($currentUser, $isAdmin) {
+            // L'action DELETE est conditionnée : seulement pour les administrateurs et ils ne peuvent pas se supprimer eux-mêmes
+            return $action->displayIf(static function ($entity) use ($currentUser, $isAdmin) {
+                return $isAdmin && $entity->getId() !== $currentUser->getId();
+            });
         });
+    
         return $actions;
     }
     
-    // src/Controller/Admin/UserCrudController.php
+    
 
-// ...
-
-public function edit(AdminContext $context)
-{
-    $entity = $context->getEntity()->getInstance();
-    $currentUser = $this->security->getUser();
-
-    if (!$this->security->isGranted('ROLE_ADMIN') && $entity->getId() !== $currentUser->getId()) {
-        throw new AccessDeniedException('Vous n\'avez pas les droits pour modifier ce profil.');
+    public function edit(AdminContext $context) {
+        $entity = $context->getEntity()->getInstance();
+        $currentUser = $this->security->getUser();
+    
+        // Interdire l'édition d'autres profils pour les rôles non-admin
+        if (!$this->security->isGranted('ROLE_ADMIN') && $entity->getId() !== $currentUser->getId()) {
+            throw new AccessDeniedException('Vous n\'avez pas les droits pour modifier ce profil.');
+        }
+    
+        return parent::edit($context);
     }
-
-    return parent::edit($context);
-}
 
 // ...
 
@@ -122,15 +131,15 @@ public function edit(AdminContext $context)
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
             TextField::new('phone'),
             ChoiceField::new('singleRole', 'Role')
-                ->setChoices([
-                    'Admin' => 'ROLE_ADMIN',
-                    'Senior' => 'ROLE_SENIOR',
-                    'Apprenti' => 'ROLE_APPRENTI',
-                    'Client' => 'ROLE_CUSTOMER'
-                    ]),
-            ];
-
-        $password = TextField::new('password')
+            ->setChoices([
+                'Admin' => 'ROLE_ADMIN',
+                'Senior' => 'ROLE_SENIOR',
+                'Apprenti' => 'ROLE_APPRENTI',
+                'Client' => 'ROLE_CUSTOMER'
+            ])
+            ->setFormTypeOption('disabled', !$this->security->isGranted('ROLE_ADMIN')),
+    ];
+            $password = TextField::new('password')
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
