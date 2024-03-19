@@ -37,8 +37,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
-use Symfony\Component\Form\Extension\Core\Type\{EmailType};
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
 
 class UserCrudController extends AbstractCrudController
@@ -76,7 +74,6 @@ class UserCrudController extends AbstractCrudController
         }
     }
     
-    
     public function configureActions(Actions $actions): Actions {
         $actions = parent::configureActions($actions);
     
@@ -85,6 +82,11 @@ class UserCrudController extends AbstractCrudController
     
         // Vérifiez si l'utilisateur actuel est un administrateur
         $isAdmin = $this->security->isGranted('ROLE_ADMIN');
+    
+        // Désactiver l'action 'NEW' pour les utilisateurs sans le rôle 'ROLE_ADMIN'
+        if (!$isAdmin) {
+            $actions->disable(Action::NEW);
+        }
     
         // Mise à jour de l'action DELETE
         $actions->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) use ($currentUser, $isAdmin) {
