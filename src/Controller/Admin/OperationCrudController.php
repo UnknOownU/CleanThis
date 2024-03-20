@@ -193,7 +193,8 @@ class OperationCrudController extends AbstractCrudController {
                         'En cours' => 'warning',
                         'Terminée' => 'success',
                         'Archivée' => 'success',
-                    ]),
+                    ])
+                    ->hideOnForm(),
                 TextField::new('street_ope', 'Rue')
                     ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
                 TextField::new('zipcode_ope', 'CP')
@@ -226,13 +227,15 @@ class OperationCrudController extends AbstractCrudController {
         } elseif ($this->isGranted('ROLE_ADMIN')) {
             // Laisser l'administrateur voir toutes les opérations
         } else {
-            // Restreindre les utilisateurs qui ne sont pas administrateurs.
-            $qb->andWhere('entity.status = :statusPending OR statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
-               ->setParameter('statusPending', 'En attente de Validation')
-               ->setParameter('statusAccepted', 'En cours')
-               ->setParameter('statusCancelled', 'Refusée')
-               ->setParameter('user', $user);
-        }
+// Restreindre les utilisateurs qui ne sont pas administrateurs.
+// Restreindre les utilisateurs qui ne sont pas administrateurs.
+$qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+->setParameter('statusPending', 'En attente de Validation')
+->setParameter('statusAccepted', 'En cours')
+->setParameter('statusCancelled', 'Refusée')
+->setParameter('user', $user);
+
+} 
     
         return $qb;
     }
@@ -295,17 +298,56 @@ class OperationCrudController extends AbstractCrudController {
             throw $this->createNotFoundException('Opération non trouvée');
         }
         
+        $user = $this->security->getUser();
+    
+        // Vérifier le rôle de l'utilisateur et le nombre d'opérations en cours
+        if ($user) {
+            $role = '';
+            $maxOperations = 0;
+    
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $role = 'admin';
+                $maxOperations = 5;
+            } elseif ($this->isGranted('ROLE_SENIOR')) {
+                $role = 'senior';
+                $maxOperations = 3;
+            } elseif ($this->isGranted('ROLE_APPRENTI')) {
+                $role = 'apprenti';
+                $maxOperations = 1;
+            }
+    
+            // Récupérer le nombre d'opérations en cours de l'utilisateur
+            if ($role) {
+                $qb = $entityManager->createQueryBuilder();
+                $qb->select('COUNT(op)')
+                   ->from(Operation::class, 'op')
+                   ->where('op.status = :status')
+                   ->andWhere('op.salarie = :user')
+                   ->setParameter('status', 'En cours')
+                   ->setParameter('user', $user);
+                $count = $qb->getQuery()->getSingleScalarResult();
+    
+                // Limiter le nombre d'opérations en cours en fonction du rôle de l'utilisateur
+                if ($count >= $maxOperations) {
+                    // Afficher un message d'erreur ou rediriger avec un message d'erreur
+                    if (!$session->getFlashBag()->has('error')) {
+                        $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
+                    }
+                    return new RedirectResponse('/admin');
+                }
+            }
+        }
+    
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');
-        $operation->setSalarie($this->security->getUser());
+        $operation->setSalarie($user);
         $entityManager->flush();
-
-        
+    
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
-                    return new RedirectResponse('/admin');
+            return new RedirectResponse('/admin');
         }
     
         return new Response('<script>window.location.reload();</script>');
