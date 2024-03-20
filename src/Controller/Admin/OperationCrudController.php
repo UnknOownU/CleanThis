@@ -155,7 +155,8 @@ class OperationCrudController extends AbstractCrudController {
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
                 TextField::new('name', 'Intitulé de l’opération')
-                    ->setLabel('Mission'),
+                    ->setLabel('Mission')
+                    ->hideOnIndex(),
                 TextField::new('attachmentFile')
                     ->setFormType(VichImageType::class)
                     ->onlyWhenCreating(),
@@ -185,6 +186,13 @@ class OperationCrudController extends AbstractCrudController {
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
                         'Refusée' => 'Refusée',
+                        
+                    ])
+                    ->renderAsBadges([
+                        'En attente de Validation' => 'info',
+                        'En cours' => 'warning',
+                        'Terminée' => 'success',
+                        'Archivée' => 'success',
                     ]),
                 TextField::new('street_ope', 'Rue')
                     ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
@@ -262,7 +270,7 @@ class OperationCrudController extends AbstractCrudController {
                 && $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation'); 
-            $archiveAction = Action::new('archive', 'Archiver', 'fa fa-check')
+         $archiveAction = Action::new('archivée', 'Archivée', 'fa fa-history')
             ->displayIf(function (Operation $operation) {
                 return ($this->isGranted('ROLE_ADMIN') || 
                 $this->isGranted('ROLE_SENIOR') || 
@@ -270,11 +278,11 @@ class OperationCrudController extends AbstractCrudController {
             })
             ->linkToCrudAction('archiveOperation');
         return $actions
-            ->add(Crud::PAGE_INDEX, $acceptAction)
-            ->add(Crud::PAGE_INDEX, $declineAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
-            ->add(Crud::PAGE_INDEX, $finishAction)
             ->add(Crud::PAGE_INDEX, $archiveAction)
+            ->add(Crud::PAGE_INDEX, $finishAction)
+            ->add(Crud::PAGE_INDEX, $declineAction)
+            ->add(Crud::PAGE_INDEX, $acceptAction)
             ;
     }
     
