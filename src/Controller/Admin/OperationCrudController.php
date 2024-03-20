@@ -248,9 +248,26 @@ class OperationCrudController extends AbstractCrudController {
                 && $operation->getStatus() === 'En attente de Validation';
             })
             ->linkToCrudAction('declineOperation');
+        $downloadInvoice = Action::new('downloadInvoice', 'Télécharger Facture', 'fa fa-download')
+            ->linkToRoute('operation_download_invoice', function (Operation $operation) {
+                return ['id' => $operation->getId()];
+            })
+            ->displayIf(static function (Operation $operation) {
+                return $operation->getStatus() === 'Terminée';
+            });
+            $finishAction = Action::new('terminée', 'Terminée', 'fa fa-check')
+            ->displayIf(function (Operation $operation) {
+                return ($this->isGranted('ROLE_ADMIN') || 
+                $this->isGranted('ROLE_SENIOR') || 
+                $this->isGranted('ROLE_APPRENTI')) 
+                && $operation->getStatus() === 'En cours';
+            })
+            ->linkToCrudAction('finishOperation'); 
         return $actions
             ->add(Crud::PAGE_INDEX, $acceptAction)
-            ->add(Crud::PAGE_INDEX, $declineAction);
+            ->add(Crud::PAGE_INDEX, $declineAction)
+            ->add(Crud::PAGE_INDEX, $downloadInvoice)
+            ->add(Crud::PAGE_INDEX, $finishAction);
     }
     
     /**
@@ -296,4 +313,25 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
 
     }
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+        $operation = $context->getEntity()->getInstance();
+        if (!$operation) {
+            throw $this->createNotFoundException('Opération non trouvée');
+        }
+        
+        // Logique pour accepter l'opération
+        $operation->setStatus('Terminée');
+        $operation->setSalarie($this->security->getUser());
+        $entityManager->flush();
+
+        
+        // Vérifier si le message flash a déjà été affiché dans la session
+        if (!$session->getFlashBag()->has('success')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
+                    return new RedirectResponse('/admin');
+        }
+    
+        return new Response('<script>window.location.reload();</script>');
+    } 
 }
