@@ -159,7 +159,7 @@ class OperationCrudController extends AbstractCrudController {
                 TextField::new('attachmentFile')
                     ->setFormType(VichImageType::class)
                     ->onlyWhenCreating(),
-                ImageField::new('attachment')
+                ImageField::new('attachment', 'photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
                 ChoiceField::new('type')
@@ -170,10 +170,9 @@ class OperationCrudController extends AbstractCrudController {
                         'Personnalisée' => 'Custom', //TODO:
                 ]),
                 MoneyField::new('price', 'Prix')
-                    ->setCurrency('EUR')
-                    ->setLabel('Prix si opération custom'),
+                    ->setCurrency('EUR'),
                 FormField::addColumn('col-lg-4 col-xl-4'),
-                DateTimeField::new('rdv_at', 'Date de RDV'),
+                DateTimeField::new('rdv_at', 'RDV'),
                 FormField::addColumn('col-lg-3 col-xl-6'),
                 TextEditorField::new('description', 'Description')
                     ->hideOnForm(),
@@ -189,7 +188,7 @@ class OperationCrudController extends AbstractCrudController {
                     ]),
                 TextField::new('street_ope', 'Rue')
                     ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
-                TextField::new('zipcode_ope', 'Code Postal')
+                TextField::new('zipcode_ope', 'CP')
                     ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
                 TextField::new('city_ope', 'Ville')
                     ->setFormTypeOption('attr', ['class' => 'city_ope']),
@@ -263,11 +262,20 @@ class OperationCrudController extends AbstractCrudController {
                 && $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation'); 
+            $archiveAction = Action::new('archive', 'Archiver', 'fa fa-check')
+            ->displayIf(function (Operation $operation) {
+                return ($this->isGranted('ROLE_ADMIN') || 
+                $this->isGranted('ROLE_SENIOR') || 
+                $this->isGranted('ROLE_APPRENTI'));
+            })
+            ->linkToCrudAction('archiveOperation');
         return $actions
             ->add(Crud::PAGE_INDEX, $acceptAction)
             ->add(Crud::PAGE_INDEX, $declineAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
-            ->add(Crud::PAGE_INDEX, $finishAction);
+            ->add(Crud::PAGE_INDEX, $finishAction)
+            ->add(Crud::PAGE_INDEX, $archiveAction)
+            ;
     }
     
     /**
@@ -329,6 +337,28 @@ class OperationCrudController extends AbstractCrudController {
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
+                    return new RedirectResponse('/admin');
+        }
+    
+        return new Response('<script>window.location.reload();</script>');
+    } 
+
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+        $operation = $context->getEntity()->getInstance();
+        if (!$operation) {
+            throw $this->createNotFoundException('Opération non trouvée');
+        }
+        
+        // Logique pour accepter l'opération
+        $operation->setStatus('Archivée');
+        $operation->setSalarie($this->security->getUser());
+        $entityManager->flush();
+
+        
+        // Vérifier si le message flash a déjà été affiché dans la session
+        if (!$session->getFlashBag()->has('success')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
                     return new RedirectResponse('/admin');
         }
     
