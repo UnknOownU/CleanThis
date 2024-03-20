@@ -262,7 +262,7 @@ class OperationCrudController extends AbstractCrudController {
             ->displayIf(static function (Operation $operation) {
                 return $operation->getStatus() === 'Terminée';
             });
-            $finishAction = Action::new('terminée', 'Terminée', 'fa fa-check')
+            $finishAction = Action::new('terminée', 'Terminer', 'fa fa-check')
             ->displayIf(function (Operation $operation) {
                 return ($this->isGranted('ROLE_ADMIN') || 
                 $this->isGranted('ROLE_SENIOR') || 
@@ -270,7 +270,7 @@ class OperationCrudController extends AbstractCrudController {
                 && $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation'); 
-         $archiveAction = Action::new('archivée', 'Archivée', 'fa fa-history')
+         $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
             ->displayIf(function (Operation $operation) {
                 return ($this->isGranted('ROLE_ADMIN') || 
                 $this->isGranted('ROLE_SENIOR') || 
