@@ -159,7 +159,7 @@ class OperationCrudController extends AbstractCrudController {
                 TextField::new('attachmentFile')
                     ->setFormType(VichImageType::class)
                     ->onlyWhenCreating(),
-                ImageField::new('attachment', 'photo')
+                ImageField::new('attachment', 'Photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
                 ChoiceField::new('type')
