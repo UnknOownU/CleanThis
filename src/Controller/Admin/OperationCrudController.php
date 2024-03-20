@@ -111,9 +111,11 @@ class OperationCrudController extends AbstractCrudController {
                 TextField::new('name', 'Intitulé de l’opération')
                     ->setLabel('Mission'),
                 TextField::new('attachmentFile')
+                    ->setLabel('Photo')
                     ->setFormType(VichImageType::class)
                     ->onlyWhenCreating(),
                 ImageField::new('attachment')
+                    ->setLabel('Photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
                 ChoiceField::new('type')
@@ -157,9 +159,11 @@ class OperationCrudController extends AbstractCrudController {
                 TextField::new('name', 'Intitulé de l’opération')
                     ->setLabel('Mission'),
                 TextField::new('attachmentFile')
+                    ->setLabel('Photo')
                     ->setFormType(VichImageType::class)
                     ->onlyWhenCreating(),
                 ImageField::new('attachment')
+                    ->setLabel('Photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
                 ChoiceField::new('type')
@@ -171,7 +175,7 @@ class OperationCrudController extends AbstractCrudController {
                 ]),
                 MoneyField::new('price', 'Prix')
                     ->setCurrency('EUR')
-                    ->setLabel('Prix si opération custom'),
+                    ->setLabel('Prix'),
                 FormField::addColumn('col-lg-4 col-xl-4'),
                 DateTimeField::new('rdv_at', 'Date de RDV'),
                 FormField::addColumn('col-lg-3 col-xl-6'),
@@ -195,6 +199,7 @@ class OperationCrudController extends AbstractCrudController {
                     ->setFormTypeOption('attr', ['class' => 'city_ope']),
                 DateTimeField::new('finished_at', 'Terminé le')
                     ->hideOnForm(),
+                AssociationField::new('salarie', 'Salarié')
             ];}
     }
 
@@ -220,12 +225,13 @@ class OperationCrudController extends AbstractCrudController {
             // Laisser l'administrateur voir toutes les opérations
         } else {
             // Restreindre les utilisateurs qui ne sont pas administrateurs.
-            $qb->andWhere('entity.status = :statusPending OR statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
-               ->setParameter('statusPending', 'En attente de Validation')
-               ->setParameter('statusAccepted', 'En cours')
-               ->setParameter('statusCancelled', 'Refusée')
-               ->setParameter('user', $user);
-        }
+            $qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+            ->setParameter('statusPending', 'En attente de Validation')
+            ->setParameter('statusAccepted', 'En cours')
+            ->setParameter('statusCancelled', 'Refusée')
+            ->setParameter('user', $user);
+
+            }
     
         return $qb;
     }

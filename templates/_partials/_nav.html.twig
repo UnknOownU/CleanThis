@@ -4,18 +4,18 @@
       <img src="{{ asset('images/cleanThis.png') }}" alt="CleanThis">
     </div>
     <div class="right-content">
-      <button>Demande de devis</button>
-      <button>Se connecter</button>
+      <button>{{ "Demande de devis"|trans}}</button>
+      <button>{{ "Se connecter"|trans}}</button>
     </div>
   </div>
 </header>
 
 <nav>
   <ul class="nav-content">
-    <li><a href="{{ path('accueil') }}" class="active">Accueil</a></li>
-    <li><a href="{{ path('services') }}">Nos services</a></li>
-    <li><a href="{{ path('equipe') }}">Notre équipe</a></li>
-    <li><a href="{{ path('contact') }}">Contact</a></li>
-    <li><a href="{{ path('recrutement') }}">Recrutement</a></li>
+    <li><a href="{{ path('accueil') }}" class="active">{{ "Accueil"|trans}}</a></li>
+    <li><a href="{{ path('services') }}">{{ "Nos services"|trans}}</a></li>
+    <li><a href="{{ path('equipe') }}">{{ "Notre équipe"|trans}}</a></li>
+    <li><a href="{{ path('contact') }}">{{ "Contact"|trans}}</a></li>
+    <li><a href="{{ path('recrutement') }}">{{ "Recrutement"|trans}}</a></li>
   </ul>
 </nav>

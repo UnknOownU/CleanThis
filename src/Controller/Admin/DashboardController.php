@@ -38,7 +38,7 @@ class DashboardController extends AbstractDashboardController
                 ->generateUrl();
             return $this->redirect($url);
         } else {
-            throw new AccessDeniedException('You do not have access to this section.');
+            throw new AccessDeniedException('Vous n\'avez pas accès à cette section.');
         }
     }
 
