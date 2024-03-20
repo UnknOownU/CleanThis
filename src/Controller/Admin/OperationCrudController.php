@@ -154,6 +154,8 @@ class OperationCrudController extends AbstractCrudController {
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
+                AssociationField::new('salarie', 'Opérateur')
+                    ->hideOnForm(),
                 TextField::new('name', 'Intitulé de l’opération')
                     ->setLabel('Mission')
                     ->hideOnIndex(),
@@ -201,7 +203,7 @@ class OperationCrudController extends AbstractCrudController {
                     ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
                 TextField::new('city_ope', 'Ville')
                     ->setFormTypeOption('attr', ['class' => 'city_ope']),
-                DateTimeField::new('finished_at', 'Terminé le')
+                DateTimeField::new('finished_at', 'Terminée le')
                     ->hideOnForm(),
             ];}
     }
