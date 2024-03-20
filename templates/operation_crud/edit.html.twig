@@ -1,13 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/crud/edit.html.twig' %}
 
-{% block title %}Edit Operation{% endblock %}
-
-{% block body %}
-    <h1>Edit Operation</h1>
-
-    {{ include('operation_crud/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_operation_crud_index') }}">back to list</a>
-
-    {{ include('operation_crud/_delete_form.html.twig') }}
+{% block body_javascript %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
+    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
 {% endblock %}

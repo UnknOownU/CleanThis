@@ -73,7 +73,6 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('userType', 'employee'),
             ]);        
             // yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route'); TODO:
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
             // yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class); FIXME:
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
@@ -92,7 +91,6 @@ class DashboardController extends AbstractDashboardController
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
             ]);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
@@ -110,9 +108,8 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                     ->setQueryParameter('status', 'Terminée'),
             ]);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
-            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
+            yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
@@ -128,9 +125,8 @@ class DashboardController extends AbstractDashboardController
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
             ]);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
-            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
+            yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
     }

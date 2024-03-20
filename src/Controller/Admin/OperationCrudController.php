@@ -46,8 +46,8 @@ class OperationCrudController extends AbstractCrudController {
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/new', 'user/new.html.twig')
-            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
+            ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
             ->setSearchFields(null);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
@@ -220,11 +220,12 @@ class OperationCrudController extends AbstractCrudController {
             // Laisser l'administrateur voir toutes les opérations
         } else {
             // Restreindre les utilisateurs qui ne sont pas administrateurs.
-            $qb->andWhere('entity.status = :statusPending OR statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
-               ->setParameter('statusPending', 'En attente de Validation')
-               ->setParameter('statusAccepted', 'En cours')
-               ->setParameter('statusCancelled', 'Refusée')
-               ->setParameter('user', $user);
+            $qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+            ->setParameter('statusPending', 'En attente de Validation')
+            ->setParameter('statusAccepted', 'En cours')
+            ->setParameter('statusCancelled', 'Refusée')
+            ->setParameter('user', $user);
+
         }
     
         return $qb;

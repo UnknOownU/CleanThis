@@ -1,7 +1,140 @@
-{% extends '@EasyAdmin/crud/edit.html.twig' %}
+{# templates/user/edit.html.twig #}
 
-{% block body_javascript %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
-    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier le Profil</title>
+    <style>
+body {
+            font-family: 'Sora', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex; /* Utilisation de flexbox */
+            justify-content: center; /* Centrer les éléments horizontalement */
+            align-items: center; /* Centrer les éléments verticalement */
+            width: 80%; /* ou la largeur que vous préférez */
+            max-width: 1200px; /* ou la largeur maximale que vous préférez */
+            margin: auto;
+        }
+        .profile-edit-form {
+            flex: 1;
+            position: relative;
+            background: #E1E1E1;
+            border-radius: 33px;
+            padding: 2em;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            width: 436px;
+            overflow: hidden;
+        }
+        .image-container {
+            flex: 1; /* occuper l'espace disponible */
+            background-size: cover;
+            border-radius: 33px 0 0 33px; /* arrondir les coins de l'image à gauche */
+        }
+        .profile-edit-form::before {
+            flex: 1;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(118,232,232,1) 0%, rgba(1,69,90,1) 100%);
+            border-top-left-radius: 33px;
+            border-bottom-left-radius: 33px;
+            border-radius: 33px 0 0 33px; /* arrondi seulement du côté gauche */
+            z-index: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 1em;
+            position: relative;
+            z-index: 1;
+        }
+        .form-group {
+            margin-bottom: 1em;
+            position: relative;
+            z-index: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: .5em;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: .75em;
+            border: none;
+            border-radius: 6px;
+            background: #C1C1C1;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 1em;
+            border: none;
+            border-radius: 12px;
+            background-color: #444444;
+            color: white;
+            font-weight: 600;
+            margin-top: 1em;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #333333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <div class="image-container">
+        <img src="{{ asset('images/Logo.png') }}" alt="CleanThisLogo">
+        </div>
+    <div class="profile-edit-form">
+        <h1>Modifier Votre Profil</h1>
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.firstname) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.street) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.zipcode) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.phone) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.city) }}
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="form-group">
+            {{ form_row(form.roles) }}
+        </div>
+        {% endif %}
+        <div class="form-group">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.newPassword.first, { label: 'Nouveau mot de passe' }) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.newPassword.second, { label: 'Confirmer le nouveau mot de passe' }) }}
+        </div>
+        <button type="submit">Enregistrer les modifications</button>
+        {{ form_end(form) }}
+    </div>
+</body>
+</html>

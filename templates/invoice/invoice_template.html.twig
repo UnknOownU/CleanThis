@@ -1,160 +1,210 @@
-
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Facture de l'opération</title>
-    <style>
-body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #fff;
-}
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-.header,
-.footer {
-    color: #111;
-    text-align: center;
-    margin-bottom: 30px;
-}
+		<title>Your Cleaning Invoice</title>
 
-.header {
-    margin-top: 20px;
-}
+		<!-- Favicon -->
+		<link rel="icon" href="./images/favicon.png" type="image/x-icon" />
 
-.header img {
-    max-height: 50px;
-    margin-bottom: 10px;
-}
+		<!-- Invoice styling -->
+		<style>
+			body {
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				text-align: center;
+				color: #777;
+			}
 
-{# TITRE ICI #}
-.invoice-title {
-    color: blue;
-    font-weight: bold;
-    margin: 10px 0;
-}
+			body h1 {
+				font-weight: 300;
+				margin-bottom: 0px;
+				padding-bottom: 0px;
+				color: #000;
+			}
 
-.table-header {
-    background-color: #f2f2f2;
-    color: #111;
-    font-weight: bold;
-    text-transform: uppercase;
-}
+			body h3 {
+				font-weight: 300;
+				margin-top: 10px;
+				margin-bottom: 20px;
+				font-style: italic;
+				color: #555;
+			}
 
-.table-line {
-    background-color: #fff;
-    color: #111;
-}
+			body a {
+				color: #06f;
+			}
+            
+			.invoice-box {
+				max-width: 800px;
+				margin: auto;
+				padding: 30px;
+				border: 1px solid #eee;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+				font-size: 16px;
+				line-height: 24px;
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				color: #555;
+			}
 
-.table-footer {
-    background-color: #f2f2f2;
-    color: #111;
-    font-weight: bold;
-}
+			.invoice-box table {
+				width: 100%;
+				line-height: inherit;
+				text-align: left;
+				border-collapse: collapse;
+			}
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+			.invoice-box table td {
+				padding: 5px;
+				vertical-align: top;
+			}
 
-table, th, td {
-    border: 1px solid #ddd;
-}
+			.invoice-box table tr td:nth-child(2) {
+				text-align: right;
+			}
 
-th, td {
-    text-align: left;
-    padding: 8px;
-}
+			.invoice-box table tr.top table td {
+				padding-bottom: 20px;
+			}
 
-th {
-    height: 40px;
-}
+			.invoice-box table tr.top table td.title {
+				font-size: 45px;
+				line-height: 45px;
+				color: #333;
+			}
 
-td {
-    height: 30px;
-}
+			.invoice-box table tr.information table td {
+				padding-bottom: 40px;
+			}
 
-.total-price {
-    text-align: right;
-    font-weight: bold;
-}
+			.invoice-box table tr.heading td {
+				background: #eee;
+				border-bottom: 1px solid #ddd;
+				font-weight: bold;
+			}
 
-.footer {
-    font-size: 12px;
-    margin-top: 50px;
-}
+			.invoice-box table tr.details td {
+				padding-bottom: 20px;
+			}
 
-.footer p {
-    margin: 5px;
-}
+			.invoice-box table tr.item td {
+				border-bottom: 1px solid #eee;
+			}
 
-@media print {
-    .no-print {
-        display: none;
-    }
-}
+			.invoice-box table tr.item.last td {
+				border-bottom: none;
+			}
 
+			.invoice-box table tr.total td:nth-child(2) {
+				border-top: 2px solid #eee;
+				font-weight: bold;
+			}
 
-    </style>
-</head>
-<body>
-    <div class="header">
-        <img src="cleanThis.jpeg" alt="Logo">
+			@media only screen and (max-width: 600px) {
+				.invoice-box table tr.top table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+
+				.invoice-box table tr.information table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="invoice-box">
+			<table>
+				<tr class="top">
+					<td colspan="2">
+						<table>
+							<tr>
+								<td class="title">
+									 <img src="{{ logo_base64 }}" alt="Logo" style="width: 100%; max-width: 200px;">
+								</td>
+
+								<td>
+									Invoice #: {{ operation.id }}<br />
+									Created: {{ operation.createdAt|date('Y-m-d') }}<br />
+									Due: {{ operation.finishedAt|date('Y-m-d') }}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr class="information">
+					<td colspan="2">
+						<table>
+							<tr>
+								<td>
+								{{ operation.name }}<br />
+                                {{ operation.streetope }}, {{ operation.zipcodeope }}<br />
+                                {{ operation.cityope }}<br />
+								</td>
+
+								<td>
+									{{ operation.getCustomerFullName }}<br />
+									{{ operation.customer.email }}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="heading">
+					<td>Your cleaning Order details</td>
+
+					<td>Price</td>
+				</tr>
+	
+				<tr class="item">
+					<td>{{ operation.name }}</td>
+
+				</tr>
+
+				<tr class="item">
+					<td>{{ operation.description }}</td>
+				</tr>
+
+				<tr class="item last">
+					<td>
+                    {{ operation.type }} Size</td>
+
+					<td>{{ operation.price }} €<</td>
+				</tr>
+
+                <tr class="heading">
+					<td>Payment Method</td>
+
+					<td>Total</td>
+				</tr>
+
+				<tr class="details">
+					<td>Automatic Bank Transfer</td>
+
+					<td>{{ operation.price }} €</td>
+				</tr>
+
+			</table>
+		</div>
+        <div class="invoice-box">
+        <!-- ... Reste du contenu ... -->
+
+        <div class="footer">
+            <p class="footer-info">
+                <i class="fas fa-envelope icon"></i>CleanThis@Pro.com | 
+                <i class="fas fa-phone icon"></i>(+33) 753382997
+            </p>
+            <p class="footer-info">
+                <i class="fas fa-globe icon"></i>www.Cleathis.com
+            </p>
+        </div>
     </div>
-    
-    <h1 class="invoice-title">Facture de l'opération {{ operation.id }}</h1>
-    
-    <div class="invoice-info">
-        <table>
-            <tr>
-                <th>Type d'opération:</th>
-                <td>{{ operation.type }}</td>
-            </tr>
-            <tr>
-                <th>Nom de l'opération:</th>
-                <td>{{ operation.name }}</td>
-            </tr>
-            <tr>
-                <th>Description:</th>
-                <td>{{ operation.description }}</td>
-            </tr>
-            <tr>
-                <th>Statut:</th>
-                <td>{{ operation.status }}</td>
-            </tr>
-            <tr>
-                <th>Adresse:</th>
-                <td>{{ operation.streetope }}, {{ operation.zipcodeope }}, {{ operation.cityope }}</td>
-            </tr>
-            <tr>
-                <th>Date de création:</th>
-                <td>{{ operation.createdAt|date('d/m/Y') }}</td>
-            </tr>
-            <tr>
-                <th>Date du RDV:</th>
-                <td>{{ operation.rdvAt|date('d/m/Y H:i') }}</td>
-            </tr>
-            <tr>
-                <th>Client:</th>
-                <td>{{ operation.getCustomerFullName }}</td>
-            </tr>
-            <tr>
-                <th>Prix:</th>
-                <td>{{ operation.price }} €</td>
-            </tr>
-            <!-- Vous pouvez ajouter d'autres lignes ici si nécessaire -->
-        </table>
-    </div>
-    
-    <div class="total">
-        Total: {{ operation.price }} €
-    </div>
-    
-    <div class="footer">
-        Merci pour votre confiance.
-    </div>
-</body>
+	</body>
 </html>
