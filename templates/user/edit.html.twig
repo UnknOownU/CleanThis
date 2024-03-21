@@ -1,140 +1,203 @@
-{# templates/user/edit.html.twig #}
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Modifier le Profil</title>
     <style>
-body {
-            font-family: 'Sora', sans-serif;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            display: flex; /* Utilisation de flexbox */
-            justify-content: center; /* Centrer les éléments horizontalement */
-            align-items: center; /* Centrer les éléments verticalement */
-            width: 80%; /* ou la largeur que vous préférez */
-            max-width: 1200px; /* ou la largeur maximale que vous préférez */
-            margin: auto;
-        }
-        .profile-edit-form {
-            flex: 1;
-            position: relative;
-            background: #E1E1E1;
-            border-radius: 33px;
-            padding: 2em;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            width: 436px;
-            overflow: hidden;
-        }
-        .image-container {
-            flex: 1; /* occuper l'espace disponible */
-            background-size: cover;
-            border-radius: 33px 0 0 33px; /* arrondir les coins de l'image à gauche */
-        }
-        .profile-edit-form::before {
-            flex: 1;
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 10px;
-            height: 100%;
-            background: linear-gradient(180deg, rgba(118,232,232,1) 0%, rgba(1,69,90,1) 100%);
-            border-top-left-radius: 33px;
-            border-bottom-left-radius: 33px;
-            border-radius: 33px 0 0 33px; /* arrondi seulement du côté gauche */
-            z-index: 0;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 1em;
-            position: relative;
-            z-index: 1;
-        }
-        .form-group {
-            margin-bottom: 1em;
-            position: relative;
-            z-index: 1;
-        }
-        label {
-            display: block;
-            margin-bottom: .5em;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: .75em;
-            border: none;
-            border-radius: 6px;
-            background: #C1C1C1;
-        }
-        button[type="submit"] {
-            width: 100%;
-            padding: 1em;
-            border: none;
-            border-radius: 12px;
-            background-color: #444444;
-            color: white;
-            font-weight: 600;
-            margin-top: 1em;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover {
-            background-color: #333333;
-        }
+       body {
+    font-family: 'Sora', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center; 
+    flex-direction: column; /* Center align the main container */
+    align-items: center;
+    width: 80%;
+    max-width: 900px;
+    margin: auto;
+}
+
+.image-side {
+    flex: 1; /* Ajuste l'espace occupé par l'image */
+    background-image: url('{{ asset('images/Professional.jpg') }}'); /* Chemin de l'image */
+    background-size: cover; /* Redimensionne l'image pour couvrir toute la zone */
+    background-position: left; /* Positionne l'image sur le côté gauche */
+    height: 100vh; /* Hauteur égale à la taille de l'écran */
+    border-top-left-radius: 25px; /* Arrondi uniquement sur le coin supérieur gauche */
+    border-bottom-left-radius: 25px; /* Arrondi uniquement sur le coin inférieur gauche */
+}
+
+.profile-edit-form {
+    position: relative;
+    background: #E1E1E1;
+    border-radius: 25px;
+    padding: 2em;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 42%; /* Adjust the width as needed */
+    font-size: 0.8em;
+    overflow: hidden; /* Ensures that the pseudo-element doesn't overflow */
+}
+
+.form-group.full-width {
+    width: 100%; /* Prendre toute la largeur disponible */
+}
+
+.profile-edit-form::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px; /* Or adjust width as needed for your design */
+    background: linear-gradient(180deg, #76E8D6 0%, #01455A 100%);
+    border-radius: 25px 0 0 25px; /* Rounded on the top-left and bottom-left */
+    z-index: 0; /* Puts the gradient behind the form contents */
+    transition: width 0.5s ease-in-out; /* Smooth transition for the width */
+}
+
+.profile-edit-form:hover::before {
+    width: 4%; /* Width on hover to show the gradient expanding */
+    border-radius: 10px; /* Fully rounded on hover to match the form's border-radius */
+}
+
+.logo-container {
+    position: relative; /* Changer la position en relative */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Espacement sous le logo */
+}
+
+.logo-container img {
+    max-width: 200px; /* Ajustez la largeur maximale comme souhaité */
+}
+
+.form-group label {
+    font-weight: 600; /* Utilisez 600 pour Sora Semibold */
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2em;
+    color: 
+}
+
+.form-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 1em;
+}
+
+.form-group {
+    width: calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center align for email input */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: calc(100% - 1.5em);
+    padding: 0.75em;
+    border: none;
+    border-radius: 6px;
+    background: #C1C1C1;
+    margin-bottom: 0.5em; /* Ensure spacing for wrapped labels */
+}
+
+button[type="submit"] {
+    padding: 1em;
+    border: none;
+    border-radius: 12px;
+    background-color: #444444;
+    color: white;
+    font-weight: 600;
+    margin: 1em auto 0 auto; /* Margin top and auto margin for left/right */
+    cursor: pointer;
+    display: block; /* Make it a block to center align */
+}
+
+button[type="submit"]:hover {
+    background-color: #333333;
+}
     </style>
 </head>
 <body>
+<div class="image-side">
+    </div>
 <div class="container">
-        <div class="image-container">
-        <img src="{{ asset('images/Logo.png') }}" alt="CleanThisLogo">
-        </div>
+<div class="logo-container" style="text-align: center; margin-bottom: 19px; width: 100%;">
+    <img src="{{ asset('images/cleanThis.png') }}" alt="Logo" style="max-width: 200px;"> <!-- Ajustez le chemin et les dimensions comme nécessaire -->
+</div>
     <div class="profile-edit-form">
         <h1>Modifier Votre Profil</h1>
         {{ form_start(form) }}
-        <div class="form-group">
-            {{ form_row(form.name) }}
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_row(form.name) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.firstname) }}
+            </div>
         </div>
-        <div class="form-group">
-            {{ form_row(form.firstname) }}
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_row(form.street) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.zipcode) }}
+            </div>
         </div>
-        <div class="form-group">
-            {{ form_row(form.street) }}
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_row(form.city) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.phone) }}
+            </div>
         </div>
-        <div class="form-group">
-            {{ form_row(form.zipcode) }}
+
+        <div class="form-row">
+            <div class="form-group full-width">
+                {{ form_row(form.email) }}
+            </div>
         </div>
-        <div class="form-group">
-            {{ form_row(form.phone) }}
+
+        <div class="form-row">
+            <div class="form-group">
+                {{ form_row(form.newPassword.first, { label: 'Ancien Mot de Passe' }) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.newPassword.second, { label: 'Nouveau Mot de Passe ' }) }}
+            </div>
         </div>
-        <div class="form-group">
-            {{ form_row(form.city) }}
-        </div>
-        {% if is_granted('ROLE_ADMIN') %}
-        <div class="form-group">
-            {{ form_row(form.roles) }}
-        </div>
-        {% endif %}
-        <div class="form-group">
-            {{ form_row(form.email) }}
-        </div>
-        <div class="form-group">
-            {{ form_row(form.newPassword.first, { label: 'Nouveau mot de passe' }) }}
-        </div>
-        <div class="form-group">
-            {{ form_row(form.newPassword.second, { label: 'Confirmer le nouveau mot de passe' }) }}
-        </div>
+
+
         <button type="submit">Enregistrer les modifications</button>
         {{ form_end(form) }}
-    </div>
+            </div>
+</div>
 </body>
 </html>

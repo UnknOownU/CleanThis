@@ -39,10 +39,6 @@ class UserType extends AbstractType
             ])
             ->add('phone', TextType::class);
 
-        if ($this->authChecker->isGranted('ROLE_ADMIN')) {
-            // Si l'utilisateur est un admin, il peut modifier les rôles
-            $builder->add('roles', TextType::class); // À adapter selon vos besoins
-        }
 
         $builder->add('newPassword', RepeatedType::class, [
             'type' => PasswordType::class,
