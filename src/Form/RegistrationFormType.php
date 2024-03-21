@@ -37,9 +37,10 @@ class RegistrationFormType extends AbstractType
 
             ->add('agreeTerms', CheckboxType::class, [
                                 'mapped' => false,
+                                'label' => "conditions d'utilisations",
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Merci d\'accepter les conditions d\'utilisation.',
                     ]),
                 ],
             ])
@@ -47,14 +48,19 @@ class RegistrationFormType extends AbstractType
                                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
+                'label' => 'Mot de passe',
                 'attr' => ['class' => 'new-password'],
                 'constraints' => [
                     new Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', "Il faut un mot de passe de 8 caractères, une majuscule et un chiffre")
                 ],
             ])
             
-            ->add('name')
-            ->add('firstname')            
+            ->add('name', TextType::class, [
+                'label' => 'Nom'
+            ])
+            ->add('firstname', TextType::class, [
+                'label' => 'Prenom'
+            ])            
             ->add('street', TextType::class, [
                 'label' => 'Rue',
                 'attr' => ['class' => 'adresse-autocomplete']
@@ -68,7 +74,9 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['class' => 'city_ope']
             ])
 
-            ->add('phone');
+            ->add('phone', TextType::class, [
+                'label' => 'Telephone'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

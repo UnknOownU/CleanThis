@@ -1,5 +1,5 @@
 <?php
-// src/Service/InvoiceService.php
+
 namespace App\Service;
 
 use Dompdf\Dompdf;
@@ -9,26 +9,43 @@ use Twig\Environment;
 
 class InvoiceService {
     private Environment $twig;
+    private string $projectDir;
 
-    public function __construct(Environment $twig) {
+    // Ajoutez le constructeur avec $projectDir
+    public function __construct(Environment $twig, string $projectDir) {
         $this->twig = $twig;
+        $this->projectDir = $projectDir;
     }
 
     public function generateInvoice(Operation $operation): string {
-        // Vous avez maintenant directement accès aux données de l'opération grâce à l'objet $operation
+        // Obtenez le chemin complet du fichier logo
+        $logoPath = $this->projectDir . '/public/images/logo.png';
+
+        // Vérifiez si le fichier existe
+        if (!file_exists($logoPath)) {
+            throw new \Exception('Le fichier logo n\'existe pas.');
+        }
+
+        // Convertissez l'image en chaîne encodée en base64
+        $logoData = base64_encode(file_get_contents($logoPath));
+        $logoBase64 = 'data:image/png;base64,' . $logoData;
+
+        // Passez l'image encodée en base64 à votre template Twig
         $html = $this->twig->render('invoice/invoice_template.html.twig', [
             'operation' => $operation,
+            'logo_base64' => $logoBase64,
         ]);
-    
-        // Instancier et configurer DOMPDF
+
+        // Configurez dompdf et générez le PDF
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
         $dompdf = new Dompdf($pdfOptions);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-    
+
+        // Retournez le PDF généré
         return $dompdf->output();
     }
-    
+
 }

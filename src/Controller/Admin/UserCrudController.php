@@ -123,15 +123,15 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextareaField::new('email')
             ->setFormType(EmailType::class),
-            TextField::new('name'),
-            TextField::new('firstname'),
+            TextField::new('name', 'Nom'),
+            TextField::new('firstname','Prenom'),
             TextField::new('street', 'Rue')
             ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('zipcode', 'Code Postal')
             ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
             TextField::new('city', 'Ville')
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
-            TextField::new('phone'),
+            TextField::new('phone','Telephone'),
             ChoiceField::new('singleRole', 'Role')
             ->setChoices([
                 'Admin' => 'ROLE_ADMIN',
@@ -139,14 +139,20 @@ class UserCrudController extends AbstractCrudController
                 'Apprenti' => 'ROLE_APPRENTI',
                 'Client' => 'ROLE_CUSTOMER'
             ])
+            ->renderAsBadges([
+                'ROLE_APPRENTI' => 'warning',
+                'ROLE_SENIOR' => 'primary',
+                'ROLE_EXPERT' => 'success',
+                'ROLE_ADMIN' => 'danger'
+            ])
             ->setFormTypeOption('disabled', !$this->security->isGranted('ROLE_ADMIN')),
     ];
-            $password = TextField::new('password')
+            $password = TextField::new('password', 'Mot de passe')
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => '(Repeat)'],
+                'first_options' => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmer mot de passe'],
                 'mapped' => false,
                 'constraints' => [
                     new Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', "Il faut un mot de passe de 8 caractères, une majuscule et un chiffre")

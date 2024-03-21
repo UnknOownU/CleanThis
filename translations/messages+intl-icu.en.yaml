@@ -1,0 +1,100 @@
+Accepter: Accept
+Refuser: Decline
+Supprimer: Delete
+'Réinitialisation de mot de passe': 'Reset password'
+Envoyer: Send
+Bienvenue!: Welcome!
+'Si votre adresse correspond à un compte, un email vous sera envoyé': 'If your address match, an email will be send to reset your password'
+'Vous êtes déjà connecté en tant que': 'You are already connected as'
+'Se déconnecter': Logout
+'Se Connecter': Login
+'Mot de passe oublié': 'Forgotten password'
+'Mot de passe': Password
+'Adresse email': 'Email address'
+'Se connecter avec Google': 'Login with Google'
+'Merci de confirmer votre email!': 'Hi! Please confirm your email!'
+'Merci de confirmer votre adresse en cliquant sur ce lien:': 'Please confirm your email address by clicking the following link:'
+'Confirmer mon email': 'Confirm my Email'
+'Ce lien expirera dans': 'This link will expire in'
+'Veuillez remplir vos coordonnées': 'Enter your credentials'
+Valider: Validate
+'Votre facture de nettoyage': 'Your cleaning invoice'
+Facture: Invoice
+'Date création': Created
+'Date prestation': Due
+'Le détail de votre prestation': 'Your cleaning Order details'
+Prix: Price
+Taille: Size
+'Méthode de paiement': 'Payment method'
+Total: Total
+'Prélévement bancaire': 'Automatic Bank Transfer'
+Bonjour: Hello
+"Pour votre demande de réinitialisation de mot de passe, veuillez\ncliquer sur le lien suivant :": "For your password reset request, please \n click on the link :"
+"Si vous n'êtes pas à l'origine de votre demande, merci de nous contacter": 'If you do not ask to reset your password, please contact us'
+'Création de votre compte': 'Create an account'
+'La création de votre compte est maintenant terminé !': 'Your account is now create !'
+'Merci de bien vouloir vous': Please
+connecter: login
+'à votre compte': 'to your account'
+'À PROPOS DE CLEANTHIS': 'ABOUT CLEANTHIS'
+"est une entreprise de nettoyage dévouée à fournir des services de nettoyage de haute qualité pour les entreprises et les particuliers. Notre objectif est de rendre votre environnement propre et sain, en utilisant des méthodes et des produits respectueux de l'environnement.": 'is a cleaning company dedicated to supply high quality cleaning services for company or individuals. Our goal is to keep your environment healthy and clean using eco friendly products and methods.'
+Categories: Categories
+Liens: Links
+'À propos': 'About us'
+Contact: Contact
+"conditions d'utilisations": 'Privacy policy'
+'Tous droits réservés': 'All Rights Reserved by '
+'Demande de devis': 'Estimate request'
+'Se connecter': Login
+Accueil: Home
+'Nos services': 'Our services'
+'Notre équipe': 'Our team'
+Recrutement: Hiring
+'Créé le': 'Created at'
+Client: Customer
+'Entrez votre email': 'Enter your email'
+'Entrez votre nouveau mot de passe': 'Enter your new password'
+'Il faut un mot de passe de 8 caractères, une majuscule et un chiffre': 'You need 8 characters include at least one capitale letter and a number'
+Rue: Street
+'Code Postal': Zipcode
+Ville: City
+'Activation de votre compte CleanThis': 'Activate your Cleanthis account'
+Membres: Members
+'Modifier le Membre': 'Edit Member'
+'Ajouter un Membre': 'Add a Member'
+'Détails du Membre': 'Member details'
+Salarié: Employee
+'Intitulé de l’opération': 'Operation label'
+Photo: Picture
+'Petite - 1000€': 'Little - 1000€'
+'Moyenne - 2500€': 'Medium - 2500€'
+'Grande - 5000€': 'Big - 5000€'
+Personnalisée: Custom
+Mission: 'Operation label'
+'Date de RDV': 'Due to'
+'Terminée le': 'End on'
+Petite: Little
+Moyenne: Medium
+Grande: Big
+'En attente': 'Waiting validation'
+'En cours': Processing
+Terminée: Done
+Refusée: Declined
+'Télécharger Facture': 'Download invoice'
+'Opération non trouvée': 'Operation not find'
+'La mission a été acceptée et est maintenant "En cours".': 'Mission has been accepted and is now "Processing"'
+'La mission a été annulée et est maintenant "Refusée".': 'Mission has been cancelled and is now "Declined"'
+'La mission est maintenant terminée': 'Mission is now done'
+'Toutes les opérations': 'All operations'
+'En attente de Validation': 'Waiting acceptation'
+Déconnexion: Logout
+'Votre Profil': 'Your profil'
+Opérations: Operations
+Terminées: Done
+'Confirmer mot de passe': 'Repeat password'
+Clients: Customers
+Employés: Employees
+Telephone: Phone
+Nom: Name
+Prenom: Firstname
+"Conditions d'utilisations": "Terms of use"
