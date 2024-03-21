@@ -139,6 +139,12 @@ class UserCrudController extends AbstractCrudController
                 'Apprenti' => 'ROLE_APPRENTI',
                 'Client' => 'ROLE_CUSTOMER'
             ])
+            ->renderAsBadges([
+                'ROLE_APPRENTI' => 'warning',
+                'ROLE_SENIOR' => 'primary',
+                'ROLE_EXPERT' => 'success',
+                'ROLE_ADMIN' => 'danger'
+            ])
             ->setFormTypeOption('disabled', !$this->security->isGranted('ROLE_ADMIN')),
     ];
             $password = TextField::new('password', 'Mot de passe')

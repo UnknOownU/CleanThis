@@ -157,14 +157,16 @@ class OperationCrudController extends AbstractCrudController {
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
+                AssociationField::new('salarie', 'Opérateur')
+                    ->hideOnForm(),
                 TextField::new('name', 'Intitulé de l’opération')
-                    ->setLabel('Mission'),
+                    ->setLabel('Mission')
+                    ->hideOnIndex(),
                 TextField::new('attachmentFile')
                     ->setLabel('Photo')
                     ->setFormType(VichImageType::class)
                     ->onlyWhenCreating(),
-                ImageField::new('attachment')
-                    ->setLabel('Photo')
+                ImageField::new('attachment', 'Photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
                 ChoiceField::new('type')
@@ -178,7 +180,7 @@ class OperationCrudController extends AbstractCrudController {
                     ->setCurrency('EUR')
                     ->setLabel('Prix'),
                 FormField::addColumn('col-lg-4 col-xl-4'),
-                DateTimeField::new('rdv_at', 'Date de RDV'),
+                DateTimeField::new('rdv_at', 'RDV'),
                 FormField::addColumn('col-lg-3 col-xl-6'),
                 TextEditorField::new('description', 'Description')
                     ->hideOnForm(),
@@ -191,14 +193,22 @@ class OperationCrudController extends AbstractCrudController {
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
                         'Refusée' => 'Refusée',
-                    ]),
+                        
+                    ])
+                    ->renderAsBadges([
+                        'En attente de Validation' => 'info',
+                        'En cours' => 'warning',
+                        'Terminée' => 'success',
+                        'Archivée' => 'success',
+                    ])
+                    ->hideOnForm(),
                 TextField::new('street_ope', 'Rue')
                     ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
-                TextField::new('zipcode_ope', 'Code Postal')
+                TextField::new('zipcode_ope', 'CP')
                     ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
                 TextField::new('city_ope', 'Ville')
                     ->setFormTypeOption('attr', ['class' => 'city_ope']),
-                DateTimeField::new('finished_at', 'Terminé le')
+                DateTimeField::new('finished_at', 'Terminée le')
                     ->hideOnForm(),
                 AssociationField::new('salarie', 'Salarié')
             ];}
@@ -261,7 +271,7 @@ class OperationCrudController extends AbstractCrudController {
             ->displayIf(static function (Operation $operation) {
                 return $operation->getStatus() === 'Terminée';
             });
-            $finishAction = Action::new('terminée', 'Terminée', 'fa fa-check')
+            $finishAction = Action::new('terminée', 'Terminer', 'fa fa-check')
             ->displayIf(function (Operation $operation) {
                 return ($this->isGranted('ROLE_ADMIN') || 
                 $this->isGranted('ROLE_SENIOR') || 
@@ -269,11 +279,20 @@ class OperationCrudController extends AbstractCrudController {
                 && $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation'); 
+         $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
+            ->displayIf(function (Operation $operation) {
+                return ($this->isGranted('ROLE_ADMIN') || 
+                $this->isGranted('ROLE_SENIOR') || 
+                $this->isGranted('ROLE_APPRENTI'));
+            })
+            ->linkToCrudAction('archiveOperation');
         return $actions
-            ->add(Crud::PAGE_INDEX, $acceptAction)
-            ->add(Crud::PAGE_INDEX, $declineAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
-            ->add(Crud::PAGE_INDEX, $finishAction);
+            ->add(Crud::PAGE_INDEX, $archiveAction)
+            ->add(Crud::PAGE_INDEX, $finishAction)
+            ->add(Crud::PAGE_INDEX, $declineAction)
+            ->add(Crud::PAGE_INDEX, $acceptAction)
+            ;
     }
     
     /**
@@ -285,17 +304,56 @@ class OperationCrudController extends AbstractCrudController {
             throw $this->createNotFoundException('Opération non trouvée');
         }
         
+        $user = $this->security->getUser();
+    
+        // Vérifier le rôle de l'utilisateur et le nombre d'opérations en cours
+        if ($user) {
+            $role = '';
+            $maxOperations = 0;
+    
+            if ($this->isGranted('ROLE_ADMIN')) {
+                $role = 'admin';
+                $maxOperations = 5;
+            } elseif ($this->isGranted('ROLE_SENIOR')) {
+                $role = 'senior';
+                $maxOperations = 3;
+            } elseif ($this->isGranted('ROLE_APPRENTI')) {
+                $role = 'apprenti';
+                $maxOperations = 1;
+            }
+    
+            // Récupérer le nombre d'opérations en cours de l'utilisateur
+            if ($role) {
+                $qb = $entityManager->createQueryBuilder();
+                $qb->select('COUNT(op)')
+                   ->from(Operation::class, 'op')
+                   ->where('op.status = :status')
+                   ->andWhere('op.salarie = :user')
+                   ->setParameter('status', 'En cours')
+                   ->setParameter('user', $user);
+                $count = $qb->getQuery()->getSingleScalarResult();
+    
+                // Limiter le nombre d'opérations en cours en fonction du rôle de l'utilisateur
+                if ($count >= $maxOperations) {
+                    // Afficher un message d'erreur ou rediriger avec un message d'erreur
+                    if (!$session->getFlashBag()->has('error')) {
+                        $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
+                    }
+                    return new RedirectResponse('/admin');
+                }
+            }
+        }
+    
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');
-        $operation->setSalarie($this->security->getUser());
+        $operation->setSalarie($user);
         $entityManager->flush();
-
-        
+    
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
-                    return new RedirectResponse('/admin');
+            return new RedirectResponse('/admin');
         }
     
         return new Response('<script>window.location.reload();</script>');
@@ -335,6 +393,28 @@ class OperationCrudController extends AbstractCrudController {
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
+                    return new RedirectResponse('/admin');
+        }
+    
+        return new Response('<script>window.location.reload();</script>');
+    } 
+
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+        $operation = $context->getEntity()->getInstance();
+        if (!$operation) {
+            throw $this->createNotFoundException('Opération non trouvée');
+        }
+        
+        // Logique pour accepter l'opération
+        $operation->setStatus('Archivée');
+        $operation->setSalarie($this->security->getUser());
+        $entityManager->flush();
+
+        
+        // Vérifier si le message flash a déjà été affiché dans la session
+        if (!$session->getFlashBag()->has('success')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
                     return new RedirectResponse('/admin');
         }
     

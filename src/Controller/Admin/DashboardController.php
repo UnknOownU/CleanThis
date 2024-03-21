@@ -63,6 +63,8 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('status', 'En cours'),
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
+                    MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                        ->setQueryParameter('status', 'Archivée'),
             ]);
             yield MenuItem::submenu('Profil', 'fa fa-user');
             yield MenuItem::subMenu('Membres', 'fa fa-users')
@@ -107,8 +109,9 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('status', 'En cours'),
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
+                     MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                        ->setQueryParameter('status', 'Archivée'),
             ]);
-
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToRoute(
@@ -141,8 +144,9 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'En cours'),
                 MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                     ->setQueryParameter('status', 'Terminée'),
+                MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                    ->setQueryParameter('status', 'Archivée'),
             ]);
-
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
             yield MenuItem::linkToRoute(
@@ -176,8 +180,9 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('status', 'En cours'),
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
+                    MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                        ->setQueryParameter('status', 'Archivée'),
             ]);
-
             yield MenuItem::section('Support');
             yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
             yield MenuItem::linkToRoute(

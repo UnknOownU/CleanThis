@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User recrutement{% endblock %}
+
+{% block body %}
+<main>
+
+            <section class="banner-section d-flex justify-content-center align-items-end">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-7 col-12">
+                            <h1 class="text-white mb-lg-0">Recrutement</h1>
+                        </div>
+
+                        <div class="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center ms-auto">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb justify-content-center">
+                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+
+                                    <li class="breadcrumb-item active" aria-current="page">Recrutement</li>
+                                </ol>
+                            </nav>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+         
+
+            <section class="section-padding">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-8 col-12 text-center mx-auto">
+                            <ul class="countdown d-flex flex-wrap justify-content-center align-items-center">
+                               <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                    <h3 class="countdown-title days">14</h3>
+                                    <span class="countdown-text">Days</span>
+
+                                    <div class="countdown-item-overlay"></div>
+                               </li>
+
+                               <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                    <h3 class="countdown-title hours">10</h3>
+                                    <span class="countdown-text">hours</span>
+                               </li>
+
+                               <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                    <h3 class="countdown-title minutes">15</h3>
+                                    <span class="countdown-text">minutes</span>
+                               </li>
+
+                               <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
+                                    <h3 class="countdown-title seconds">34</h3>
+                                    <span class="countdown-text">seconds</span>
+                               </li>     
+                            </ul>
+
+                            <h2 class="">Les recrutements n'ont pas encore commencé!</h2>
+                            <h3 class="">Mais vous pouvez nous contacter à cette adresse:</h3>
+                                                        <a href="mailto:info@company.com" class="site-recrutement-link">
+                                contact@cleanthis.fr
+                            </a>
+                            {# <p>You can set the launch date time in init.js file.</p> #}
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+        <script src="{{ asset('js/counter.js') }}"></script>
+        <script src="{{ asset('js/countdown.js') }}"></script>
+        <script src="{{ asset('js/init.js') }}"></script>
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        <script src="{{ asset('js/animated-headline.js') }}"></script>
+        <script src="{{ asset('js/custom.js') }}"></script>
+
+{% endblock %}

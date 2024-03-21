@@ -10,9 +10,18 @@
         {% endblock %}
 
         {% block javascripts %}
-        <script src="{{ asset('js/custom.js') }}"></script>
-         <script src="{{ asset('js/navbar.js') }}"></script>
 
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+        <script src="{{ asset('js/counter.js') }}"></script>
+        <script src="{{ asset('js/countdown.js') }}"></script>
+        <script src="{{ asset('js/init.js') }}"></script>
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        <script src="{{ asset('js/animated-headline.js') }}"></script>
+        <script src="{{ asset('js/custom.js') }}"></script>
+      
         {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
 

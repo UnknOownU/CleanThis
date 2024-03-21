@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User about{% endblock %}
+
+{% block body %}
+<main>
+
+            <section class="banner-about d-flex justify-content-center align-items-end">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-7 col-12">
+                            <h1 class="text-white mb-lg-0">Notre équipe</h1>
+                        </div>
+
+                        <div class="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center ms-auto">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb justify-content-center">
+                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+
+                                    <li class="breadcrumb-item active" aria-current="page">About Us</li>
+                                </ol>
+                            </nav>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+         
+
+            <section class="section-padding">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-6 col-12">
+                            <img src="images/cleaning-concept-with-man-showing-business-card.jpg" class="featured-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="featured-block">
+                                <h2 class="mb-4">CleanThis</h2><br><h3>Service de nettoyage depuis 2023</h3>
+
+                                <p>Cleanthis est une entreprise de nettoyage fictive créé par 4 accolytes durant leurs formation DWWM à l'<a href="#">AFPA</a>.</p>
+
+                                <p>Farid, Simon, Selim et Abdel-karim</p>
+
+                                <a class="custom-btn btn button button--atlas mt-3" href="contact.html">
+                                    <span>Contactez-nous!</span>
+    
+                                    <div class="marquee" aria-hidden="true">
+                                        <div class="marquee__inner">
+                                            <span>Contactez-nous</span>
+                                            <span>Contactez-nous</span>
+                                            <span>Contactez-nous</span>
+                                            <span>Contactez-nous</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="team-section section-padding section-bg">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12">
+                            <h2 class="mb-4">Qui sommes-nous?</h2>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 mb-lg-0 mb-md-5">
+                            <img src="images/teams/young-cleaning-man-wearing-casual-clothes.jpg" class="team-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 d-flex justify-content-lg-center mt-4 mt-lg-0 mt-md-0 mb-5 mb-lg-0">
+                            <div class="team-info mx-auto mx-lg-0">
+                                <h4 class="mb-2">Simon</h4>
+
+                                <p>Dévoué, mais tête en l'air</p>
+
+                                <div class="border-top mt-3 pt-3">
+                                    <p class="d-flex mb-0">
+                                        <i class="bi-whatsapp me-2"></i>
+
+                                        <a href="tel: 110-220-9800">
+                                            loro-simon@live.fr
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12">
+                            <img src="images/teams/happy-young-woman-wiping-kitchen-counter-wearing-yellow-gloves.jpg" class="team-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 d-flex justify-content-lg-center mt-4 mt-lg-0 mt-md-0">
+                            <div class="team-info mx-auto mx-lg-0">
+                                <h4 class="mb-2">Selim</h4>
+
+                                <p>Organisé mais pas très bavard</p>
+
+                                <div class="border-top mt-3 pt-3">
+                                    <p class="d-flex mb-0">
+                                        <i class="bi-whatsapp me-2"></i>
+
+                                        <a href="tel: 110-220-9800">
+                                            110-220-9800
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+<section class="partners-section">
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+
+                        <div class="col-lg-12 col-12">
+                            <h4 class="partners-section-title bg-white shadow-lg">Ils nous ont fait confiance!</h4>
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/insy2s.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/HDF.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/afpa.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/FranceT.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/mel.png" class="partners-image img-fluid">
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+        <script src="{{ asset('js/counter.js') }}"></script>
+        <script src="{{ asset('js/countdown.js') }}"></script>
+        <script src="{{ asset('js/init.js') }}"></script>
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        <script src="{{ asset('js/animated-headline.js') }}"></script>
+        <script src="{{ asset('js/custom.js') }}"></script>
+
+{% endblock %}
