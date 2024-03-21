@@ -46,8 +46,8 @@ class OperationCrudController extends AbstractCrudController {
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/new', 'user/new.html.twig')
-            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
+            ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
             ->setSearchFields(null);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
@@ -231,8 +231,7 @@ class OperationCrudController extends AbstractCrudController {
             ->setParameter('statusAccepted', 'En cours')
             ->setParameter('statusCancelled', 'Refusée')
             ->setParameter('user', $user);
-
-            }
+        }
     
         return $qb;
     }
