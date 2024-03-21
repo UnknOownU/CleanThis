@@ -7,7 +7,16 @@
       <button>{{ "Demande de devis"|trans}}</button>
       <button>{{ "Se connecter"|trans}}</button>
     </div>
+		{% for locale in locales %}
+		{% if locale != app.request.locale %}
+
+    			<a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
+
+		{% endif %}
+	{% endfor %}
   </div>
+
+
 </header>
 
 <nav>
@@ -17,12 +26,6 @@
     <li><a href="{{ path('equipe') }}">{{ "Notre équipe"|trans}}</a></li>
     <li><a href="{{ path('contact') }}">{{ "Contact"|trans}}</a></li>
     <li><a href="{{ path('recrutement') }}">{{ "Recrutement"|trans}}</a></li>
-	{% for locale in locales %}
-		{% if locale != app.request.locale %}
-			<li> 
-    			<a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
-    		</li>
-		{% endif %}
-	{% endfor %}
+
   </ul>
 </nav>

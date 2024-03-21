@@ -46,7 +46,6 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets {
         return parent::configureAssets()
             ->addCssFile('css/Sidebar.css');
-
     }
     
     public function configureMenuItems(): iterable {
@@ -77,6 +76,22 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::section('Support');
             // yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class); FIXME:
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
         }
         //Senior dashboard
         if ($this->isGranted('ROLE_SENIOR')) {
@@ -96,6 +111,22 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
         }
         if ($this->isGranted('ROLE_APPRENTI')) {
             
@@ -114,6 +145,22 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
             yield MenuItem::section('Principal');
@@ -132,6 +179,22 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-language", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
         }
     }
 
