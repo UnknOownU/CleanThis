@@ -31,8 +31,8 @@
       <img src="{{ asset('images/cleanThis.png') }}" alt="CleanThis">
     </div>
     <div class="right-content">
-      <a href="http://127.0.0.1:8000/login" class="btn btn-primary">Demande de devis</a>
-      <a href="http://127.0.0.1:8000/login" class="btn btn-primary">Se connecter</a>
+      <a href="{{ path('contact') }}" class="btn btn-primary">Demande de devis</a>
+      <a href="/login" class="btn btn-primary">Se connecter</a>
     </div>
   </div>
 
@@ -40,8 +40,8 @@
 <nav>
   <ul class="nav-content">
     <li><a href="{{ path('accueil') }}" class="active">Accueil</a></li>
-    <li><a href="{{ path('services') }}">Nos services</a></li>
-    <li><a href="{{ path('equipe') }}">Notre équipe</a></li>
+    <li><a href="{{ path('services-detail-little') }}">Nos services</a></li>
+    <li><a href="{{ path('about') }}">Notre équipe</a></li>
     <li><a href="{{ path('contact') }}">Contact</a></li>
     <li><a href="{{ path('recrutement') }}">Recrutement</a></li>
   </ul>
