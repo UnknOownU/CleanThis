@@ -6,10 +6,10 @@ Envoyer: Send
 Bienvenue!: Welcome!
 'Si votre adresse correspond à un compte, un email vous sera envoyé': 'If your address match, an email will be send to reset your password'
 'Vous êtes déjà connecté en tant que': 'You are already connected as'
-'Se déconnecter': 'Logout'
-'Se Connecter': 'Login'
+'Se déconnecter': Logout
+'Se Connecter': Login
 'Mot de passe oublié': 'Forgotten password'
-'Mot de passe': 'Password'
+'Mot de passe': Password
 'Adresse email': 'Email address'
 'Se connecter avec Google': 'Login with Google'
 'Merci de confirmer votre email!': 'Hi! Please confirm your email!'
@@ -20,8 +20,8 @@ Bienvenue!: Welcome!
 Valider: Validate
 'Votre facture de nettoyage': 'Your cleaning invoice'
 Facture: Invoice
-'Date création': 'Created'
-'Date prestation': 'Due'
+'Date création': Created
+'Date prestation': Due
 'Le détail de votre prestation': 'Your cleaning Order details'
 Prix: Price
 Taille: Size
@@ -33,7 +33,7 @@ Bonjour: Hello
 "Si vous n'êtes pas à l'origine de votre demande, merci de nous contacter": 'If you do not ask to reset your password, please contact us'
 'Création de votre compte': 'Create an account'
 'La création de votre compte est maintenant terminé !': 'Your account is now create !'
-'Merci de bien vouloir vous': 'Please'
+'Merci de bien vouloir vous': Please
 connecter: login
 'à votre compte': 'to your account'
 'À PROPOS DE CLEANTHIS': 'ABOUT CLEANTHIS'
@@ -45,7 +45,7 @@ Contact: Contact
 "conditions d'utilisations": 'Privacy policy'
 'Tous droits réservés': 'All Rights Reserved by '
 'Demande de devis': 'Estimate request'
-'Se connecter': 'Login'
+'Se connecter': Login
 Accueil: Home
 'Nos services': 'Our services'
 'Notre équipe': 'Our team'
@@ -56,7 +56,7 @@ Client: Customer
 'Entrez votre nouveau mot de passe': 'Enter your new password'
 'Il faut un mot de passe de 8 caractères, une majuscule et un chiffre': 'You need 8 characters include at least one capitale letter and a number'
 Rue: Street
-'Code Postal': 'Zipcode'
+'Code Postal': Zipcode
 Ville: City
 'Activation de votre compte CleanThis': 'Activate your Cleanthis account'
 Membres: Members
@@ -77,7 +77,7 @@ Petite: Little
 Moyenne: Medium
 Grande: Big
 'En attente': 'Waiting validation'
-'En cours': 'Processing'
+'En cours': Processing
 Terminée: Done
 Refusée: Declined
 'Télécharger Facture': 'Download invoice'
@@ -92,8 +92,9 @@ Déconnexion: Logout
 Opérations: Operations
 Terminées: Done
 'Confirmer mot de passe': 'Repeat password'
-'Clients': Customers
-'Employés': Employees
-'Telephone': Phone
-'Nom': Name
-'Prenom': Firstname
+Clients: Customers
+Employés: Employees
+Telephone: Phone
+Nom: Name
+Prenom: Firstname
+"Conditions d'utilisations": "Terms of use"

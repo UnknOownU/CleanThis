@@ -17,5 +17,12 @@
     <li><a href="{{ path('equipe') }}">{{ "Notre équipe"|trans}}</a></li>
     <li><a href="{{ path('contact') }}">{{ "Contact"|trans}}</a></li>
     <li><a href="{{ path('recrutement') }}">{{ "Recrutement"|trans}}</a></li>
+	{% for locale in locales %}
+		{% if locale != app.request.locale %}
+			<li> 
+    			<a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
+    		</li>
+		{% endif %}
+	{% endfor %}
   </ul>
 </nav>
