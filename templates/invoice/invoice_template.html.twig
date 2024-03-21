@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-		<title>Your Cleaning Invoice</title>
+		<title>{{ "Votre facture de nettoyage"|trans}}</title>
 
 		<!-- Favicon -->
 		<link rel="icon" href="./images/favicon.png" type="image/x-icon" />
@@ -130,9 +130,10 @@
 								</td>
 
 								<td>
-									Invoice #: {{ operation.id }}<br />
-									Created: {{ operation.createdAt|date('Y-m-d') }}<br />
-									Due: {{ operation.finishedAt|date('Y-m-d') }}
+									{{ "Facture"|trans}} #: {{ operation.id }}<br />
+									{{ "Date création"|trans}}: {{ operation.createdAt|date('Y-m-d') }}<br />
+									{{ "Date prestation"|trans}}: {{ operation.finishedAt|date('Y-m-d') }}
+
 								</td>
 							</tr>
 						</table>
@@ -158,9 +159,9 @@
 					</td>
 				</tr>
 				<tr class="heading">
-					<td>Your cleaning Order details</td>
+					<td>{{ "Le détail de votre prestation"|trans}}</td>
 
-					<td>Price</td>
+					<td>{{ "Prix"|trans}}</td>
 				</tr>
 	
 				<tr class="item">
@@ -174,19 +175,19 @@
 
 				<tr class="item last">
 					<td>
-                    {{ operation.type }} Size</td>
+                    {{ operation.type }}{{ "Taille"|trans}}</td>
 
-					<td>{{ operation.price }} €<</td>
+					<td>{{ operation.price }} €</td>
 				</tr>
 
                 <tr class="heading">
-					<td>Payment Method</td>
+					<td>{{ "Méthode de paiement"|trans}}</td>
 
-					<td>Total</td>
+					<td>{{ "Total"|trans}}</td>
 				</tr>
 
 				<tr class="details">
-					<td>Automatic Bank Transfer</td>
+					<td>{{ "Prélévement bancaire"|trans}}</td>
 
 					<td>{{ operation.price }} €</td>
 				</tr>
@@ -202,7 +203,7 @@
                 <i class="fas fa-phone icon"></i>(+33) 753382997
             </p>
             <p class="footer-info">
-                <i class="fas fa-globe icon"></i>www.Cleathis.com
+                <i class="fas fa-globe icon"></i>www.Cleanthis.com
             </p>
         </div>
     </div>

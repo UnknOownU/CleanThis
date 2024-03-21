@@ -18,5 +18,3 @@ class AdresseApiService {
         return $response->toArray();
     }
 }
-
-?>

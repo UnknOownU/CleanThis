@@ -47,4 +47,5 @@ class InvoiceService {
         // Retournez le PDF généré
         return $dompdf->output();
     }
+
 }

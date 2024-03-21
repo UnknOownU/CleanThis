@@ -7,8 +7,8 @@
         {# ... #}
         {% if is_granted('ROLE_SENIOR') or is_granted('ROLE_APPRENTI') %}
             {# Ici, vous pouvez mettre vos boutons pour accepter ou refuser les opérations #}
-            <a href="{{ path('operation_accept', {id: entity.primaryKeyValue}) }}" class="btn btn-success">Accepter</a>
-            <a href="{{ path('operation_decline', {id: entity.primaryKeyValue}) }}" class="btn btn-danger">Refuser</a>
+            <a href="{{ path('operation_accept', {id: entity.primaryKeyValue}) }}" class="btn btn-success">{{ "Accepter"|trans }}</a>
+            <a href="{{ path('operation_decline', {id: entity.primaryKeyValue}) }}" class="btn btn-danger">{{ "Refuser"|trans }}</a>
         {% endif %}
     {% endfor %}
 {% endblock %}
