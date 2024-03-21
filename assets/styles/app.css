@@ -81,6 +81,7 @@
   }
   
   ul.nav-content{
+    background-color: #ffffff;
     justify-content: center;
     gap: 3rem;
   }
@@ -1193,7 +1194,7 @@ strong {
   SITE HEADER              
 -----------------------------------------*/
 .site-header {
-  background: var(--primary-color);
+  background: var(--secondary-color);
   position: relative;
   z-index: 22;
   padding-top: 15px;
@@ -1203,7 +1204,7 @@ strong {
 .site-header p,
 .site-header p a,
 .site-header .social-icon-link {
-  color: var(--white-color);
+  color: var(--dark-color);
   font-size: var(--copyright-font-size);
 }
 
