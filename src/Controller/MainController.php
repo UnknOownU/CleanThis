@@ -17,4 +17,14 @@ class MainController extends AbstractController
         //Revenir sur la page
         return $this->redirect($request->headers->get('referer'));
     }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(Request $request): Response
+    {
+        // Clear the session including the stored locale
+        $request->getSession()->invalidate();
+
+        // Redirect to the login page or any other page
+        return $this->redirectToRoute('app_login');
+    }
 }

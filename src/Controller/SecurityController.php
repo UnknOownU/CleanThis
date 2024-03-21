@@ -47,10 +47,14 @@ class SecurityController extends AbstractController
     
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
-       public function logout(): void
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(Request $request): Response
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        // Clear the session including the stored locale
+        $request->getSession()->invalidate();
+
+        // Redirect to the login page or any other page
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route(path:'/oauth/connect/{service}', name:'auth_oauth_connect', methods: ['GET'])]

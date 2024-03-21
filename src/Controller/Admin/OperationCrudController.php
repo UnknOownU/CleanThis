@@ -53,6 +53,7 @@ class OperationCrudController extends AbstractCrudController {
             if ($statusFilter) {
                 $crud->setDefaultSort(['status' => $statusFilter]);
             }
+            
     }
 
     public function createEntity(string $entityFqcn) {
