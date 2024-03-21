@@ -34,8 +34,14 @@
       <a href="{{ path('contact') }}" class="btn btn-primary">Demande de devis</a>
       <a href="/login" class="btn btn-primary">Se connecter</a>
     </div>
-  </div>
+		{% for locale in locales %}
+		{% if locale != app.request.locale %}
 
+    			<a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
+
+		{% endif %}
+	{% endfor %}
+  </div>
 
 <nav>
   <ul class="nav-content">

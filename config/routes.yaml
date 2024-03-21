@@ -36,3 +36,7 @@ contact:
 recrutement:
     path: /recrutement
     controller: App\Controller\RecrutementController::index
+
+profile_edit:
+    path: /profile/edit
+    controller: App\Controller\ProfilController::edit

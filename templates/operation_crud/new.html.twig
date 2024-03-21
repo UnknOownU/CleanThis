@@ -1,11 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/crud/new.html.twig' %}
 
-{% block title %}New Operation{% endblock %}
-
-{% block body %}
-    <h1>Create new Operation</h1>
-
-    {{ include('operation_crud/_form.html.twig') }}
-
-    <a href="{{ path('app_operation_crud_index') }}">back to list</a>
+{% block body_javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
 {% endblock %}
