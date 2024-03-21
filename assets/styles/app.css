@@ -1278,6 +1278,18 @@ strong {
   padding-bottom: 50px;
 }
 
+.banner-about {
+  background-image: url('../images/equipe.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  overflow: hidden;
+  min-height: 340px;
+  padding-top: 100px;
+  padding-bottom: 50px;
+}
+
 .banner-section .breadcrumb {
   margin-bottom: 0;
 }
@@ -1741,17 +1753,17 @@ strong {
 }
 
 .site-footer .logo {
-  background-color: var(--white-color);
-  border-radius: var(--border-radius-large);
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
-  padding: 15px;
 }
 
 .site-footer-title,
 .site-footer-link {
   color: var(--white-color);
+}
+.site-recrutement-link{
+  color:#000000
 }
 
 .copyright-text {
