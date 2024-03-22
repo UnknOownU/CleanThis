@@ -48,7 +48,7 @@ class OperationCrudController extends AbstractCrudController {
         return $crud
             ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
             ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
-            ->setSearchFields(null)
+            ->setSearchFields(['id', 'type', 'name', 'price', 'status', 'zipcode_ope', 'city_ope', 'street_ope', 'customer.name', 'customer.firstname', 'customer.email', 'salarie.name', 'salarie.firstname', 'salarie.email'])
             ->setPaginatorPageSize(7)
             ->setPaginatorRangeSize(0);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
