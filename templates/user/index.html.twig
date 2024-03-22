@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}{{ "Index"|trans }}{% endblock %}
 
 {% block body %}
   <main>
@@ -13,29 +13,29 @@
 
                         <div class="col-lg-7 col-12 text-center mx-auto">
                             <h1 class="cd-headline rotate-1 text-white mb-4 pb-2">
-                                <span>On clean vos</span>
+                                <span>{{ "On clean vos"|trans }}</span>
                                 <span class="cd-words-wrapper">
-                                    <b class="is-visible">Maisons</b>
-                                    <b>Bureaux</b>
-                                    <b>Voitures</b>
+                                    <b class="is-visible">{{ "Maisons"|trans }}</b>
+                                    <b>{{ "Bureaux"|trans }}</b>
+                                    <b>{{ "Voitures"|trans }}</b>
                                 </span>
                             </h1>
 
                             <a class="custom-btn btn button button--atlas smoothscroll me-3" href="#intro-section">
-                                <span>Demandez un devis!</span>
+                                <span>{{ "Demandez un devis!"|trans }}</span>
 
                                 <div class="marquee" aria-hidden="true">
                                     <div class="marquee__inner">
-                                        <span>Demandez un devis!</span>
-                                        <span>Demandez un devis!</span>
-                                        <span>Demandez un devis!</span>
-                                        <span>Demandez un devis!</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
                                     </div>
                                 </div>
                             </a>
 
                             <a class="custom-btn custom-border-btn custom-btn-bg-white btn button button--pan smoothscroll" href="#services-section">
-                                <span>Découvrez nos Services</span>
+                                <span>{{ "Découvrez nos Services"|trans }}</span>
                             </a>
                         </div>
 
@@ -51,28 +51,28 @@
                     <div class="row justify-content-lg-center align-items-center">
 
                         <div class="col-lg-6 col-12">
-                            <h2 class="mb-4">Nos services de propreté modulables <br> &amp; <br> sur-mesure POUR VOUS!</h2>
+                            <h2 class="mb-4">{{ "Nos services de propreté modulables"|trans }} <br> &amp; <br> {{ "sur-mesure POUR VOUS!"|trans }}</h2>
 
-                            <p><a href="#">CleanThis</a> Avec nos différentes sociétés de nettoyage,
-                             bénéficiez d’un service de qualité en propreté et hygiène spécifique, répondant aux normes du nettoyage industriel. 
+                            <p><a href="#">CleanThis</a> {{ "Avec nos différentes sociétés de nettoyage,"|trans }}
+                             {{ "bénéficiez d’un service de qualité en propreté et hygiène spécifique, répondant aux normes du nettoyage industriel."|trans }} 
                             <br>
-Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons notre offre à vos besoins :
+                            {{ "Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons notre offre à vos besoins :"|trans }}
 <ul>
-<li>Les techniques de nettoyage de vos locaux</li>
-<li>La durée de votre contrat</li>
-<li>La fréquence de passage de nos agents de propreté</li>
-<li>La périodicité des contrôles qualité</li>
-<li>Notre Espace Client qui permet le suivi des services propreté </li>
+<li>{{ "Les techniques de nettoyage de vos locaux"|trans }}</li>
+<li>{{ "La durée de votre contrat"|trans }}</li>
+<li>{{ "La fréquence de passage de nos agents de propreté"|trans }}</li>
+<li>{{ "La périodicité des contrôles qualité"|trans }}</li>
+<li>{{ "Notre Espace Client qui permet le suivi des services propreté"|trans }} </li>
 <ul>
 
-<a href="#contact" target="_blank">Contactez nous</a> pour plus d'information!</p>
+<a href="#contact" target="_blank">{{ "Contactez nous"|trans }}</a> {{ "pour plus d'information!"|trans }}</p>
                         </div>
 
                         <div class="col-lg-6 col-12 custom-block-wrap">
                             <img src="images/male-wearing-apron-female-white-t-shirt-smiling-broadly-being-glad-clean.png" class="img-fluid">
 
                             <div class="custom-block d-flex flex-column">
-                                <h6 class="text-white mb-3">Vous pouvez aussi<br> Nous appeler!</h6>
+                                <h6 class="text-white mb-3">{{ "Vous pouvez aussi"|trans }}<br> {{ "Nous appeler!"|trans }}</h6>
 
                                 <p class="d-flex mb-0">
                                     <i class="bi-telephone-fill custom-icon me-2"></i>
@@ -94,7 +94,7 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                     <div class="row">
 
                         <div class="col-lg-12 col-12">
-                            <h2 class="mb-4">Nos offres du moment!</h2>
+                            <h2 class="mb-4">{{ "Nos offres du moment!"|trans }}</h2>
                         </div>
 
                         <div class="col-lg-6 col-12">
@@ -126,10 +126,10 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                     <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
                                         <div class="services-info mt-4 mt-lg-0 mt-md-0">
                                             <h4 class="services-title mb-1 mb-lg-2">
-                                                <a class="services-title-link" href="services-detail.html">Petite surface/Bureau</a>
+                                                <a class="services-title-link" href="services-detail.html">{{ "Petite surface/Bureau"|trans }}</a>
                                             </h4>
 
-                                            <p>Une pièces sans un grain de poussière!</p>
+                                            <p>{{ "Une pièces sans un grain de poussière!"|trans }}</p>
 
                                             <div class="d-flex flex-wrap align-items-center">
                                                 <div class="reviews-icons">
@@ -141,14 +141,14 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                                 </div>
 
                                                 <a href="services-detail.html" class="custom-btn btn button button--atlas mt-2 ms-auto">
-                                                    <span>Voir les détails</span>
+                                                    <span>{{ "Voir les détails"|trans }}</span>
 
                                                     <div class="marquee" aria-hidden="true">
                                                         <div class="marquee__inner">
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -188,10 +188,10 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                     <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
                                         <div class="services-info mt-4 mt-lg-0 mt-md-0">
                                             <h4 class="services-title mb-1 mb-lg-2">
-                                                <a class="services-title-link" href="services-detail.html">Moyenne Surface/Maison</a>
+                                                <a class="services-title-link" href="services-detail.html">{{ "Moyenne Surface/Maison"|trans }}</a>
                                             </h4>
 
-                                            <p>Du sol au plafond!</p>
+                                            <p>{{ "Du sol au plafond!"|trans }}</p>
 
                                             <div class="d-flex flex-wrap align-items-center">
                                                 <div class="reviews-icons">
@@ -203,14 +203,14 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                                 </div>
 
                                                 <a href="services-detail.html" class="custom-btn btn button button--atlas mt-2 ms-auto">
-                                                    <span>Voir les détails</span>
+                                                    <span>{{ "Voir les détails"|trans }}</span>
 
                                                     <div class="marquee" aria-hidden="true">
                                                         <div class="marquee__inner">
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -250,10 +250,10 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                     <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
                                         <div class="services-info mt-4 mt-lg-0 mt-md-0">
                                             <h4 class="services-title mb-1 mb-lg-2">
-                                                <a class="services-title-link" href="services-detail.html">Grande surface/Industriel</a>
+                                                <a class="services-title-link" href="services-detail.html">{{ "Grande surface/Industriel"|trans }}</a>
                                             </h4>
 
-                                            <p>Faites confiance à nos experts pour les tâches difficiles!</p>
+                                            <p>{{ "Faites confiance à nos experts pour les tâches difficiles!"|trans }}</p>
 
                                             <div class="d-flex flex-wrap align-items-center">
                                                 <div class="reviews-icons">
@@ -265,14 +265,14 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                                 </div>
 
                                                 <a href="services-detail.html" class="custom-btn btn button button--atlas mt-2 ms-auto">
-                                                    <span>Voir les détails</span>
+                                                    <span>{{ "Voir les détails"|trans }}</span>
 
                                                     <div class="marquee" aria-hidden="true">
                                                         <div class="marquee__inner">
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -296,7 +296,7 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <p class="text-white mb-0">
                                                             <i class="bi-cash me-2"></i>
-                                                            Prix personnalisé 
+                                                            {{ "Prix personnalisé "|trans }}
                                                         </p>
 
                                                         <p class="text-white mb-0">
@@ -312,10 +312,10 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                     <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
                                         <div class="services-info mt-4 mt-lg-0 mt-md-0">
                                             <h4 class="services-title mb-1 mb-lg-2">
-                                                <a class="services-title-link" href="services-detail.html">Opération spécifique</a>
+                                                <a class="services-title-link" href="services-detail.html">{{ "Opération spécifique"|trans }}</a>
                                             </h4>
 
-                                            <p>Votre voiture, vos habits, votre jardin... N'hésitez pas à nous envoyer un devis et nous ferons tout pour répondre à vos demandes!</p>
+                                            <p>{{ "Votre voiture, vos habits, votre jardin... N'hésitez pas à nous envoyer un devis et nous ferons tout pour répondre à vos demandes!"|trans }}</p>
 
                                             <div class="d-flex flex-wrap align-items-center">
                                                 <div class="reviews-icons">
@@ -327,14 +327,14 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                                                 </div>
 
                                                 <a href="services-detail.html" class="custom-btn btn button button--atlas mt-2 ms-auto">
-                                                    <span>Voir les détails</span>
+                                                    <span>{{ "Voir les détails"|trans }}</span>
 
                                                     <div class="marquee" aria-hidden="true">
                                                         <div class="marquee__inner">
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
-                                                            <span>Voir les détails</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -357,7 +357,7 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                     <div class="row">
 
                         <div class="col-lg-12 col-12 text-center">
-                            <h2 class="text-white mb-4">Nos retours clients!</h2>
+                            <h2 class="text-white mb-4">{{ "Nos retours clients!"|trans }}</h2>
                         </div>
 
                         <div class="col-lg-4 col-12">
@@ -496,7 +496,7 @@ Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons not
                     <div class="row justify-content-center align-items-center">
 
                         <div class="col-lg-12 col-12">
-                            <h4 class="partners-section-title bg-white shadow-lg">Ils nous ont fait confiance!</h4>
+                            <h4 class="partners-section-title bg-white shadow-lg">{{ "Ils nous ont fait confiance!"|trans }}</h4>
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-6">

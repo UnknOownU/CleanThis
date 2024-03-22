@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Modifier le Profil</title>
+    <title>{{ "Modifier le Profil"|trans }}</title>
     <style>
        body {
     font-family: 'Sora', sans-serif;
@@ -149,7 +149,7 @@ button[type="submit"]:hover {
     <img src="{{ asset('images/cleanThis.png') }}" alt="Logo" style="max-width: 200px;"> <!-- Ajustez le chemin et les dimensions comme nécessaire -->
 </div>
     <div class="profile-edit-form">
-        <h1>Modifier Votre Profil</h1>
+        <h1>{{ "Modifier Votre Profil"|trans }}</h1>
         {{ form_start(form) }}
 
         <div class="form-row">
@@ -190,12 +190,12 @@ button[type="submit"]:hover {
                 {{ form_row(form.newPassword.first, { label: 'Ancien Mot de Passe' }) }}
             </div>
             <div class="form-group">
-                {{ form_row(form.newPassword.second, { label: 'Nouveau Mot de Passe ' }) }}
+                {{ form_row(form.newPassword.second, { label: 'Nouveau Mot de Passe' }) }}
             </div>
         </div>
 
 
-        <button type="submit">Enregistrer les modifications</button>
+        <button type="submit">{{ "Enregistrer les modifications"|trans }}</button>
         {{ form_end(form) }}
             </div>
 </div>

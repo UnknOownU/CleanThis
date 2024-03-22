@@ -6,7 +6,7 @@
                         
                       <p class="d-flex me-4 mb-0">
                         
-             Services de Nettoyage Non-Stop!
+                         {{ "Services de Nettoyage Non-Stop!"|trans }}
                         </p>
 
                         <p class="d-flex d-lg-block d-md-block d-none me-4 mb-0">
@@ -31,8 +31,8 @@
       <img src="{{ asset('images/cleanThis.png') }}" alt="CleanThis">
     </div>
     <div class="right-content">
-      <a href="{{ path('contact') }}" class="btn btn-primary">Demande de devis</a>
-      <a href="/login" class="btn btn-primary">Se connecter</a>
+      <a href="{{ path('contact') }}" class="btn btn-primary">{{ "Demande de devis"|trans }}</a>
+      <a href="/login" class="btn btn-primary">{{ "Se connecter"|trans }}</a>
     </div>
 		{% for locale in locales %}
 		{% if locale != app.request.locale %}
@@ -45,10 +45,10 @@
 
 <nav>
   <ul class="nav-content">
-    <li><a href="{{ path('accueil') }}" class="active">Accueil</a></li>
-    <li><a href="{{ path('services-detail-little') }}">Nos services</a></li>
-    <li><a href="{{ path('about') }}">Notre équipe</a></li>
-    <li><a href="{{ path('contact') }}">Contact</a></li>
-    <li><a href="{{ path('recrutement') }}">Recrutement</a></li>
+    <li><a href="{{ path('accueil') }}" class="active">{{ "Accueil"|trans }}</a></li>
+    <li><a href="{{ path('services-detail-little') }}">{{ "Nos services"|trans }}</a></li>
+    <li><a href="{{ path('about') }}">{{ "Notre équipe"|trans }}</a></li>
+    <li><a href="{{ path('contact') }}">{{ "Contact"|trans }}</a></li>
+    <li><a href="{{ path('recrutement') }}">{{ "Recrutement"|trans }}</a></li>
   </ul>
 </nav>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User recrutement{% endblock %}
+{% block title %}{{ "Recrutement"|trans }}{% endblock %}
 
 {% block body %}
 <main>
@@ -12,15 +12,15 @@
                     <div class="row">
 
                         <div class="col-lg-7 col-12">
-                            <h1 class="text-white mb-lg-0">Recrutement</h1>
+                            <h1 class="text-white mb-lg-0">{{ "Recrutement"|trans }}</h1>
                         </div>
 
                         <div class="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center ms-auto">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="index.html">{{ "Accueil"|trans }}</a></li>
 
-                                    <li class="breadcrumb-item active" aria-current="page">Recrutement</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ "Recrutement"|trans }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -38,29 +38,29 @@
                             <ul class="countdown d-flex flex-wrap justify-content-center align-items-center">
                                <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
                                     <h3 class="countdown-title days">14</h3>
-                                    <span class="countdown-text">Days</span>
+                                    <span class="countdown-text">{{ "Jours"|trans }}</span>
 
                                     <div class="countdown-item-overlay"></div>
                                </li>
 
                                <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
                                     <h3 class="countdown-title hours">10</h3>
-                                    <span class="countdown-text">hours</span>
+                                    <span class="countdown-text">{{ "Heures"|trans }}</span>
                                </li>
 
                                <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
                                     <h3 class="countdown-title minutes">15</h3>
-                                    <span class="countdown-text">minutes</span>
+                                    <span class="countdown-text">{{ "minutes"|trans }}</span>
                                </li>
 
                                <li class="countdown-item d-flex flex-column justify-content-center align-items-center">
                                     <h3 class="countdown-title seconds">34</h3>
-                                    <span class="countdown-text">seconds</span>
+                                    <span class="countdown-text">{{ "secondes"|trans }}</span>
                                </li>     
                             </ul>
 
-                            <h2 class="">Les recrutements n'ont pas encore commencé!</h2>
-                            <h3 class="">Mais vous pouvez nous contacter à cette adresse:</h3>
+                            <h2 class="">{{ "Les recrutements n'ont pas encore commencé!"|trans }}</h2>
+                            <h3 class="">{{ "Mais vous pouvez nous contacter à cette adresse:"|trans }}</h3>
                                                         <a href="mailto:info@company.com" class="site-recrutement-link">
                                 contact@cleanthis.fr
                             </a>

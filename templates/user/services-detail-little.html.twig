@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail Petite surface{% endblock %}
+{% block title %}{{ "Détail Petite surface"|trans }}{% endblock %}
 
 {% block body %}
 <main>
@@ -12,15 +12,15 @@
                     <div class="row">
 
                         <div class="col-lg-7 col-12">
-                            <h1 class="text-white mb-lg-0">Petite surface</h1>
+                            <h1 class="text-white mb-lg-0">{{ "Petite surface"|trans }}</h1>
                         </div>
 
                         <div class="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center ms-auto">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="index.html">{{ "Accueil"|trans }}</a></li>
 
-                                    <li class="breadcrumb-item active" aria-current="page">Petite Surface</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ "Petite Surface"|trans }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -57,19 +57,19 @@
 
                         <div class="col-lg-6 col-12">
                             <div class="services-info px-4 pt-4">
-                                <h2 class="mb-4">Petite Surface/Bureau</h2>
+                                <h2 class="mb-4">{{ "Petite Surface/Bureau"|trans }}</h2>
 
                                 
 
                                 <h6 class="mt-4"></h6>
 
-                                <p>Opération de tout type sur une surface de moins de 30m². <br> Idéal pour votre bureau ou une petit pièce à vivre.</p>
+                                <p>{{ "Opération de tout type sur une surface de moins de 30m²."|trans }} <br>{{ "Idéal pour votre bureau ou une petit pièce à vivre."|trans }} </p>
 
-                                <h6>Nos professionnels</h6>
+                                <h6>{{ "Nos professionnels"|trans }}</h6>
 
-                                <p>Nos <a href="#">agents</a> sont certifiés, n'ayez donc aucune crainte concernant vos documents professionnels! <br>
-                                Ils peuvent être missionnés 24h/24h et 7j/7j et ainsi effectuer leurs opérations après vos horaires de travail!  <br></p>
-                                <p> Demandez votre <a href="#">devis gratuit</a></p> 
+                                <p>{{ "Nos"|trans }} <a href="#">{{ "agents"|trans }}</a> {{ "sont certifiés, n'ayez donc aucune crainte concernant vos documents professionnels!"|trans }} <br>
+                                {{ "Ils peuvent être missionnés 24h/24h et 7j/7j et ainsi effectuer leurs opérations après vos horaires de travail!"|trans }}  <br></p>
+                                <p> {{ "Demandez votre"|trans }} <a href="#">{{ "devis gratuit"|trans }}</a></p> 
                           </div>
                         </div>
 
@@ -83,7 +83,7 @@
                     <div class="row">
 
                         <div class="col-lg-12 col-12">
-                            <h2 class="mb-4">Retour Photo</h2>
+                            <h2 class="mb-4">{{ "Retour Photo"|trans }}</h2>
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-12">
@@ -113,7 +113,7 @@
                     <div class="row">
 
                         <div class="col-lg-12 col-12">
-                            <h2 class="mb-4">Autres Services</h2>
+                            <h2 class="mb-4">{{ "Autres Services"|trans }}</h2>
                         </div>
 
                         <div class="col-lg-6 col-12">
@@ -145,10 +145,10 @@
                                     <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
                                         <div class="services-info mt-4 mt-lg-0 mt-md-0">
                                             <h4 class="services-title mb-1 mb-lg-2">
-                                                <a class="services-title-link" href="services-detail.html">Lavage de voiture</a>
+                                                <a class="services-title-link" href="services-detail.html">{{ "Lavage de voiture"|trans }}</a>
                                             </h4>
 
-                                            <p>Intérieur, exterieur et polish</p>
+                                            <p>{{ "Intérieur, exterieur et polish"|trans }}</p>
 
                                             <div class="d-flex flex-wrap align-items-center">
                                                 <div class="reviews-icons">
@@ -160,14 +160,14 @@
                                                 </div>
 
                                                 <a href="services-detail.html" class="custom-btn btn button button--atlas mt-2 ms-auto">
-                                                    <span>Voir détails</span>
+                                                    <span>{{ "Voir détails"|trans }}</span>
 
                                                     <div class="marquee" aria-hidden="true">
                                                         <div class="marquee__inner">
-                                                            <span>Voir détails</span>
-                                                            <span>Voir détails</span>
-                                                            <span>Voir détails</span>
-                                                            <span>Voir détails</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -207,10 +207,10 @@
                                     <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
                                         <div class="services-info mt-4 mt-lg-0 mt-md-0">
                                             <h4 class="services-title mb-1 mb-lg-2">
-                                                <a class="services-title-link" href="services-detail.html">Petites taches</a>
+                                                <a class="services-title-link" href="services-detail.html">{{ "Petites taches"|trans }}</a>
                                             </h4>
 
-                                            <p>Vaisselle, repassage, lessive, etc...</p>
+                                            <p>{{ "Vaisselle, repassage, lessive, etc..."|trans }}</p>
 
                                             <div class="d-flex flex-wrap align-items-center">
                                                 <div class="reviews-icons">
@@ -222,14 +222,14 @@
                                                 </div>
 
                                                 <a href="services-detail.html" class="custom-btn btn button button--atlas mt-2 ms-auto">
-                                                    <span>Voir détails</span>
+                                                    <span>{{ "Voir détails"|trans }}</span>
 
                                                     <div class="marquee" aria-hidden="true">
                                                         <div class="marquee__inner">
-                                                            <span>Voir détails</span>
-                                                            <span>Voir détails</span>
-                                                            <span>Voir détails</span>
-                                                            <span>Voir détails</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
+                                                            <span>{{ "Voir détails"|trans }}</span>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -252,7 +252,7 @@
                     <div class="row">
 
                         <div class="col-lg-12 col-12 text-center">
-                            <h2 class="text-white mb-4">Nos retours clients!</h2>
+                            <h2 class="text-white mb-4">{{ "Nos retours clients!"|trans }}</h2>
                         </div>
 
                         <div class="col-lg-4 col-12">
@@ -391,7 +391,7 @@
                     <div class="row justify-content-center align-items-center">
 
                         <div class="col-lg-12 col-12">
-                            <h4 class="partners-section-title bg-white shadow-lg">Ils nous ont fait confiance!</h4>
+                            <h4 class="partners-section-title bg-white shadow-lg">{{ "Ils nous ont fait confiance!"|trans }}</h4>
                         </div>
 
                         <div class="col-lg-2 col-md-4 col-6">

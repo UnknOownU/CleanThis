@@ -61,8 +61,8 @@ class UserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/new', 'user/new.html.twig')
-            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
+            ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
             ->setPageTitle(Crud::PAGE_INDEX, 'Membres')
             ->setPageTitle(Crud::PAGE_EDIT, 'Modifier le Membre')
             ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un Membre')

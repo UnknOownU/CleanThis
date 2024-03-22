@@ -53,7 +53,6 @@ class OperationCrudController extends AbstractCrudController {
             if ($statusFilter) {
                 $crud->setDefaultSort(['status' => $statusFilter]);
             }
-            
     }
 
     public function createEntity(string $entityFqcn) {
@@ -157,8 +156,7 @@ class OperationCrudController extends AbstractCrudController {
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
-                AssociationField::new('salarie', 'Opérateur')
-                    ->hideOnForm(),
+                AssociationField::new('salarie', 'Opérateur'),
                 TextField::new('name', 'Intitulé de l’opération')
                     ->setLabel('Mission')
                     ->hideOnIndex(),
@@ -210,7 +208,6 @@ class OperationCrudController extends AbstractCrudController {
                     ->setFormTypeOption('attr', ['class' => 'city_ope']),
                 DateTimeField::new('finished_at', 'Terminée le')
                     ->hideOnForm(),
-                AssociationField::new('salarie', 'Salarié')
             ];}
     }
 
@@ -373,10 +370,9 @@ class OperationCrudController extends AbstractCrudController {
             $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
                     return new RedirectResponse('/admin');
         }
-    
         return new Response('<script>window.location.reload();</script>');
-
     }
+
     public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
         $operation = $context->getEntity()->getInstance();
         if (!$operation) {
@@ -395,7 +391,6 @@ class OperationCrudController extends AbstractCrudController {
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
                     return new RedirectResponse('/admin');
         }
-    
         return new Response('<script>window.location.reload();</script>');
     } 
 
@@ -409,7 +404,6 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setStatus('Archivée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-
         
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
@@ -417,7 +411,6 @@ class OperationCrudController extends AbstractCrudController {
             $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
                     return new RedirectResponse('/admin');
         }
-    
         return new Response('<script>window.location.reload();</script>');
     } 
 }
