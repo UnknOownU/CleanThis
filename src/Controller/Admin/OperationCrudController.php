@@ -43,7 +43,44 @@ class OperationCrudController extends AbstractCrudController {
     public static function getEntityFqcn(): string {
         return Operation::class;
     }
+    public function edit(AdminContext $context)
+{
+    $operation = $context->getEntity()->getInstance();
+    if (!$operation instanceof Operation) {
+        throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
+    }
 
+    // Vérifier les droits de l'utilisateur sur l'opération
+    $this->denyAccessUnlessGranted('EDIT', $operation);
+
+    return parent::edit($context);
+}
+
+public function delete(AdminContext $context)
+{
+    $operation = $context->getEntity()->getInstance();
+    if (!$operation instanceof Operation) {
+        throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
+    }
+
+    // Vérifier les droits de l'utilisateur sur l'opération
+    $this->denyAccessUnlessGranted('DELETE', $operation);
+
+    return parent::delete($context);
+}
+
+    
+    protected function initialize(Request $request): void
+    {
+        parent::initialize($request);
+    
+        $entityId = $request->query->get('entityId');
+        if ($entityId) {
+            $operation = $this->entityManager->getRepository(Operation::class)->find($entityId);
+            $this->denyAccessUnlessGranted('EDIT', $operation);
+        }
+    }
+    
     public function configureCrud(Crud $crud): Crud {
         return $crud
             ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
@@ -55,6 +92,7 @@ class OperationCrudController extends AbstractCrudController {
             }
             
     }
+    
 
     public function createEntity(string $entityFqcn) {
         $operation = new Operation();
@@ -73,8 +111,10 @@ class OperationCrudController extends AbstractCrudController {
     
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
         if ($entityInstance instanceof Operation) {
+            $this->denyAccessUnlessGranted('EDIT', $entityInstance);
             $this->setOperationPrice($entityInstance);
         }
+    
         parent::updateEntity($entityManager, $entityInstance);
     }
     
@@ -343,6 +383,7 @@ class OperationCrudController extends AbstractCrudController {
                 }
             }
         }
+        
     
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');

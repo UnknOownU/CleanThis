@@ -10,7 +10,14 @@ services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+    App\Security\OperationVoter:
+        tags:
+            - { name: security.voter } # Automatically registers your services as commands, event subscribers, etc.
+   
+    App\EventSubscriber\EasyAdminSubscriber:
+        tags:
+        - { name: kernel.event_subscriber }
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -24,3 +31,4 @@ services:
     App\Service\InvoiceService:
         arguments:
             $projectDir: '%kernel.project_dir%'
+    

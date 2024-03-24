@@ -1,203 +1,85 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier le Profil</title>
-    <style>
-       body {
-    font-family: 'Sora', sans-serif;
-    background-color: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
-.container {
-    display: flex;
-    justify-content: center; 
-    flex-direction: column; /* Center align the main container */
-    align-items: center;
-    width: 80%;
-    max-width: 900px;
-    margin: auto;
-}
-
-.image-side {
-    flex: 1; /* Ajuste l'espace occupé par l'image */
-    background-image: url('{{ asset('images/Professional.jpg') }}'); /* Chemin de l'image */
-    background-size: cover; /* Redimensionne l'image pour couvrir toute la zone */
-    background-position: left; /* Positionne l'image sur le côté gauche */
-    height: 100vh; /* Hauteur égale à la taille de l'écran */
-    border-top-left-radius: 25px; /* Arrondi uniquement sur le coin supérieur gauche */
-    border-bottom-left-radius: 25px; /* Arrondi uniquement sur le coin inférieur gauche */
-}
-
-.profile-edit-form {
-    position: relative;
-    background: #E1E1E1;
-    border-radius: 25px;
-    padding: 2em;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 42%; /* Adjust the width as needed */
-    font-size: 0.8em;
-    overflow: hidden; /* Ensures that the pseudo-element doesn't overflow */
-}
-
-.form-group.full-width {
-    width: 100%; /* Prendre toute la largeur disponible */
-}
-
-.profile-edit-form::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 10px; /* Or adjust width as needed for your design */
-    background: linear-gradient(180deg, #76E8D6 0%, #01455A 100%);
-    border-radius: 25px 0 0 25px; /* Rounded on the top-left and bottom-left */
-    z-index: 0; /* Puts the gradient behind the form contents */
-    transition: width 0.5s ease-in-out; /* Smooth transition for the width */
-}
-
-.profile-edit-form:hover::before {
-    width: 4%; /* Width on hover to show the gradient expanding */
-    border-radius: 10px; /* Fully rounded on hover to match the form's border-radius */
-}
-
-.logo-container {
-    position: relative; /* Changer la position en relative */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px; /* Espacement sous le logo */
-}
-
-.logo-container img {
-    max-width: 200px; /* Ajustez la largeur maximale comme souhaité */
-}
-
-.form-group label {
-    font-weight: 600; /* Utilisez 600 pour Sora Semibold */
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 2em;
-    color: 
-}
-
-.form-row {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 1em;
-}
-
-.form-group {
-    width: calc(50% - 10px);
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group.full-width {
-    width: 100%;
-    display: flex;
-    justify-content: center; /* Center align for email input */
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select {
-    width: calc(100% - 1.5em);
-    padding: 0.75em;
-    border: none;
-    border-radius: 6px;
-    background: #C1C1C1;
-    margin-bottom: 0.5em; /* Ensure spacing for wrapped labels */
-}
-
-button[type="submit"] {
-    padding: 1em;
-    border: none;
-    border-radius: 12px;
-    background-color: #444444;
-    color: white;
-    font-weight: 600;
-    margin: 1em auto 0 auto; /* Margin top and auto margin for left/right */
-    cursor: pointer;
-    display: block; /* Make it a block to center align */
-}
-
-button[type="submit"]:hover {
-    background-color: #333333;
-}
-    </style>
-</head>
-<body>
-<div class="image-side">
+{% block body_id 'page-content-wrapper' %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
+{% endblock %}
+{% block body %}
+    <div class="container-xl px-4 mt-4">
+        <hr class="mt-0 mb-4">
+        <div class="row">
+            <div class="col-xl-4">
+                <!-- Placer la sidebar ici -->
+                <div class="sidebar-wrapper">
+                    {{ block('sidebar') }}
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <div class="row">
+                    <div class="col">
+                        <!-- Profile picture card-->
+                        <div class="card mb-4 mb-xl-0">
+                            <div class="card-header">Profile Picture</div>
+                            <div class="card-body text-center">
+                                <!-- Profile picture image-->
+                                <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                <!-- Profile picture help block-->
+                                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                <!-- Profile picture upload button-->
+                                <button class="btn btn-primary" type="button">Upload new image</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- Account details card-->
+                        <div class="card mb-4">
+                            <div class="card-header">Account Details</div>
+                            <div class="card-body">
+                                {{ form_start(form) }}
+                                    <!-- Form Group (email)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (name)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (firstname)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.firstname, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (zipcode)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.zipcode, {'label': 'Code Postal', 'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (city)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.city, {'label': 'Ville', 'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (street)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.street, {'label': 'Rue', 'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (phone)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.phone, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (newPassword)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.newPassword.first, {'label': 'Nouveau mot de passe', 'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Form Group (confirmPassword)-->
+                                    <div class="mb-3">
+                                        {{ form_row(form.newPassword.second, {'label': 'Confirmez le mot de passe', 'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                    <!-- Save changes button-->
+                                    <button class="btn btn-primary" type="submit">Save changes</button>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-<div class="container">
-<div class="logo-container" style="text-align: center; margin-bottom: 19px; width: 100%;">
-    <img src="{{ asset('images/cleanThis.png') }}" alt="Logo" style="max-width: 200px;"> <!-- Ajustez le chemin et les dimensions comme nécessaire -->
-</div>
-    <div class="profile-edit-form">
-        <h1>Modifier Votre Profil</h1>
-        {{ form_start(form) }}
-
-        <div class="form-row">
-            <div class="form-group">
-                {{ form_row(form.name) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.firstname) }}
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                {{ form_row(form.street) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.zipcode) }}
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                {{ form_row(form.city) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.phone) }}
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group full-width">
-                {{ form_row(form.email) }}
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                {{ form_row(form.newPassword.first, { label: 'Ancien Mot de Passe' }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.newPassword.second, { label: 'Nouveau Mot de Passe ' }) }}
-            </div>
-        </div>
-
-
-        <button type="submit">Enregistrer les modifications</button>
-        {{ form_end(form) }}
-            </div>
-</div>
-</body>
-</html>
+{% endblock %}
