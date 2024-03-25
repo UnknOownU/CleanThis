@@ -2,6 +2,7 @@
 // src/EventSubscriber/EasyAdminSubscriber.php
 namespace App\EventSubscriber;
 
+use App\Entity\Operation;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;

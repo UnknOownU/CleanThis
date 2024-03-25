@@ -3,10 +3,11 @@
 {% block body_id 'page-content-wrapper' %}
 
 {% block main %}
+
 <section class="content-body">
-    <div class="row justify-content-center">
+    <div class="row d-flex justify-content-around"> <!-- Modifier ici pour aligner à droite -->
         <div class="col-md-10">
-            <div class="user-info mb-4 p-5 bg-white shadow rounded" id="profile-info">
+            <div class="user-info mb-4 p-5 bg-white shadow" id="profile-info" style="border-radius: 20px;"> <!-- Ajouter border-radius -->
                 <h2 class="h4 text-primary mb-4">Informations du Profil</h2>
                 <p><strong>Email:</strong> {{ user.email }}</p>
                 <p><strong>Nom:</strong> {{ user.name }}</p>
@@ -15,11 +16,20 @@
                 <p><strong>Ville:</strong> {{ user.city }}</p>
                 <p><strong>Rue:</strong> {{ user.street }}</p>
                 <p><strong>Téléphone:</strong> {{ user.phone }}</p>
+                <p>
+                    <strong>Rôle:</strong>
+                    <span class="{% if 'ROLE_ADMIN' in user.roles %}text-danger
+                                 {% elseif 'ROLE_SENIOR' in user.roles %}text-success
+                                 {% elseif 'ROLE_APPRENTI' in user.roles %}text-primary
+                                 {% else %}text-warning{% endif %}">
+                        {{ user.roles|join(', ')|replace({'ROLE_': ''})|title }}
+                    </span>
+                </p>
                 <button class="btn btn-outline-primary" onclick="toggleEditForm()">Modifier</button>
             </div>
             
-            <div class="edit-form d-none p-5 bg-white shadow rounded" id="profile-edit-form" style="transition: all 0.5s ease-in-out;">
-                {{ form_start(form) }}
+            <div class="edit-form d-none p-5 bg-white shadow" id="profile-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;"> <!-- Ajouter border-radius -->
+                {{ form_start(form, {'attr': {'id': 'profile-edit-form-twig'}}) }}
                 <h2 class="h4 text-primary mb-4">Éditer le Profil</h2>
                 {{ form_row(form.email, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.name, {'attr': {'class': 'form-control mb-3'}}) }}
@@ -30,18 +40,83 @@
                 {{ form_row(form.phone, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.newPassword.first, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.newPassword.second, {'attr': {'class': 'form-control mb-3'}}) }}
-                <div class="form-group mt-4">
+                    <div class="form-group mt-4">
                     <button type="submit" class="btn btn-success">Sauvegarder</button>
                     <button type="button" class="btn btn-secondary" onclick="toggleEditForm()">Annuler</button>
-                </div>
                 {{ form_end(form) }}
             </div>
         </div>
     </div>
 </section>
 
-<script>
-    function toggleEditForm() {
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+    function initFormCheck() {
+    var initialValues = {};
+    var form = document.getElementById('profile-edit-form-twig');
+
+    if (form) {
+        Array.from(form.elements).forEach(function(element) {
+            if (element.name) {
+                initialValues[element.name] = element.value;
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            var changedFields = [];
+            Array.from(form.elements).forEach(function(element) {
+                if (element.name && initialValues[element.name] !== element.value) {
+                    const friendlyName = getFriendlyFieldName(element.name);
+                    changedFields.push(`${friendlyName}: "${initialValues[element.name]}" en "${element.value}"`);
+                }
+            });
+
+            if (changedFields.length > 0) {
+                event.preventDefault(); // Empêche la soumission immédiate du formulaire
+
+                Swal.fire({
+                    title: 'Confirmez les changements',
+                    html: "Voulez-vous vraiment changer les champs suivants?<br>" + changedFields.join("<br>"),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Oui, changer!',
+                    cancelButtonText: 'Non, annuler!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                             title: 'Succès!',
+                             text: 'Vos modifications ont été enregistrées.',
+                             icon: 'success',
+                        })
+                        form.submit(); // Soumet le formulaire si confirmé
+                    }
+                });
+            }
+        });
+    }
+}
+
+window.onload = initFormCheck;
+
+function getFriendlyFieldName(fieldName) {
+    const nameMap = {
+        'user[email]': 'Email',
+        'user[name]': 'Nom de famille',
+        'user[firstname]': 'Prénom',
+        'user[zipcode]': 'Code Postal',
+        'user[city]': 'Ville',
+        'user[street]': 'Rue',
+        'user[phone]': 'Téléphone',
+        'user[newPassword][first]': 'Nouveau mot de passe',
+        'user[newPassword][second]': 'Confirmation du mot de passe'
+    };
+    return nameMap[fieldName] || fieldName;
+}
+
+function toggleEditForm() {
         let info = document.getElementById('profile-info');
         let form = document.getElementById('profile-edit-form');
         
@@ -55,5 +130,7 @@
             form.classList.remove('d-none');
         }
     }
-</script>
-{% endblock %}
+
+    </script>
+    {% endblock %}
+    {% endblock %}
