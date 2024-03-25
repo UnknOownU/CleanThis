@@ -1,85 +1,59 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block body_id 'page-content-wrapper' %}
-{% block stylesheet %}
-    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
-{% endblock %}
-{% block body %}
-    <div class="container-xl px-4 mt-4">
-        <hr class="mt-0 mb-4">
-        <div class="row">
-            <div class="col-xl-4">
-                <!-- Placer la sidebar ici -->
-                <div class="sidebar-wrapper">
-                    {{ block('sidebar') }}
-                </div>
+
+{% block main %}
+<section class="content-body">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="user-info mb-4 p-5 bg-white shadow rounded" id="profile-info">
+                <h2 class="h4 text-primary mb-4">Informations du Profil</h2>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Nom:</strong> {{ user.name }}</p>
+                <p><strong>Prénom:</strong> {{ user.firstname }}</p>
+                <p><strong>Code Postal:</strong> {{ user.zipcode }}</p>
+                <p><strong>Ville:</strong> {{ user.city }}</p>
+                <p><strong>Rue:</strong> {{ user.street }}</p>
+                <p><strong>Téléphone:</strong> {{ user.phone }}</p>
+                <button class="btn btn-outline-primary" onclick="toggleEditForm()">Modifier</button>
             </div>
-            <div class="col-xl-8">
-                <div class="row">
-                    <div class="col">
-                        <!-- Profile picture card-->
-                        <div class="card mb-4 mb-xl-0">
-                            <div class="card-header">Profile Picture</div>
-                            <div class="card-body text-center">
-                                <!-- Profile picture image-->
-                                <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                <!-- Profile picture help block-->
-                                <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-                                <!-- Profile picture upload button-->
-                                <button class="btn btn-primary" type="button">Upload new image</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <!-- Account details card-->
-                        <div class="card mb-4">
-                            <div class="card-header">Account Details</div>
-                            <div class="card-body">
-                                {{ form_start(form) }}
-                                    <!-- Form Group (email)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (name)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (firstname)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.firstname, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (zipcode)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.zipcode, {'label': 'Code Postal', 'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (city)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.city, {'label': 'Ville', 'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (street)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.street, {'label': 'Rue', 'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (phone)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.phone, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (newPassword)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.newPassword.first, {'label': 'Nouveau mot de passe', 'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Form Group (confirmPassword)-->
-                                    <div class="mb-3">
-                                        {{ form_row(form.newPassword.second, {'label': 'Confirmez le mot de passe', 'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                    <!-- Save changes button-->
-                                    <button class="btn btn-primary" type="submit">Save changes</button>
-                                {{ form_end(form) }}
-                            </div>
-                        </div>
-                    </div>
+            
+            <div class="edit-form d-none p-5 bg-white shadow rounded" id="profile-edit-form" style="transition: all 0.5s ease-in-out;">
+                {{ form_start(form) }}
+                <h2 class="h4 text-primary mb-4">Éditer le Profil</h2>
+                {{ form_row(form.email, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.name, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.firstname, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.zipcode, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.city, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.street, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.phone, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.newPassword.first, {'attr': {'class': 'form-control mb-3'}}) }}
+                {{ form_row(form.newPassword.second, {'attr': {'class': 'form-control mb-3'}}) }}
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-success">Sauvegarder</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleEditForm()">Annuler</button>
                 </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
+</section>
+
+<script>
+    function toggleEditForm() {
+        let info = document.getElementById('profile-info');
+        let form = document.getElementById('profile-edit-form');
+        
+        if (info.style.display === 'none') {
+            info.style.display = 'block';
+            form.style.display = 'none';
+            form.classList.add('d-none');
+        } else {
+            info.style.display = 'none';
+            form.style.display = 'block';
+            form.classList.remove('d-none');
+        }
+    }
+</script>
 {% endblock %}
