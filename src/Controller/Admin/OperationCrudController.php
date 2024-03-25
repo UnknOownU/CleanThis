@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
+use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,9 +50,7 @@ class OperationCrudController extends AbstractCrudController {
         return $crud
             ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
             ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
-            ->setSearchFields(['id', 'type', 'name', 'price', 'status', 'zipcode_ope', 'city_ope', 'street_ope', 'customer.name', 'customer.firstname', 'customer.email', 'salarie.name', 'salarie.firstname', 'salarie.email'])
-            ->setPaginatorPageSize(7)
-            ->setPaginatorRangeSize(0);
+            ->setSearchFields(null);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
                 $crud->setDefaultSort(['status' => $statusFilter]);
@@ -62,6 +62,7 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setCustomer($this->getUser());
         $operation->setCreatedAt(new DateTimeImmutable());
         $operation->setSalarie(null);
+    
         return $operation;
     }
     
@@ -193,7 +194,6 @@ class OperationCrudController extends AbstractCrudController {
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
                         'Refusée' => 'Refusée',
-                        
                     ])
                     ->renderAsBadges([
                         'En attente de Validation' => 'info',
@@ -297,8 +297,10 @@ class OperationCrudController extends AbstractCrudController {
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
+        $customer = $operation->getCustomer();
+
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
@@ -345,21 +347,40 @@ class OperationCrudController extends AbstractCrudController {
     
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');
-        $operation->setSalarie($user);
+        $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
     
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
+
+            //Try & catch envoi de mail au client opération acceptée
+            try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Acceptation de votre opération',
+                    'opeaccept',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            }
+
             return new RedirectResponse('/admin');
         }
     
         return new Response('<script>window.location.reload();</script>');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
+        $customer = $operation->getCustomer();
+        $user = $this->security->getUser();
+        
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
@@ -370,13 +391,33 @@ class OperationCrudController extends AbstractCrudController {
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
+
+        //Try & catch envoi de mail au client opération refusée
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Refus de votre opération',
+                'opedecline',
+                [
+                    'user' => $customer
+                ]
+            );
+        } catch (Exception $e) {
+            echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+        }
                     return new RedirectResponse('/admin');
         }
+
+
         return new Response('<script>window.location.reload();</script>');
     }
 
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
+        $customer = $operation->getCustomer();
+        $user = $this->security->getUser();
+
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
@@ -391,8 +432,25 @@ class OperationCrudController extends AbstractCrudController {
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
+
+            //Try & catch envoi de mail opération terminée
+            try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Opération terminée',
+                    'opefinished',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            }
                     return new RedirectResponse('/admin');
         }
+
+
         return new Response('<script>window.location.reload();</script>');
     } 
 
@@ -415,4 +473,5 @@ class OperationCrudController extends AbstractCrudController {
         }
         return new Response('<script>window.location.reload();</script>');
     } 
+
 }

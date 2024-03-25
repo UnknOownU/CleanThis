@@ -37,7 +37,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
-            
+
             try {
                 $mail->send(
                     'no-reply@cleanthis.fr',
@@ -54,7 +54,6 @@ class RegistrationController extends AbstractController
                 
             }
 
-            
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,

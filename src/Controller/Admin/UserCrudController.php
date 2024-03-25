@@ -67,9 +67,7 @@ class UserCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_EDIT, 'Modifier le Membre')
             ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un Membre')
             ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du Membre')
-            ->setPaginatorPageSize(10)
-            ->setPaginatorRangeSize(0)
-            ->setSearchFields(['id', 'name', 'firstname', 'email', 'roles', 'zipcode', 'city', 'street', 'phone']);
+            ->setSearchFields(null);
             $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
             if ($rolesFilter) {
                 $crud->setDefaultSort(['roles' => $rolesFilter]);

@@ -2,15 +2,38 @@
 
 namespace App\Service;
 
+use Symfony\Component\Mime\Email;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class SendMailService 
 {
-    private $mailer;
 
-    public function __construct(MailerInterface $mailer) {
+    public function __construct(private MailerInterface $mailer) {
         $this->mailer = $mailer;
+    }
+
+    public function sendEmail(
+        string $to,
+        string $subject,
+        string $content
+    ): void
+    {
+        $email = (new Email())
+            ->from('afpagpmdwm@gmail.com')
+            ->to($to)
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject($subject)
+            //->text($content)
+            ->html($content);
+
+        $this->mailer->send($email);
+
+        // ...
     }
 
     public function send(
