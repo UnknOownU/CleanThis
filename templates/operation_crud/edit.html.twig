@@ -1,7 +1,272 @@
-{% extends '@EasyAdmin/crud/edit.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
+{% block body_id 'page-content-wrapper' %}
 
+{% block main %}
+<div class="ea-edit-form">
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Modification de votre opération numéro {{ operation.id }}</h2>
+    </div>
+    <div id="operationEditContainer">
+        <!-- Étape 1 : Choix du type d'opération -->
+<div id="step1" class="row justify-content-center mb-4">
+    <!-- Petite Opération -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Petite Opération</h5>
+                <p class="card-text">Pour une intervention d'environ 10 à 15 mètres carrés</p>
+                <button class="btn btn-primary" data-type="Little" onclick="showStep(2, 'Little')">Sélectionner</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Moyenne Opération -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Moyenne Opération</h5>
+                <p class="card-text">Pour une intervention d'environ 30 à 50 mètres carrés</p>
+                <button class="btn btn-primary" data-type="Medium" onclick="showStep(2, 'Medium')">Sélectionner</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grande Opération -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Grande Opération</h5>
+                <p class="card-text">Pour une intervention d'environ 50 à 500 mètres carrés</p>
+                <button class="btn btn-primary" data-type="Big" onclick="showStep(2, 'Big')">Sélectionner</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opération Personnalisée -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">Opération Personnalisée</h5>
+                <p class="card-text">Choisissez une opération personnalisée</p>
+                <button class="btn btn-primary" data-type="Custom" onclick="showStep(2, 'Custom')">Sélectionner</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="step2" class="d-none">
+            <div class="container">
+                <h3 class="text-center mb-4">Détails de l'Opération</h3>
+                <form id="operationForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="nettoyageService" class="form-label">Type de Service</label>
+                        <select id="nettoyageService" name="nettoyageService" class="form-select"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="street_ope" class="form-label">Rue</label>
+                        <input type="text" id="street_ope" name="street_ope" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="zipcode_ope" class="form-label">Code Postal</label>
+                        <input type="text" id="zipcode_ope" name="zipcode_ope" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="city_ope" class="form-label">Ville</label>
+                        <input type="text" id="city_ope" name="city_ope" class="form-control">
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary" onclick="showStep(3)">Continuer</button>
+                        <button type="button" class="btn btn-secondary" onclick="showStep(1)">Retour</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="step3" class="container d-none">
+            <h3 class="text-center mb-4">Description de l'Opération</h3>
+            <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici"></textarea>
+            <div class="text-center mt-3">
+            <button type="button" class="btn btn-primary mt-3" onclick="showStep(4)">Continuer</button>
+            <button type="button" class="btn btn-secondary mt-3" onclick="showStep(2)">Retour</button>
+        </div>
+        </div>
+
+        <div id="step4" class="d-none">
+        <h3 class="text-center mb-4">Comparaison des Données</h3>
+            <div id="dataComparison">
+        <p>Type de l'opération: <span id="oldType"></span> → <span id="newType"></span></p>
+        <p>Service de nettoyage: <span id="oldName"></span> → <span id="newName"></span></p>
+        <p>Adresse: <span id="oldAddress"></span> → <span id="newAddress"></span></p>
+        <p>Description: <span id="oldDescription"></span> → <span id="newDescription"></span></p>
+        </div>
+            <button type="button" class="btn btn-primary mt-3" onclick="submitEditForm()">Confirmer et Mettre à Jour</button>
+            <button type="button" class="btn btn-secondary mt-3" onclick="showStep(3)">Retour</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
 {% block body_javascript %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
-    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+{{ parent() }}
+<script>
+var operationId = {{ operation.id }};
+var oldData = {}; // Variable pour stocker les anciennes données
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetchOperationData(operationId);
+});
+
+function fetchOperationData(operationId) {
+    fetch(`/operation/edit/${operationId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                oldData = data.operation; // Sauvegarder les anciennes données
+                preselectOperationType(data.operation.type);
+                fillFormWithExistingData(data.operation);
+                fetchOptions(data.operation.type);
+                showStep(1);
+            } else {
+                console.error('Erreur lors du chargement des données de l\'opération');
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+function preselectOperationType(operationType) {
+    var buttons = document.querySelectorAll('#step1 .btn');
+    buttons.forEach(button => {
+        if (button.getAttribute('data-type') === operationType) {
+            button.classList.add('selected');
+        }
+    });
+}
+
+function fetchOptions(operationType) {
+    fetch('/ajax/get-cleaning-options', {
+        method: 'POST',
+        body: JSON.stringify({ type: operationType }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => updateCleaningOptions(data.options))
+    .catch(error => console.error('Erreur:', error));
+}
+
+function updateCleaningOptions(options) {
+    let select = document.getElementById('nettoyageService');
+    select.innerHTML = '<option value="">-- Sélectionnez le service --</option>';
+    options.forEach(option => {
+        let newOption = new Option(option, option);
+        select.appendChild(newOption);
+    });
+}
+
+function fillFormWithExistingData(operation) {
+    updateCleaningOptionsSelect(operation.name);
+    document.getElementById('street_ope').value = operation.street;
+    document.getElementById('zipcode_ope').value = operation.zipcode;
+    document.getElementById('city_ope').value = operation.city;
+    document.getElementById('description').value = operation.description;
+}
+
+function updateCleaningOptionsSelect(selectedName) {
+    let select = document.getElementById('nettoyageService');
+    for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === selectedName) {
+            select.selectedIndex = i;
+            break;
+        }
+    }
+}
+function showStep(stepNumber, operationType = null) {
+    if (operationType) {
+        // Mettre à jour le type d'opération sélectionné et charger les options
+        var selectedButton = document.querySelector(`#step1 .btn[data-type="${operationType}"]`);
+        if (selectedButton) {
+            document.querySelectorAll('#step1 .btn').forEach(button => button.classList.remove('selected'));
+            selectedButton.classList.add('selected');
+            fetchOptions(operationType); // Charger les options pour le nouveau type sélectionné
+        }
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById('step' + i).classList.add('d-none');
+    }
+
+    if (stepNumber === 4) {
+        var currentData = {
+            type: getSelectedOperationType(),
+            name: document.getElementById('nettoyageService').value,
+            street: document.getElementById('street_ope').value,
+            zipcode: document.getElementById('zipcode_ope').value,
+            city: document.getElementById('city_ope').value,
+            description: document.getElementById('description').value
+        };
+        updateDataComparison(currentData);
+    }
+
+    document.getElementById('step' + stepNumber).classList.remove('d-none');
+}
+
+function updateDataComparison(newData) {
+    document.getElementById('oldType').textContent = oldData.type || 'N/A';
+    document.getElementById('newType').textContent = newData.type || 'N/A';
+    document.getElementById('oldName').textContent = oldData.name || 'N/A';
+    document.getElementById('newName').textContent = newData.name || 'N/A';
+    document.getElementById('oldAddress').textContent = oldData.street ? `${oldData.street}, ${oldData.zipcode}, ${oldData.city}` : 'N/A';
+    document.getElementById('newAddress').textContent = `${newData.street}, ${newData.zipcode}, ${newData.city}`;
+    document.getElementById('oldDescription').textContent = oldData.description || 'N/A';
+    document.getElementById('newDescription').textContent = newData.description || 'N/A';
+}
+
+function getSelectedOperationType() {
+    var selectedButton = document.querySelector('#step1 .btn.selected');
+    return selectedButton ? selectedButton.getAttribute('data-type') : '';
+}
+
+function submitEditForm() {
+    var selectedOperationType = getSelectedOperationType();
+    var data = {
+        type: selectedOperationType,
+        name: document.getElementById('nettoyageService').value,
+        street: document.getElementById('street_ope').value,
+        zipcode: document.getElementById('zipcode_ope').value,
+        city: document.getElementById('city_ope').value,
+        description: document.getElementById('description').value
+    };
+
+    compareOldAndNewData(data);
+
+    fetch(`/ajax/update-operation/${operationId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Opération mise à jour avec succès');
+        } else {
+            alert('Erreur lors de la mise à jour de l\'opération');
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+}
+
+function getSelectedOperationType() {
+    var selectedButton = document.querySelector('#step1 .btn.selected');
+    return selectedButton ? selectedButton.getAttribute('data-type') : '';
+}
+
+function compareOldAndNewData(newData) {
+    var comparisonMessage = `Comparaison des données :\n\n`;
+    comparisonMessage += `Type de l'opération :\nAncien : ${oldData.type}\nNouveau : ${newData.type}\n\n`;
+    comparisonMessage += `Service de nettoyage :\nAncien : ${oldData.name}\nNouveau : ${newData.name}\n\n`;
+    comparisonMessage += `Adresse :\nAncienne : ${oldData.street}, ${oldData.zipcode}, ${oldData.city}\nNouvelle : ${newData.street}, ${newData.zipcode}, ${newData.city}\n\n`;
+    comparisonMessage += `Description :\nAncienne : ${oldData.description}\nNouvelle : ${newData.description}`;
+
+    alert(comparisonMessage);
+}
+</script>
 {% endblock %}

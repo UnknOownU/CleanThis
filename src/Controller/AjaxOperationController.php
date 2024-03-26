@@ -122,19 +122,64 @@ public function createOperation(Request $request, EntityManagerInterface $entity
     
 }
 
-private function determinePriceBasedOnType(string $type): int
-{
-    // Déterminez le prix en fonction du type d'opération
-    switch ($type) {
-        case 'Little':
-            return 1000;
-        case 'Medium':
-            return 2500;
-        case 'Big':
-            return 5000;
-        default:
-            return 0; // ou un autre prix par défaut pour des opérations personnalisées
-    }
-}
+        private function determinePriceBasedOnType(string $type): int
+        {
+            // Déterminez le prix en fonction du type d'opération
+            switch ($type) {
+                case 'Little':
+                    return 1000;
+                case 'Medium':
+                    return 2500;
+                case 'Big':
+                    return 5000;
+                default:
+                    return 0; // ou un autre prix par défaut pour des opérations personnalisées
+            }
+        }
 
+        /**
+ * @Route("/ajax/edit-operation/{id}", name="ajax_edit_operation")
+ */
+public function editOperation(int $id, EntityManagerInterface $entityManager): JsonResponse
+{
+    $operation = $entityManager->getRepository(Operation::class)->find($id);
+    if (!$operation) {
+        return $this->json(['status' => 'error', 'message' => 'Opération non trouvée'], 404);
+    }
+
+    // Convertir l'entité en tableau ou objet utilisable pour le JSON
+    $operationData = [
+        'id' => $operation->getId(),
+        'type' => $operation->getType(),
+        'name' => $operation->getName(),
+        'description' => $operation->getDescription(),
+        'street' => $operation->getStreetOpe(),
+        'zipcode' => $operation->getZipcodeOpe(),
+        'city' => $operation->getCityOpe(),
+    ];
+
+    return $this->json(['status' => 'success', 'operation' => $operationData]);
 }
+        /**
+        * @Route("/ajax/update-operation/{id}", name="ajax_update_operation")
+        */
+        public function updateOperation(Request $request, Operation $operation, EntityManagerInterface $entityManager): JsonResponse
+        {
+           if (!$operation) {
+               return $this->json(['status' => 'error', 'message' => 'Opération non trouvée']);
+           }
+       
+           $data = json_decode($request->getContent(), true);
+
+           $operation->setName($data['name']);
+           $operation->setDescription($data['description']);
+           $operation->setStreetOpe($data['street']);  // Modifier ici
+           $operation->setZipcodeOpe($data['zipcode']); // Modifier ici si nécessaire
+           $operation->setCityOpe($data['city']); // Modifier ici si nécessaire
+       
+           $entityManager->flush();
+       
+           return $this->json(['status' => 'success', 'message' => 'Opération mise à jour avec succès']);
+        }
+
+        }

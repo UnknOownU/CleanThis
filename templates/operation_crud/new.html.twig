@@ -116,6 +116,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     var operationType;
+    var isFormSubmitted = false;
 
     function validateStep2() {
         var service = document.getElementById('nettoyageService').value;
@@ -215,34 +216,54 @@
     }
  }
 
-    function submitOperation() {
-        if (!validateStep3()) return;
-
-        const description = document.getElementById('description').value;
-        const name = document.getElementById('nettoyageService').value;
-        const street = document.getElementById('street_ope').value;
-        const zipcode = document.getElementById('zipcode_ope').value;
-        const city = document.getElementById('city_ope').value;
-
-        fetch('/ajax/create-operation', {
-            method: 'POST',
-            body: JSON.stringify({
-                type: operationType,
-                description: description,
-                name: name,
-                street: street,
-                zipcode: zipcode,
-                city: city
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => handleResponse(data))
-        .catch(error => handleError(error));
+   function submitOperation() {
+    if (isFormSubmitted) {
+        Swal.fire('Erreur!', 'Le formulaire a déjà été soumis.', 'error');
+        return;
     }
 
+    if (!validateStep3()) return;
+
+    isFormSubmitted = true;
+
+    const description = document.getElementById('description').value;
+    const name = document.getElementById('nettoyageService').value;
+    const street = document.getElementById('street_ope').value;
+    const zipcode = document.getElementById('zipcode_ope').value;
+    const city = document.getElementById('city_ope').value;
+
+    fetch('/ajax/create-operation', {
+        method: 'POST',
+        body: JSON.stringify({
+            type: operationType,
+            description: description,
+            name: name,
+            street: street,
+            zipcode: zipcode,
+            city: city
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire('Succès!', 'Opération créée avec succès.', 'success')
+            .then(() => {
+                window.location.href = '/admin'; // Redirection
+            });
+        } else {
+            isFormSubmitted = false; // Réinitialisez l'état si la soumission a échoué
+            Swal.fire('Erreur!', 'Erreur lors de la création de l\'opération.', 'error');
+        }
+    })
+    .catch(error => {
+        isFormSubmitted = false; // Réinitialisez l'état si une erreur survient
+        handleError(error);
+    });
+
+   }
     function handleResponse(data) {
         if (data.status === 'success') {
             Swal.fire('Succès!', 'Opération créée avec succès.', 'success');

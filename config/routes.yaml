@@ -50,3 +50,13 @@ ajax_create_operation:
     path: /ajax/create-operation
     controller: App\Controller\AjaxOperationController::createOperation
     methods: POST
+
+ajax_update_operation:
+    path: /ajax/update-operation/{id}
+    controller: App\Controller\AjaxOperationController::updateOperation
+    methods: POST
+
+operation_edit:
+    path: /operation/edit/{id}
+    controller: App\Controller\AjaxOperationController::editOperation
+    methods: GET

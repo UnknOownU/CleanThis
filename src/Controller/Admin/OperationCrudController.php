@@ -45,17 +45,17 @@ class OperationCrudController extends AbstractCrudController {
         return Operation::class;
     }
     public function edit(AdminContext $context)
-{
-    $operation = $context->getEntity()->getInstance();
-    if (!$operation instanceof Operation) {
-        throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
+    {
+        $operation = $context->getEntity()->getInstance();
+        if (!$operation instanceof Operation) {
+            throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
+        }
+    
+        // Assurez-vous que vous avez accès à Twig ou injectez le service Twig
+        return $this->render('operation_crud/edit.html.twig', [
+            'operation' => $operation
+        ]);
     }
-
-    // Vérifier les droits de l'utilisateur sur l'opération
-    $this->denyAccessUnlessGranted('EDIT', $operation);
-
-    return parent::edit($context);
-}
 
 public function delete(AdminContext $context)
 {
