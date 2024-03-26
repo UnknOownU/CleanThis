@@ -1,11 +1,13 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
-{% block body_id 'page-content-wrapper' %}
+
+{% block page_title %}Titre de votre Page{% endblock %}
+
 {% block main %}
 <div class="ea-new-form">
     <!-- Étape 1 : Choix du type d'opération -->
     <div id="step1" class="row justify-content-center">
         <!-- Petite Opération -->
-        <div class="col-md-6 mb-5">
+        <div class="col-md-4 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Petite Opération</h5>
@@ -16,7 +18,7 @@
         </div>
 
         <!-- Moyenne Opération -->
-        <div class="col-md-6 mb-5">
+        <div class="col-md-4 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Moyenne Opération</h5>
@@ -27,7 +29,7 @@
         </div>
 
         <!-- Grande Opération -->
-        <div class="col-md-6 mb-5">
+        <div class="col-md-4 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Grande Opération</h5>
@@ -38,7 +40,7 @@
         </div>
 
         <!-- Opération Personnalisée -->
-        <div class="col-md-6 mb-5">
+        <div class="col-md-4 mb-3">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Opération Personnalisée</h5>
@@ -56,10 +58,10 @@
         <div class="container">
             <h3 class="mb-4">Services de Nettoyage</h3>
             <form id="operationForm" class="row g-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <select id="nettoyageService" name="nettoyageService" class="form-select"></select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <input type="text" id="street_ope" name="street_ope" placeholder="Rue" class="form-control adresse-autocomplete">
                 </div>
                 <div class="col-md-4">
@@ -294,8 +296,7 @@
 </script>
 
 {% endblock %}
+
 {% block body_footer %}
-    <div class="container-fluid mt-3 mb-3 fixed-bottom"> 
-        {# ... Votre texte de pied de page ... #}
-    </div>
+    {# Votre pied de page ici #}
 {% endblock %}
