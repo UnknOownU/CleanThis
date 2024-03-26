@@ -51,33 +51,56 @@
 
 
 <!-- Étape 2 : Sélection des services de nettoyage et saisie de l'adresse -->
-    <div id="step2" class="d-none">
-        <div class="container">
-            <h3 class="mb-4">Services de Nettoyage</h3>
-            <form id="operationForm" class="row g-3">
-                <div class="col-md-4">
-                    <select id="nettoyageService" name="nettoyageService" class="form-select"></select>
-                </div>
-                <div class="col-md-4">
-                    <input type="text" id="street_ope" name="street_ope" placeholder="Rue" class="form-control adresse-autocomplete">
-                </div>
-                <div class="col-md-4">
-                    <input type="text" id="zipcode_ope" name="zipcode_ope" placeholder="Code postal" class="form-control zipcode_ope">
-                </div>
-                <div class="col-md-4">
-                    <input type="text" id="city_ope" name="city_ope" placeholder="Ville" class="form-control city_ope">
-                </div>
-                <div class="col-md-4">
-                    <div id="map" style="height: 200px;"></div> <!-- Carte pour l'adresse -->
-                </div>
-                <div class="col-12">
-                    <button type="button" class="btn btn-primary" onclick="showStep(3)">Continuer</button>
-                    <button class="btn btn-warning" onclick="showStep(1)">Retour</button>
-                </div>
-            </form>
+<div id="step2" class="d-none">
+    <div class="container py-5">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center">Services de Nettoyage</h3>
+                <div id="map" class="mb-4" style="height: 400px;"></div>
+                <form id="operationForm" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nettoyageService" class="form-label">Type de Service</label>
+                            <select id="nettoyageService" name="nettoyageService" class="form-select" required>
+                                <option value="">Choisir...</option>
+                                <!-- Les options seront injectées ici -->
+                            </select>
+                            <div class="invalid-feedback">
+                                Veuillez sélectionner un service de nettoyage.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="street_ope" class="form-label">Adresse</label>
+                            <input type="text" class="form-control adresse-autocomplete" id="street_ope" name="street_ope" placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                Veuillez entrer l'adresse de l'opération.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="zipcode_ope" class="form-label">Code Postal</label>
+                            <input type="text" class="form-control zipcode_ope" id="zipcode_ope" name="zipcode_ope" placeholder="Code postal" required>
+                            <div class="invalid-feedback">
+                                Veuillez entrer le code postal.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="city_ope" class="form-label">Ville</label>
+                            <input type="text" class="form-control city_ope" id="city_ope" name="city_ope" placeholder="Ville" required>
+                            <div class="invalid-feedback">
+                                Veuillez entrer la ville.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-warning" type="button" onclick="showStep(1)">Retour</button>
+                        <button class="btn btn-primary" type="button" onclick="showStep(3)">Continuer</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
 <!-- Étape 3 : Description de l'opération -->
 <div id="step3" class="container d-none">
     <h3 class="mb-4">Description de l'Opération</h3>
@@ -126,11 +149,63 @@
 
 {% block body_javascript %}
     {{ parent() }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     var operationType;
     var isFormSubmitted = false;
+    var map;
+    var marker;
+
+function initMap() {
+        map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris par défaut
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    }
+
+function updateMap() {
+    var street = document.getElementById('street_ope').value;
+    var zipcode = document.getElementById('zipcode_ope').value;
+    var city = document.getElementById('city_ope').value;
+    var country = 'France'; // Ajoutez le pays pour améliorer la précision
+    var address = `${street}, ${zipcode}, ${city}, ${country}`;
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Ajoutez un log pour voir les données retournées
+            if(data && data.length > 0) {
+                var lat = data[0].lat;
+                var lon = data[0].lon;
+                console.log('Lat:', lat, 'Lon:', lon); // Log pour vérifier les coordonnées
+                map.setView([lat, lon], 13);
+                if(marker) {
+                    marker.remove();
+                }
+                marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup('Nous Interviendrons.<br> ici.')
+                .openPopup();
+            } else {
+                console.log('Aucun résultat trouvé pour cette adresse');
+                // Vous pouvez ici gérer le cas où l'adresse n'est pas trouvée
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+
+    document.getElementById('street_ope').addEventListener('change', updateMap);
+    document.getElementById('zipcode_ope').addEventListener('change', updateMap);
+    document.getElementById('city_ope').addEventListener('change', updateMap);
+
+    // Initialisation de la carte à l'ouverture de la page
+    window.onload = initMap;
+
 
     function validateStep2() {
         var service = document.getElementById('nettoyageService').value;
@@ -290,6 +365,32 @@
         console.error('Erreur:', error);
         Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
     }
+
+// Ajouter cet écouteur pour chaque champ de saisie de votre formulaire
+document.getElementById('street_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Vous pouvez ici appeler updateMap ou toute autre fonction que vous souhaitez exécuter
+        updateMap();
+    }
+});
+
+document.getElementById('zipcode_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Logique similaire pour le champ code postal
+        updateMap();
+    }
+});
+
+document.getElementById('city_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Logique similaire pour le champ ville
+        updateMap();
+    }
+});
+
 </script>
 
 {% endblock %}
