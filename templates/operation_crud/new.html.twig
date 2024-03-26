@@ -1,24 +1,26 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
+{% block body_id 'page-content-wrapper' %}
 
-{% block page_title %}Titre de votre Page{% endblock %}
+{% block page_title %}Demande D'opération{% endblock %}
 
 {% block main %}
 <div class="ea-new-form">
+<div class="container mt-3">
+    <h2 class="text-center mb-5">Nouvelle Demande De Nettoyage</h2>
+    </div>
     <!-- Étape 1 : Choix du type d'opération -->
-    <div id="step1" class="row justify-content-center">
+    <div id="step1" class="row justify-content-center mb-4">
         <!-- Petite Opération -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Petite Opération</h5>
                     <p class="card-text">Pour une intervention d'environ 10 à 15 mètres carrés</p>
-                    <button class="btn btn-primary" onclick="showStep(2, 'Little')">Sélectionner</button>
+                    <button class="btn btn-primary" data-type="Little" onclick="showStep(2, 'Little')">Sélectionner</button>
                 </div>
             </div>
         </div>
-
-        <!-- Moyenne Opération -->
-        <div class="col-md-4 mb-3">
+         <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Moyenne Opération</h5>
@@ -27,9 +29,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Grande Opération -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Grande Opération</h5>
@@ -38,15 +38,12 @@
                 </div>
             </div>
         </div>
-
-        <!-- Opération Personnalisée -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
                     <h5 class="card-title">Opération Personnalisée</h5>
                     <p class="card-text">Choisissez une opération personnalisée</p>
-                    <button class="btn btn-primary" onclick="showStep(2, 'Custom')">Sélectionner</button>
-                </div>
+                <button class="btn btn-primary" onclick="showStep(2, 'Custom')">Sélectionner</button>
             </div>
         </div>
     </div>

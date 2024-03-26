@@ -2,26 +2,10 @@
 {% block body_id 'page-content-wrapper' %}
 
 {% block main %}
-<style>
-#dataComparison {
-    transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark-mode #dataComparison {
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-}
-
-body.dark-mode .list-group-item {
-    background-color: transparent;
-    border-color: rgba(255, 255, 255, 0.25);
-}
-
-</style>
 
 <div class="ea-edit-form">
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Modification de votre demande d'opération de néttoyage numéro {{ operation.id }}</h2>
+<div class="container mt-3">
+    <h2 class="text-center mb-5">Modification de votre demande d'opération de néttoyage numéro {{ operation.id }}</h2>
     </div>
     <div id="operationEditContainer">
         <!-- Étape 1 : Choix du type d'opération -->
