@@ -1,6 +1,260 @@
-{% extends '@EasyAdmin/crud/new.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
+{% block body_id 'page-content-wrapper' %}
+
+{% block main %}
+<div class="ea-new-form">
+    <!-- Étape 1 : Choix du type d'opération -->
+    <div id="step1" class="row justify-content-center">
+        <!-- Petite Opération -->
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Petite Opération</h5>
+                    <p class="card-text">Pour une intervention d'environ 10 à 15 mètres carrés</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Little')">Sélectionner</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Moyenne Opération -->
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Moyenne Opération</h5>
+                    <p class="card-text">Pour une intervention d'environ 30 à 50 mètres carrés</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Medium')">Sélectionner</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grande Opération -->
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Grande Opération</h5>
+                    <p class="card-text">Pour une intervention d'environ 50 à 500 mètres carrés</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Big')">Sélectionner</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opération Personnalisée -->
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Opération Personnalisée</h5>
+                    <p class="card-text">Choisissez une opération personnalisée</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Custom')">Sélectionner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Étape 2 : Sélection des services de nettoyage et saisie de l'adresse -->
+    <div id="step2" class="d-none">
+        <div class="container">
+            <h3 class="mb-4">Services de Nettoyage</h3>
+            <form id="operationForm" class="row g-3">
+                <div class="col-md-6">
+                    <select id="nettoyageService" name="nettoyageService" class="form-select"></select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="street_ope" name="street_ope" placeholder="Rue" class="form-control adresse-autocomplete">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="zipcode_ope" name="zipcode_ope" placeholder="Code postal" class="form-control zipcode_ope">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="city_ope" name="city_ope" placeholder="Ville" class="form-control city_ope">
+                </div>
+                <div class="col-md-4">
+                    <div id="map" style="height: 200px;"></div> <!-- Carte pour l'adresse -->
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary" onclick="showStep(3)">Continuer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Étape 3 : Description de l'opération -->
+<div id="step3" class="container d-none">
+    <h3 class="mb-4">Description de l'Opération</h3>
+    <p>Veuillez fournir une description détaillée du site où aura lieu l'opération de nettoyage. Ceci est crucial pour assurer que nos équipes soient correctement préparées et équipées pour répondre au mieux à vos besoins. Vous devriez inclure :</p>
+    <ul>
+        <li>La taille approximative de l'espace à nettoyer (en mètres carrés).</li>
+        <li>Toute condition spécifique ou exigence (par exemple, surfaces délicates, zones à éviter).</li>
+        <li>Des informations sur les types de surfaces et de matériaux présents (carrelage, moquette, bois, etc.).</li>
+        <li>Tout obstacle potentiel ou zone difficile d'accès.</li>
+        <li>Préférences concernant les produits de nettoyage (écologiques, hypoallergéniques, etc.).</li>
+        <li>Heures ou périodes souhaitées pour l'intervention.</li>
+    </ul>
+    <p>Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace.</p>
+    <textarea id="description" name="description" placeholder="Veuillez décrire le site de nettoyage" class="form-control" rows="4"></textarea>
+    <button class="btn btn-primary mt-3" onclick="showStep(4)">Continuer</button>
+    <button class="btn btn-secondary mt-3" onclick="showStep(2)">Retour</button>
+</div>
+
+<!-- Étape 4 : Confirmation des détails -->
+<div id="step4" class="container d-none">
+    <h3 class="mb-4">Confirmation des Détails</h3>
+    <p>Vous avez choisi une <span id="confirmationType"></span> avec le service <span id="confirmationService"></span>.</p>
+    <p>L'adresse de l'opération est au <span id="confirmationAddress"></span>.</p>
+    <p>Description : <span id="confirmationDescription"></span></p>
+    <p>Veuillez confirmer que toutes les informations ci-dessus sont correctes. Une fois confirmées, ces informations seront utilisées pour planifier et exécuter votre opération de nettoyage. Assurez-vous que les détails sont complets et précis.</p>
+    <button class="btn btn-primary mt-3" onclick="submitOperation()">Confirmer et Soumettre</button>
+    <button class="btn btn-secondary mt-3" onclick="showStep(3)">Retour</button>
+</div>
+
+{% endblock %}
 
 {% block body_javascript %}
     {{ parent() }}
-    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+<script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    var operationType;
+
+    function validateStep2() {
+        var service = document.getElementById('nettoyageService').value;
+        var street = document.getElementById('street_ope').value;
+        var zipcode = document.getElementById('zipcode_ope').value;
+        var city = document.getElementById('city_ope').value;
+
+        if (!service || !street || !zipcode || !city) {
+            Swal.fire('Désolé !', 'Veuillez remplir tous les champs de l\'étape 2.', 'error');
+            return false;
+        }
+        return true;
+    }
+
+    function validateStep3() {
+        var description = document.getElementById('description').value;
+        if (!description) {
+            Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
+            return false;
+        }
+        return true;
+    }
+
+    function showStep(stepNumber, selectedOperationType = null) {
+        // Validation avant de changer d'étape
+        if ((stepNumber === 3 && !validateStep2()) || (stepNumber === 4 && !validateStep3())) return;
+
+        if (selectedOperationType) {
+            operationType = selectedOperationType;
+        }
+
+        // Cachez toutes les étapes
+        document.getElementById('step1').classList.add('d-none');
+        document.getElementById('step2').classList.add('d-none');
+        document.getElementById('step3').classList.add('d-none');
+        document.getElementById('step4').classList.add('d-none');
+
+        // Affichez l'étape demandée
+        document.getElementById('step' + stepNumber).classList.remove('d-none');
+
+        if (stepNumber === 2 && selectedOperationType) {
+            fetchOptions(operationType);
+        } else if (stepNumber === 4) {
+            updateConfirmation();
+        }
+    }
+
+    function fetchOptions(operationType) {
+        fetch('/ajax/get-cleaning-options', {
+            method: 'POST',
+            body: JSON.stringify({ type: operationType }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updateCleaningOptions(data.options))
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    function updateCleaningOptions(options) {
+        let select = document.getElementById('nettoyageService');
+        select.innerHTML = '<option value="">-- Sélectionnez le service --</option>';
+        options.forEach(option => {
+            let newOption = new Option(option, option);
+            select.appendChild(newOption);
+        });
+    }
+
+    function updateConfirmation() {
+        const translatedType = translateOperationType(operationType);
+        const service = document.getElementById('nettoyageService').value;
+        const street = document.getElementById('street_ope').value;
+        const zipcode = document.getElementById('zipcode_ope').value;
+        const city = document.getElementById('city_ope').value;
+        const description = document.getElementById('description').value;
+    
+        document.getElementById('confirmationType').innerText = translatedType;
+        document.getElementById('confirmationService').innerText = service;
+        document.getElementById('confirmationAddress').innerText = `${street}, ${zipcode} ${city}`;
+        document.getElementById('confirmationDescription').innerText = description;
+    }
+   
+   
+    function translateOperationType(type) {
+    switch (type) {
+        case 'Little':
+            return 'Petite Opération (environ 10 à 15 m²)';
+        case 'Medium':
+            return 'Moyenne Opération (environ 30 à 50 m²)';
+        case 'Big':
+            return 'Grande Opération (environ 50 à 500 m²)';
+        case 'Custom':
+            return 'Opération Personnalisée';
+        default:
+            return 'Type Inconnu';
+    }
+ }
+
+    function submitOperation() {
+        if (!validateStep3()) return;
+
+        const description = document.getElementById('description').value;
+        const name = document.getElementById('nettoyageService').value;
+        const street = document.getElementById('street_ope').value;
+        const zipcode = document.getElementById('zipcode_ope').value;
+        const city = document.getElementById('city_ope').value;
+
+        fetch('/ajax/create-operation', {
+            method: 'POST',
+            body: JSON.stringify({
+                type: operationType,
+                description: description,
+                name: name,
+                street: street,
+                zipcode: zipcode,
+                city: city
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => handleResponse(data))
+        .catch(error => handleError(error));
+    }
+
+    function handleResponse(data) {
+        if (data.status === 'success') {
+            Swal.fire('Succès!', 'Opération créée avec succès.', 'success');
+        } else {
+            Swal.fire('Erreur!', 'Erreur lors de la création de l\'opération.', 'error');
+        }
+    }
+
+    function handleError(error) {
+        console.error('Erreur:', error);
+        Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
+    }
+</script>
+
 {% endblock %}

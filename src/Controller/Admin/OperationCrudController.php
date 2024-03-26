@@ -136,124 +136,85 @@ public function delete(AdminContext $context)
     }
 
     public function configureFields(string $pageName): iterable {
-        //Formulaire creation operation pour client
-        if ($this->isGranted('ROLE_CUSTOMER')) {
-            return [
-                FormField::addTab('Mission'),
-                DateTimeField::new('created_at', 'Créé le')
-                    ->hideOnForm(),
-                FormField::addColumn('col-lg-8 col-xl-3'),
-                IdField::new('id', 'Nº')
-                    ->hideOnForm(),
-                AssociationField::new('customer', 'Client')
-                    ->hideOnForm()
-                    ->hideOnIndex(),
-                AssociationField::new('salarie', 'Salarié')
-                    ->hideOnForm(),
-                TextField::new('name', 'Intitulé de l’opération')
-                    ->setLabel('Mission'),
-                TextField::new('attachmentFile')
-                    ->setLabel('Photo')
-                    ->setFormType(VichImageType::class)
-                    ->onlyWhenCreating(),
-                ImageField::new('attachment')
-                    ->setLabel('Photo')
-                    ->setBasePath('/images/products')
-                    ->onlyOnIndex(),
-                ChoiceField::new('type')
-                    ->setChoices([
-                        'Petite - 1000€' => 'Little',
-                        'Moyenne - 2500€' => 'Medium',
-                        'Grande - 5000€' => 'Big',
-                        'Personnalisée' => 'Custom',
-                ]),
-                MoneyField::new('price', 'Prix')
-                    ->setCurrency('EUR')
-                    ->hideOnForm(),
-                FormField::addColumn('col-lg-4 col-xl-4'),
-                DateTimeField::new('rdv_at', 'Date de RDV'),
-                FormField::addColumn('col-lg-3 col-xl-6'),
-                TextEditorField::new('description', 'Description')
-                    ->hideOnForm(),
-                TextareaField::new('description', 'Description')
-                    ->renderAsHtml()
-                    ->hideOnIndex(),
-                TextField::new('street_ope', 'Rue')
-                    ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
-                TextField::new('zipcode_ope', 'Code Postal')
-                    ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
-                TextField::new('city_ope', 'Ville')
-                    ->setFormTypeOption('attr', ['class' => 'city_ope']),
-                DateTimeField::new('finished_at', 'Terminé le')
-                    ->hideOnForm() 
-                ];
-        } else { 
-        //Formulaire creation operation pour salariés
-            return [
-                FormField::addTab('Mission'),
-                DateTimeField::new('created_at', 'Créé le')
-                    ->hideOnForm(),
-                FormField::addColumn('col-lg-8 col-xl-3'),
-                IdField::new('id', 'Nº')
-                    ->hideOnForm(),
-                AssociationField::new('customer', 'Client')
-                    ->hideOnForm(),
-                AssociationField::new('salarie', 'Opérateur')
-                    ->hideOnForm(),
-                TextField::new('name', 'Intitulé de l’opération')
-                    ->setLabel('Mission')
-                    ->hideOnIndex(),
-                TextField::new('attachmentFile')
-                    ->setLabel('Photo')
-                    ->setFormType(VichImageType::class)
-                    ->onlyWhenCreating(),
-                ImageField::new('attachment', 'Photo')
-                    ->setBasePath('/images/products')
-                    ->onlyOnIndex(),
-                ChoiceField::new('type')
-                    ->setChoices([
-                        'Petite' => 'Little',
-                        'Moyenne' => 'Medium',
-                        'Grande' => 'Big',
-                        'Personnalisée' => 'Custom', //TODO:
-                ]),
-                MoneyField::new('price', 'Prix')
-                    ->setCurrency('EUR')
-                    ->setLabel('Prix'),
-                FormField::addColumn('col-lg-4 col-xl-4'),
-                DateTimeField::new('rdv_at', 'RDV'),
-                FormField::addColumn('col-lg-3 col-xl-6'),
-                TextEditorField::new('description', 'Description')
-                    ->hideOnForm(),
-                TextareaField::new('description', 'Description')
-                    ->renderAsHtml()
-                    ->hideOnIndex(),
-                ChoiceField::new('status')
-                    ->setChoices([
+        $fields = [];
+
+        if ($this->isGranted('ROLE_CUSTOMER') && Crud::PAGE_INDEX === $pageName) {
+            $fields[] = TextField::new('name', 'Mission');
+            $fields[] = TextField::new('descritpion', 'La description de la mission de néttoyage');
+            $fields[] = ChoiceField::new('type', 'Type de mission')
+                        ->setChoices([
+                            'Petite - 1000€' => 'Little',
+                            'Moyenne - 2500€' => 'Medium',
+                            'Grande - 5000€' => 'Big',
+                            'Personnalisée' => 'Custom',
+                        ])->renderAsBadges([
+                            'Little' => 'info',
+                            'Medium' => 'warning',
+                            'Big' => 'success',
+                            'Custom' => 'secondary',
+                        ]);
+                        $fields[] = AssociationField::new('salarie', 'Employé En Charge de Votre Demande')
+                        ->formatValue(function ($value, $entity) {
+                            $salarie = $entity->getSalarie();
+                            return $salarie ? sprintf('%s %s', $salarie->getFirstName(), $salarie->getName()) : 'Non assigné';
+                        });
+                        $fields[] =ChoiceField::new('status')
+                        ->setChoices([
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
                         'Refusée' => 'Refusée',
-                        
-                    ])
-                    ->renderAsBadges([
-                        'En attente de Validation' => 'info',
-                        'En cours' => 'warning',
+                    ])   ->renderAsBadges([
+                        'En attente de Validation' => 'warning',
+                        'En cours' => 'primary',
                         'Terminée' => 'success',
-                        'Archivée' => 'success',
-                    ])
-                    ->hideOnForm(),
-                TextField::new('street_ope', 'Rue')
-                    ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
-                TextField::new('zipcode_ope', 'CP')
-                    ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
-                TextField::new('city_ope', 'Ville')
-                    ->setFormTypeOption('attr', ['class' => 'city_ope']),
-                DateTimeField::new('finished_at', 'Terminée le')
-                    ->hideOnForm(),
-                AssociationField::new('salarie', 'Salarié')
-            ];}
+                        'Refusée' => 'danger',
+                    ]);
+                    $fields[] = TextField::new('fullAddress', 'Adresse d\'intervention')
+                    ->formatValue(function ($value, $entity) {
+                        return $entity->getFullAddress();
+                    });
+                        
+        }
+    
+    
+            if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
+                // Champs pour les pages de création et d'édition
+                $fields = [
+                    FormField::addPanel('Détails de la Mission'),
+                    TextField::new('name', 'Intitulé de l’opération')
+                        ->setLabel('Mission'),
+                    ChoiceField::new('type', 'Type de mission')
+                        ->setChoices([
+                            'Petite - 1000€' => 'Little',
+                            'Moyenne - 2500€' => 'Medium',
+                            'Grande - 5000€' => 'Big',
+                            'Personnalisée' => 'Custom',
+                        ]),
+                    DateTimeField::new('rdv_at', 'Date de RDV'),
+                    TextareaField::new('description', 'Description'),
+                    TextField::new('street_ope', 'Rue')
+                        ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
+                    TextField::new('zipcode_ope', 'Code Postal')
+                        ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+                    TextField::new('city_ope', 'Ville')
+                        ->setFormTypeOption('attr', ['class' => 'city_ope']),
+                    TextField::new('attachmentFile')
+                        ->setLabel('Photo')
+                        ->setFormType(VichImageType::class)
+                        ->onlyWhenCreating(),
+                        
+                ];
+                
+            
+        } else {
+            // Configuration des champs pour d'autres rôles...
+            // ...
+        }
+    
+        return $fields;
     }
+    
 
     public function createIndexQueryBuilder(
         SearchDto $searchDto,

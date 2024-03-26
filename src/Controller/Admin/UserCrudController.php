@@ -86,6 +86,7 @@ class UserCrudController extends AbstractCrudController
         // Désactiver l'action 'NEW' pour les utilisateurs sans le rôle 'ROLE_ADMIN'
         if (!$isAdmin) {
             $actions->disable(Action::NEW);
+            $actions->disable(Action::DETAIL);
         }
     
         // Mise à jour de l'action DELETE

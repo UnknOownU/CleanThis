@@ -2,7 +2,7 @@
 
 controllers:
   resource: '../src/Controller/'
-  type: annotation
+  type: attribute
 
 auth_oauth_check:
   path: /oauth/check/{service}
@@ -40,3 +40,13 @@ recrutement:
 profile_edit:
     path: /profile/edit
     controller: App\Controller\ProfilController::edit
+
+ajax_get_cleaning_options:
+    path: /ajax/get-cleaning-options
+    controller: App\Controller\AjaxOperationController::getCleaningOptions
+    methods: POST
+
+ajax_create_operation:
+    path: /ajax/create-operation
+    controller: App\Controller\AjaxOperationController::createOperation
+    methods: POST
