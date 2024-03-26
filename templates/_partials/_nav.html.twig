@@ -23,8 +23,16 @@
     </div>
     <div class="right-content">
         {% if app.user %}
-            <a href="{{ path('admin') }}" class="btn btn-primary">Mon dashboard</a>
-            <a href="{{ path('app_logout') }}" class="btn btn-danger"><i class="fa fa-sign-out" aria-hidden="true"></i>Déconnexion</a>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Espace personnel
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="{{ path('admin') }}" target="_blank">Dashboard</a></li>
+                    <li><a class="dropdown-item" href="#">Profil</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Déconnexion</a></li>
+                </ul>
+            </div>
         {% else %}
             <a href="/login" class="btn btn-primary">Se connecter</a>
             <a href="{{ path('contact') }}" class="btn btn-primary">Demande de devis</a>
@@ -35,9 +43,8 @@
             <a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
         {% endif %}
     {% endfor %}
-
-
 </div>
+
 
 <nav>
     <ul class="nav-content">
