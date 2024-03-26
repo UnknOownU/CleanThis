@@ -2,9 +2,26 @@
 {% block body_id 'page-content-wrapper' %}
 
 {% block main %}
+<style>
+#dataComparison {
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode #dataComparison {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+body.dark-mode .list-group-item {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+</style>
+
 <div class="ea-edit-form">
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Modification de votre opération numéro {{ operation.id }}</h2>
+    <h2 class="text-center mb-4">Modification de votre demande d'opération de néttoyage numéro {{ operation.id }}</h2>
     </div>
     <div id="operationEditContainer">
         <!-- Étape 1 : Choix du type d'opération -->
@@ -54,37 +71,47 @@
     </div>
 </div>
 
-
-        <div id="step2" class="d-none">
-            <div class="container">
-                <h3 class="text-center mb-4">Détails de l'Opération</h3>
-                <form id="operationForm" class="row g-3">
-                    <div class="col-md-6">
-                        <label for="nettoyageService" class="form-label">Type de Service</label>
-                        <select id="nettoyageService" name="nettoyageService" class="form-select"></select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="street_ope" class="form-label">Rue</label>
-                        <input type="text" id="street_ope" name="street_ope" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="zipcode_ope" class="form-label">Code Postal</label>
-                        <input type="text" id="zipcode_ope" name="zipcode_ope" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="city_ope" class="form-label">Ville</label>
-                        <input type="text" id="city_ope" name="city_ope" class="form-control">
-                    </div>
-                    <div class="col-12">
-                        <button type="button" class="btn btn-primary" onclick="showStep(3)">Continuer</button>
-                        <button type="button" class="btn btn-secondary" onclick="showStep(1)">Retour</button>
-                    </div>
-                </form>
+<div id="step2" class="d-none">
+    <div class="container">
+        <h3 class="text-center mb-4">Détails de l'Opération</h3>
+        <form id="operationForm" class="row g-3">
+            <div class="col-md-6">
+                <label for="nettoyageService" class="form-label">Type de Service</label>
+                <select id="nettoyageService" name="nettoyageService" class="form-select"></select>
             </div>
-        </div>
+            <div class="col-md-6">
+                <label for="street_ope" class="form-label">Rue</label>
+                <input type="text" id="street_ope" name="street_ope" class="form-control adresse-autocomplete">
+            </div>
+            <div class="col-md-6">
+                <label for="zipcode_ope" class="form-label">Code Postal</label>
+                <input type="text" id="zipcode_ope" name="zipcode_ope" class="form-control zipcode_ope">
+            </div>
+            <div class="col-md-6">
+                <label for="city_ope" class="form-label">Ville</label>
+                <input type="text" id="city_ope" name="city_ope" class="form-control city_ope">
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="button" class="btn btn-primary" onclick="showStep(3)">Continuer</button>
+                <button type="button" class="btn btn-secondary" onclick="showStep(1)">Retour</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
         <div id="step3" class="container d-none">
-            <h3 class="text-center mb-4">Description de l'Opération</h3>
+            <h3 class="mb-4">Description de l'Opération</h3>
+            <p>Veuillez fournir une description détaillée du site où aura lieu l'opération de nettoyage. Ceci est crucial pour assurer que nos équipes soient correctement préparées et équipées pour répondre au mieux à vos besoins. Vous devriez inclure :</p>
+            <ul>
+                <li>La taille approximative de l'espace à nettoyer (en mètres carrés).</li>
+                <li>Toute condition spécifique ou exigence (par exemple, surfaces délicates, zones à éviter).</li>
+                <li>Des informations sur les types de surfaces et de matériaux présents (carrelage, moquette, bois, etc.).</li>
+                <li>Tout obstacle potentiel ou zone difficile d'accès.</li>
+                <li>Préférences concernant les produits de nettoyage (écologiques, hypoallergéniques, etc.).</li>
+                <li>Heures ou périodes souhaitées pour l'intervention.</li>
+            </ul>
+            <p>Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace.</p>
             <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici"></textarea>
             <div class="text-center mt-3">
             <button type="button" class="btn btn-primary mt-3" onclick="showStep(4)">Continuer</button>
@@ -92,22 +119,33 @@
         </div>
         </div>
 
-        <div id="step4" class="d-none">
+<div id="step4" class="d-none">
+    <div class="container">
         <h3 class="text-center mb-4">Comparaison des Données</h3>
-            <div id="dataComparison">
-        <p>Type de l'opération: <span id="oldType"></span> → <span id="newType"></span></p>
-        <p>Service de nettoyage: <span id="oldName"></span> → <span id="newName"></span></p>
-        <p>Adresse: <span id="oldAddress"></span> → <span id="newAddress"></span></p>
-        <p>Description: <span id="oldDescription"></span> → <span id="newDescription"></span></p>
-        </div>
-            <button type="button" class="btn btn-primary mt-3" onclick="submitEditForm()">Confirmer et Mettre à Jour</button>
-            <button type="button" class="btn btn-secondary mt-3" onclick="showStep(3)">Retour</button>
+        <div id="dataComparison" class="p-4 rounded">
+            <h4 class="mb-3">Récapitulatif des Changements</h4>
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item">Type de l'opération: <span id="oldType" class="fw-bold"></span> → <span id="newType" class="fw-bold"></span></li>
+                <li class="list-group-item">Service de nettoyage: <span id="oldName" class="fw-bold"></span> → <span id="newName" class="fw-bold"></span></li>
+                <li class="list-group-item">Adresse: <span id="oldAddress" class="fw-bold"></span> → <span id="newAddress" class="fw-bold"></span></li>
+                <li class="list-group-item">Description: <span id="oldDescription" class="fw-bold"></span> → <span id="newDescription" class="fw-bold"></span></li>
+            </ul>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary me-2" onclick="submitEditForm()">Confirmer et Mettre à Jour</button>
+                <button type="button" class="btn btn-secondary" onclick="showStep(3)">Retour</button>
+            </div>
         </div>
     </div>
 </div>
+
+
+
+
+
 {% endblock %}
 {% block body_javascript %}
 {{ parent() }}
+<script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
 <script>
 var operationId = {{ operation.id }};
 var oldData = {}; // Variable pour stocker les anciennes données

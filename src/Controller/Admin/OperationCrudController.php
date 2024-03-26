@@ -47,8 +47,11 @@ class OperationCrudController extends AbstractCrudController {
     public function edit(AdminContext $context)
     {
         $operation = $context->getEntity()->getInstance();
-        if (!$operation instanceof Operation) {
-            throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
+        $user = $this->getUser();
+    
+        if (!$operation instanceof Operation || ($operation->getCustomer() !== $user && !$this->isGranted('ROLE_ADMIN'))) {
+            $this->addFlash('error', 'Vous n\'avez pas le droit de modifier cette opération.');
+            return $this->redirectToRoute('admin'); // Assurez-vous que la route 'admin' est correcte
         }
     
         // Assurez-vous que vous avez accès à Twig ou injectez le service Twig
@@ -56,7 +59,7 @@ class OperationCrudController extends AbstractCrudController {
             'operation' => $operation
         ]);
     }
-
+    
 public function delete(AdminContext $context)
 {
     $operation = $context->getEntity()->getInstance();
