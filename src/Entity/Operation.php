@@ -317,4 +317,10 @@ private ?\DateTimeImmutable $finished_at = null;
 
         return $this;
     } 
+
+    public function getFullAddress()
+    {
+        return $this->street_ope . ', ' . $this->zipcode_ope . ' ' . $this->city_ope;
+    }
+
 }
