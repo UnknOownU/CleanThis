@@ -170,11 +170,13 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
            }
        
            $data = json_decode($request->getContent(), true);
-
+           
+           $operation->setType($data['type']);
            $operation->setName($data['name']);
            $operation->setDescription($data['description']);
            $operation->setStreetOpe($data['street']);  // Modifier ici
            $operation->setZipcodeOpe($data['zipcode']); // Modifier ici si nécessaire
+           $operation->setPrice($this->determinePriceBasedOnType($data['type']));
            $operation->setCityOpe($data['city']); // Modifier ici si nécessaire
        
            $entityManager->flush();
