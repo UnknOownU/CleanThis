@@ -154,6 +154,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 var map;
 var marker;
@@ -291,15 +292,25 @@ function submitEditForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
+.then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert('Opération mise à jour avec succès');
+            Swal.fire({
+                title: 'Succès',
+                text: 'Opération mise à jour avec succès',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }) .then(() => {
+                window.location.href = '/admin'; // Redirection
+            });
         } else {
-            alert('Erreur lors de la mise à jour de l\'opération');
+            Swal.fire('Erreur', 'Erreur lors de la mise à jour de l\'opération', 'error');
         }
     })
-    .catch(error => console.error('Erreur:', error));
+    .catch(error => {
+        console.error('Erreur:', error);
+        Swal.fire('Erreur', 'Un problème est survenu lors de la mise à jour de l\'opération.', 'error');
+    });
 }
 
 function getSelectedOperationType() {
@@ -314,7 +325,6 @@ function compareOldAndNewData(newData) {
     comparisonMessage += `Adresse :\nAncienne : ${oldData.street}, ${oldData.zipcode}, ${oldData.city}\nNouvelle : ${newData.street}, ${newData.zipcode}, ${newData.city}\n\n`;
     comparisonMessage += `Description :\nAncienne : ${oldData.description}\nNouvelle : ${newData.description}`;
 
-    alert(comparisonMessage);
 }
 function initMap() {
         map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris par défaut
