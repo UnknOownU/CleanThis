@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class ServicesdetaillittleController extends AbstractController
+class ServicesController extends AbstractController
 {
-    #[Route('/services-detail-little', name: 'services-detail-little')]
+    #[Route('/services', name: 'services')]
     public function index(): Response
     {
-        return $this->render('user/services-detail-little.html.twig', [
-            'controller_name' => 'ServicesdetaillittleController',
+        return $this->render('user/services.html.twig', [
+            'controller_name' => 'ServicesController',
         ]);
     }
 }
