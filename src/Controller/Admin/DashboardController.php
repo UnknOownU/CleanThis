@@ -66,6 +66,7 @@ class DashboardController extends AbstractDashboardController
                     MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
                         ->setQueryParameter('status', 'Archivée'),
             ]);
+            yield MenuItem::linkToRoute('Statistiques', 'fa fa-pie-chart', 'stats');   
             yield MenuItem::submenu('Profil', 'fa fa-user');
             yield MenuItem::subMenu('Membres', 'fa fa-users')
                 ->setSubItems([

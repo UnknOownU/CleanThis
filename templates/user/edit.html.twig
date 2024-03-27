@@ -7,8 +7,8 @@
 <section class="content-body">
     <div class="row d-flex justify-content-around"> <!-- Modifier ici pour aligner à droite -->
         <div class="col-md-10">
-            <div class="user-info mb-4 p-5 bg-white shadow" id="profile-info" style="border-radius: 20px;"> <!-- Ajouter border-radius -->
-                <h2 class="h4 text-primary mb-4">Informations du Profil</h2>
+            <div class="user-info mb-4 p-5" id="profile-info" style="border-radius: 20px;"> <!-- Ajouter border-radius -->
+                <h2 class="h4 text-primary mb-4">Informations De Votre Profil</h2>
                 <p><strong>Email:</strong> {{ user.email }}</p>
                 <p><strong>Nom:</strong> {{ user.name }}</p>
                 <p><strong>Prénom:</strong> {{ user.firstname }}</p>
@@ -28,9 +28,9 @@
                 <button class="btn btn-outline-primary" onclick="toggleEditForm()">Modifier</button>
             </div>
             
-            <div class="edit-form d-none p-5 bg-white shadow" id="profile-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;"> <!-- Ajouter border-radius -->
+            <div class="edit-form d-none p-5" id="profile-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;"> <!-- Ajouter border-radius -->
                 {{ form_start(form, {'attr': {'id': 'profile-edit-form-twig'}}) }}
-                <h2 class="h4 text-primary mb-4">Éditer le Profil</h2>
+                <h2 class="h4 text-primary mb-4">Éditer Votre Profil</h2>
                 {{ form_row(form.email, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.name, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.firstname, {'attr': {'class': 'form-control mb-3'}}) }}
@@ -48,89 +48,101 @@
         </div>
     </div>
 </section>
-
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
-    function initFormCheck() {
-    var initialValues = {};
-    var form = document.getElementById('profile-edit-form-twig');
+        function initFormCheck() {
+            var initialValues = {};
+            var form = document.getElementById('profile-edit-form-twig');
 
-    if (form) {
-        Array.from(form.elements).forEach(function(element) {
-            if (element.name) {
-                initialValues[element.name] = element.value;
-            }
-        });
+            if (form) {
+                Array.from(form.elements).forEach(function(element) {
+                    if (element.name) {
+                        initialValues[element.name] = element.value;
+                    }
+                });
 
-        form.addEventListener('submit', function(event) {
-            var changedFields = [];
-            Array.from(form.elements).forEach(function(element) {
-                if (element.name && initialValues[element.name] !== element.value) {
-                    const friendlyName = getFriendlyFieldName(element.name);
-                    changedFields.push(`${friendlyName}: "${initialValues[element.name]}" en "${element.value}"`);
-                }
-            });
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Empêche la soumission immédiate du formulaire
 
-            if (changedFields.length > 0) {
-                event.preventDefault(); // Empêche la soumission immédiate du formulaire
+                    var newPassword = form.querySelector('[name="user[newPassword][first]"]').value;
+                    if (!isPasswordValid(newPassword)) {
+                        Swal.fire('Erreur!', 'Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre.', 'error');
+                        return;
+                    }
 
-                Swal.fire({
-                    title: 'Confirmez les changements',
-                    html: "Voulez-vous vraiment changer les champs suivants?<br>" + changedFields.join("<br>"),
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Oui, changer!',
-                    cancelButtonText: 'Non, annuler!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                    var changedFields = [];
+                    Array.from(form.elements).forEach(function(element) {
+                        if (element.name && initialValues[element.name] !== element.value) {
+                            const friendlyName = getFriendlyFieldName(element.name);
+                            changedFields.push(`${friendlyName}: "${initialValues[element.name]}" en "${element.value}"`);
+                        }
+                    });
+
+                    if (changedFields.length > 0) {
                         Swal.fire({
-                             title: 'Succès!',
-                             text: 'Vos modifications ont été enregistrées.',
-                             icon: 'success',
-                        })
-                        form.submit(); // Soumet le formulaire si confirmé
+                            title: 'Confirmez les changements',
+                            html: "Voulez-vous vraiment changer les champs suivants?<br>" + changedFields.join("<br>"),
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Oui, changer!',
+                            cancelButtonText: 'Non, annuler!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Succès!',
+                                    text: 'Vos modifications ont été enregistrées.',
+                                    icon: 'success',
+                                });
+                                form.submit(); // Soumet le formulaire si confirmé
+                            }
+                        });
                     }
                 });
             }
-        });
-    }
-}
-
-window.onload = initFormCheck;
-
-function getFriendlyFieldName(fieldName) {
-    const nameMap = {
-        'user[email]': 'Email',
-        'user[name]': 'Nom de famille',
-        'user[firstname]': 'Prénom',
-        'user[zipcode]': 'Code Postal',
-        'user[city]': 'Ville',
-        'user[street]': 'Rue',
-        'user[phone]': 'Téléphone',
-        'user[newPassword][first]': 'Nouveau mot de passe',
-        'user[newPassword][second]': 'Confirmation du mot de passe'
-    };
-    return nameMap[fieldName] || fieldName;
-}
-
-function toggleEditForm() {
-        let info = document.getElementById('profile-info');
-        let form = document.getElementById('profile-edit-form');
-        
-        if (info.style.display === 'none') {
-            info.style.display = 'block';
-            form.style.display = 'none';
-            form.classList.add('d-none');
-        } else {
-            info.style.display = 'none';
-            form.style.display = 'block';
-            form.classList.remove('d-none');
         }
-    }
 
+        window.onload = initFormCheck;
+
+        function getFriendlyFieldName(fieldName) {
+            const nameMap = {
+                'user[email]': 'Email',
+                'user[name]': 'Nom de famille',
+                'user[firstname]': 'Prénom',
+                'user[zipcode]': 'Code Postal',
+                'user[city]': 'Ville',
+                'user[street]': 'Rue',
+                'user[phone]': 'Téléphone',
+                'user[newPassword][first]': 'Nouveau mot de passe',
+                'user[newPassword][second]': 'Confirmation du mot de passe'
+            };
+            return nameMap[fieldName] || fieldName;
+        }
+
+        function toggleEditForm() {
+            let info = document.getElementById('profile-info');
+            let form = document.getElementById('profile-edit-form');
+            
+            if (info.style.display === 'none') {
+                info.style.display = 'block';
+                form.style.display = 'none';
+                form.classList.add('d-none');
+            } else {
+                info.style.display = 'none';
+                form.style.display = 'block';
+                form.classList.remove('d-none');
+            }
+        }
+
+        function isPasswordValid(password) {
+            var minLength = 8;
+            var hasUpperCase = /[A-Z]/.test(password);
+            var hasNumber = /[0-9]/.test(password);
+
+            return password.length >= minLength && hasUpperCase && hasNumber;
+        }
     </script>
-    {% endblock %}
-    {% endblock %}
+{% endblock %}
+{% endblock %}

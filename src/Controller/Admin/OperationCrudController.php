@@ -122,21 +122,6 @@ public function delete(AdminContext $context)
         parent::updateEntity($entityManager, $entityInstance);
     }
     
-    private function setOperationPrice(Operation $operation) {
-        switch ($operation->getType()) {
-            case 'Little':
-                $operation->setPrice(100000);
-                break;
-            case 'Medium':
-                $operation->setPrice(250000);
-                break;
-            case 'Big':
-                $operation->setPrice(500000);
-                break;
-            case 'Custom':
-                break;
-        }
-    }
 
     public function configureFields(string $pageName): iterable {
         $fields = [];
