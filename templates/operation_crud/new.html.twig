@@ -207,18 +207,24 @@ function updateMap() {
     window.onload = initMap;
 
 
-    function validateStep2() {
-        var service = document.getElementById('nettoyageService').value;
-        var street = document.getElementById('street_ope').value;
-        var zipcode = document.getElementById('zipcode_ope').value;
-        var city = document.getElementById('city_ope').value;
+function validateStep2() {
+    var service = document.getElementById('nettoyageService').value;
+    var street = document.getElementById('street_ope').value;
+    var zipcode = document.getElementById('zipcode_ope').value;
+    var city = document.getElementById('city_ope').value;
 
-        if (!service || !street || !zipcode || !city) {
-            Swal.fire('Désolé !', 'Veuillez remplir tous les champs de l\'étape 2.', 'error');
-            return false;
-        }
-        return true;
+    var isZipcodeValid = /^\d+$/.test(zipcode); // Vérifier si le code postal contient uniquement des chiffres
+
+    if (!service || !street || !zipcode || !city) {
+        Swal.fire('Désolé !', 'Veuillez remplir tous les champs de l\'étape 2.', 'error');
+        return false;
+    } else if (!isZipcodeValid) {
+        Swal.fire('Code Postal Invalide', 'Le code postal doit contenir uniquement des chiffres.', 'error');
+        return false;
     }
+    return true;
+}
+
 
     function validateStep3() {
         var description = document.getElementById('description').value;

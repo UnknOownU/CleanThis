@@ -118,9 +118,9 @@
                 <li>Heures ou périodes souhaitées pour l'intervention.</li>
             </ul>
             <p>Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace.</p>
-            <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici"></textarea>
+            <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici" required></textarea> 
             <div class="text-center mt-3">
-            <button type="button" class="btn btn-primary mt-3" onclick="showStep(4)">Continuer</button>
+            <button type="button" class="btn btn-primary mt-3" onclick="if (validateStep3()) showStep(4)">Continuer</button>
             <button type="button" class="btn btn-secondary mt-3" onclick="showStep(2)">Retour</button>
         </div>
         </div>
@@ -229,13 +229,38 @@ function updateCleaningOptionsSelect(selectedName) {
     }
 }
 function showStep(stepNumber, operationType = null) {
+    // Vérification spécifique pour l'étape 3
+    if (stepNumber === 3) {
+        var service = document.getElementById('nettoyageService').value;
+        var street = document.getElementById('street_ope').value;
+        var zipcode = document.getElementById('zipcode_ope').value;
+        var city = document.getElementById('city_ope').value;
+
+        // Vérifiez si le code postal contient uniquement des chiffres
+        var isZipcodeValid = /^\d+$/.test(zipcode);
+
+        if (!service || !street || !zipcode || !city || !isZipcodeValid) {
+            var errorMessage = !isZipcodeValid 
+                               ? 'Le code postal doit être composé uniquement de chiffres.' 
+                               : 'Veuillez remplir tous les champs avant de continuer.';
+
+            Swal.fire({
+                title: 'Champs Incomplets ou Invalides',
+                text: errorMessage,
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            });
+            return; // Ne pas passer à l'étape suivante si la condition n'est pas remplie
+        }
+    }
+
+    // Le reste du code pour la fonction showStep
     if (operationType) {
-        // Mettre à jour le type d'opération sélectionné et charger les options
         var selectedButton = document.querySelector(`#step1 .btn[data-type="${operationType}"]`);
         if (selectedButton) {
             document.querySelectorAll('#step1 .btn').forEach(button => button.classList.remove('selected'));
             selectedButton.classList.add('selected');
-            fetchOptions(operationType); // Charger les options pour le nouveau type sélectionné
+            fetchOptions(operationType);
         }
     }
 
@@ -258,6 +283,7 @@ function showStep(stepNumber, operationType = null) {
     document.getElementById('step' + stepNumber).classList.remove('d-none');
 }
 
+
 function updateDataComparison(newData) {
     document.getElementById('oldType').textContent = oldData.type || 'N/A';
     document.getElementById('newType').textContent = newData.type || 'N/A';
@@ -273,6 +299,17 @@ function getSelectedOperationType() {
     var selectedButton = document.querySelector('#step1 .btn.selected');
     return selectedButton ? selectedButton.getAttribute('data-type') : '';
 }
+
+function validateStep3() {
+    var description = document.getElementById('description').value.trim();
+    if (description === '')  {
+        Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
+        return false;
+    }
+    return true;
+}
+
+
 
 function submitEditForm() {
     var selectedOperationType = getSelectedOperationType();
