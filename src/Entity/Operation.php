@@ -64,6 +64,9 @@ class Operation
     #[ORM\ManyToOne(inversedBy: 'operations')]
     private ?User $salarie = null;
 
+    #[ORM\Column]
+    private ?float $amount =null;
+
 /**
 *@ORM\ManyToOne(targetEntity=User::class)
 *@ORM\JoinColumn(nullable=false)
@@ -317,4 +320,24 @@ private ?\DateTimeImmutable $finished_at = null;
 
         return $this;
     } 
+
+    public function getFullAddress()
+    {
+        return $this->street_ope . ', ' . $this->zipcode_ope . ' ' . $this->city_ope;
+    }
+
+    // Getters et setters pour $amount
+
+    public function getAmount(): ?float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): self
+    {
+        $this->amount = $amount;
+        return $this;
+    }
 }
+
+

@@ -96,7 +96,7 @@ class DashboardController extends AbstractDashboardController
             );
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
-        //Senior dashboard
+        //Senior dashboard-
         if ($this->isGranted('ROLE_SENIOR')) {
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');

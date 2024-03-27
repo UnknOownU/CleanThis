@@ -1,54 +1,57 @@
- <header class="site-header">
-            <div class="container">
-                <div class="row">
-                    
-                    <div class="col-lg-12 col-12 d-flex flex-wrap">
-                        
-                      <p class="d-flex me-4 mb-0">
-                        
-             Services de Nettoyage Non-Stop!
-                        </p>
-
-                        <p class="d-flex d-lg-block d-md-block d-none me-4 mb-0">
-                           <strong > 24h/24 - 7J/7J </strong >
-                        </p>
-
-                        <p class="site-header-icon-wrap text-black d-flex mb-0 ms-auto">
-                            <i class="site-header-icon bi-whatsapp me-2"></i>
-
-                            <a href="tel: 110-220-9800" class="text-black">
-                                Tel: 06 09 09 09 09
-                            </a></strong>
-                        </p>
-                    </div>
-
-                </div>
+<header class="site-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-12 d-flex flex-wrap">
+                <p class="d-flex me-4 mb-0">
+                    Services de Nettoyage Non-Stop!
+                </p>
+                <p class="d-flex d-lg-block d-md-block d-none me-4 mb-0">
+                    <strong>24h/24 - 7J/7J</strong>
+                </p>
+                <p class="site-header-icon-wrap text-black d-flex mb-0 ms-auto">
+                    <i class="site-header-icon bi-whatsapp me-2"></i>
+                    <a href="tel:110-220-9800" class="text-black">Tel: 06 09 09 09 09</a>
+                </p>
             </div>
-        </header>
+        </div>
+    </div>
+</header>
 
-  <div class="header-content">
+<div class="header-content">
     <div class="left-content">
-      <img src="{{ asset('images/cleanThis.png') }}" alt="CleanThis">
+        <img src="{{ asset('images/cleanThis.png') }}" alt="CleanThis">
     </div>
     <div class="right-content">
-      <a href="{{ path('contact') }}" class="btn btn-primary">Demande de devis</a>
-      <a href="/login" class="btn btn-primary">Se connecter</a>
+        {% if app.user %}
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                   Espace personnel
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="{{ path('admin') }}" target="_blank">Dashboard</a></li>
+                    <li><a class="dropdown-item" href="#">☺ Profil</a></li>
+                    <li><a class="dropdown-item" href="{{ path('app_logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i>☻ Déconnexion</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <a href="/login" class="btn btn-primary">Se connecter</a>
+            <a href="{{ path('contact') }}" class="btn btn-primary">Demande de devis</a>
+        {% endif %}
     </div>
-		{% for locale in locales %}
-		{% if locale != app.request.locale %}
+    {% for locale in locales %}
+        {% if locale != app.request.locale %}
+            <a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
+        {% endif %}
+    {% endfor %}
+</div>
 
-    			<a href="{{ path('change_locale', {'locale': locale}) }}"><img src="{{ asset('images/'~locale~'.png') }}" alt="{{locale}}"></a>
-
-		{% endif %}
-	{% endfor %}
-  </div>
 
 <nav>
-  <ul class="nav-content">
-    <li><a href="{{ path('accueil') }}" class="active">Accueil</a></li>
-    <li><a href="{{ path('services-detail-little') }}">Nos services</a></li>
-    <li><a href="{{ path('about') }}">Notre équipe</a></li>
-    <li><a href="{{ path('contact') }}">Contact</a></li>
-    <li><a href="{{ path('recrutement') }}">Recrutement</a></li>
-  </ul>
+    <ul class="nav-content">
+        <li><a href="{{ path('accueil') }}" class="active">Accueil</a></li>
+        <li><a href="{{ path('services') }}">Nos services</a></li>
+        <li><a href="{{ path('about') }}">Notre équipe</a></li>
+        <li><a href="{{ path('contact') }}">Contact</a></li>
+        <li><a href="{{ path('recrutement') }}">Recrutement</a></li>
+    </ul>
 </nav>
