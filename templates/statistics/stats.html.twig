@@ -1,144 +1,152 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
+{% block body_id 'page-content-wrapper' %}
 {% block title %}Statistiques{% endblock %}
 
-{% block body %}
-
-
-    <div style="margin-bottom: 20px;">
-        <h1 style="margin-bottom: 10px;">Statistiques</h1>
-        <div style="margin-bottom: 10px;">
-            <label for="chartTypeGraph">Choisir le type de graphique :</label>
-            <select id="chartTypeGraph" onchange="changeChartType()">
+{% block main %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Statistiques</h1>
+    
+    <!-- Sélection du Type de Graphique et de Statistique -->
+    <div class="d-flex justify-content-center mb-4">
+        <div class="mr-4">
+            <label for="chartTypeGraph">Type de graphique</label>
+            <select id="chartTypeGraph" class="form-control" onchange="changeChartType()">
                 <option value="pie">Camembert</option>
                 <option value="bar">Barre</option>
                 <option value="doughnut">Donuts</option>
             </select>
         </div>
-
-        <div style="margin-bottom: 10px;">
-            <label for="chartType">Choisir le type de statistique :</label>
-            <select id="chartType" onchange="changeChartType()">
+        <div>
+            <label for="chartType">Type de statistique</label>
+            <select id="chartType" class="form-control" onchange="changeChartType()">
                 <option value="operations">Ventes par type d'opération</option>
                 <option value="salaries">Missions par salarié</option>
-                <option value="salariePlusDeMissions">Salarié avec le plus de missions</option>
                 <option value="chiffreAffaires">Chiffre d'affaires total</option>
-                <option value="chiffreAffairesParDate">Chiffre d'affaires par date</option>
             </select>
         </div>
     </div>
-
-    <div id="chartContainer" style="width: 70%; margin: auto;">
-        <h2 id="chartTitle" style="margin-bottom: 10px;"></h2>
+    
+    <!-- Conteneur pour le Graphique -->
+    <div id="chartContainer" style="width: 30%; margin: auto;">
+        <h2 id="chartTitle" style="margin-bottom: 10px;">Chiffre d'affaires par date</h2>
         <canvas id="myChart"></canvas>
     </div>
+</div>
 
-    <!-- JavaScript pour la génération des graphiques et le changement de type -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart;
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart;
 
-        function createChart(data, chartType) {
-            if (myChart) {
-                myChart.destroy();
-            }
-            
-            myChart = new Chart(ctx, {
-                type: chartType,
-                data: data,
-                options: {
-                    responsive: true,
-                    legend: {
-                        display: true,
-                        position: 'top', // Légende au-dessus du titre
-                    },
-                    title: {
-                        display: true,
-                        text: getTitleText(),
-                        padding: 20 // Ajouter un espace entre le titre et le graphique
-                    }
-                }
-            });
+    function createChart(data, chartType) {
+        if (myChart) {
+            myChart.destroy();
         }
 
-        function getTitleText() {
-            var chartType = document.getElementById('chartType').value;
-            var titleText = '';
-            switch (chartType) {
-                case 'operations':
-                    titleText = 'Répartition des ventes par type d\'opération';
-                    break;
-                case 'salaries':
-                    titleText = 'Répartition des missions par salarié';
-                    break;
-                // Ajoutez les autres cas ici
+        myChart = new Chart(ctx, {
+            type: chartType,
+            data: data,
+            options: {
+                responsive: true,
+                legend: {
+                    display: chartType !== 'line',
+                    position: 'top',
+                },
+                scales: chartType !== 'pie' && chartType !== 'doughnut' ? {
+                    yAxes: [{ 
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                } : {}
             }
-            return titleText;
+        });
+    }
+
+    function changeChartType() {
+        var chartTypeGraph = document.getElementById('chartTypeGraph').value;
+        var chartType = document.getElementById('chartType').value;
+        var data;
+
+        switch (chartType) {
+            case 'operations':
+            data = {
+                labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}", {% endfor %}],
+                datasets: [{
+                    label: 'Nombre d\'opérations',
+                    data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }}, {% endfor %}],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+                    borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                    borderWidth: 1
+                }]
+            };
+            break;
+            case 'salaries':
+               var labels = [];
+               var dataValues = [];
+               {% for stat in statistiquesSalaries %}
+                   labels.push("{{ stat.name }}");
+                   dataValues.push({{ stat.numMissions }});
+               {% else %}
+                   labels.push("Aucun Salarié");
+                   dataValues.push(0);
+               {% endfor %}
+
+               data = {
+                   labels: labels,
+                   datasets: [{
+                       label: 'Nombre de missions',
+                       data: dataValues,
+                       backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
+                       borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                       borderWidth: 1
+                   }]
+               };
+               break;
+
+            case 'chiffreAffaires':
+                var labels = [];
+                var salesData = [];
+                {% for sale in chiffreAffairesParDate %}
+                    labels.push("{{ sale.monthYear }}");
+                    salesData.push({{ sale.totalSales }});
+                {% endfor %}
+                data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Chiffre d\'affaires par mois (€)',
+                        data: salesData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                        fill: false
+                    }]
+                };
+    break;
+            default:
+                data = {};
         }
 
-        function changeChartType() {
-            var chartType = document.getElementById('chartType').value;
-            var chartTypeGraph = document.getElementById('chartTypeGraph').value;
-            var data;
+        createChart(data, chartTypeGraph);
+        document.getElementById('chartTitle').innerText = getTitleText(chartType);
+    }
 
-            switch (chartType) {
-                case 'operations':
-                    data = {
-                        labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}", {% endfor %}],
-                        datasets: [{
-                            label: 'Nombre de ventes',
-                            data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }}, {% endfor %}],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                            ],
-                            borderWidth: 1
-                        }]
-                    };
-                    break;
-                case 'salaries':
-                    data = {
-                        labels: [{% for stat in statistiquesSalaries %}"{{ stat.name }}", {% endfor %}],
-                        datasets: [{
-                            label: 'Nombre de missions',
-                            data: [{% for stat in statistiquesSalaries %}{{ stat.numMissions }}, {% endfor %}],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                            ],
-                            borderWidth: 1
-                        }]
-                    };
-                    break;
-                // Ajoutez les autres cas ici
-            }
-
-            createChart(data, chartTypeGraph);
-            document.getElementById('chartTitle').innerText = getTitleText(); // Mettre à jour le titre
+    function getTitleText(chartType) {
+        switch (chartType) {
+            case 'operations':
+                return 'Ventes par Type d\'Opération';
+            case 'salaries':
+                return 'Missions par Salarié';
+            case 'chiffreAffaires':
+                return 'Chiffre d\'Affaires par Date';
+            default:
+                return 'Statistiques';
         }
+    }
 
-        // Initialiser le graphique avec le type par défaut
+    document.addEventListener('DOMContentLoaded', function() {
         changeChartType();
-    </script>
+    });
+</script>
 {% endblock %}

@@ -60,3 +60,10 @@ operation_edit:
     path: /operation/edit/{id}
     controller: App\Controller\AjaxOperationController::editOperation
     methods: GET
+
+operation_download_invoice:
+    path: /operation/download-invoice/{id}
+    controller: App\Controller\InvoiceController::downloadInvoice
+    methods: GET
+    requirements:
+        id: '\d+'

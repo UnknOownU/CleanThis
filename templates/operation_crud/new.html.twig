@@ -1,12 +1,33 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 {% block body_id 'page-content-wrapper' %}
 
-{% block page_title %}Demande D'opération{% endblock %}
+{% block page_title %}{{ "Demande D'opération"|trans }}{% endblock %}
 
 {% block main %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col text-center step-indicator">
+            <div class="circle">1</div>
+            <div>Étape 1</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">2</div>
+            <div>Étape 2</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">3</div>
+            <div>Étape 3</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">4</div>
+            <div>Étape 4</div>
+        </div>
+    </div>
+</div>
+
 <div class="ea-new-form">
 <div class="container mt-3">
-    <h2 class="text-center mb-5">Nouvelle Demande De Nettoyage</h2>
+    <h2 class="text-center mb-5">{{ "Nouvelle Demande De Nettoyage"|trans }}</h2>
     </div>
     <!-- Étape 1 : Choix du type d'opération -->
     <div id="step1" class="row justify-content-center mb-4">
@@ -14,36 +35,36 @@
         <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Petite Opération</h5>
-                    <p class="card-text">Pour une intervention d'environ 10 à 15 mètres carrés</p>
-                    <button class="btn btn-primary" data-type="Little" onclick="showStep(2, 'Little')">Sélectionner</button>
+                    <h5 class="card-title">{{ "Petite Opération"|trans }}</h5>
+                    <p class="card-text">{{ "Pour une intervention d'environ 10 à 15 mètres carrés"|trans }}</p>
+                    <button class="btn btn-primary" data-type="Little" onclick="showStep(2, 'Little')">{{ "Sélectionner"|trans }}</button>
                 </div>
             </div>
         </div>
          <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Moyenne Opération</h5>
-                    <p class="card-text">Pour une intervention d'environ 30 à 50 mètres carrés</p>
-                    <button class="btn btn-primary" onclick="showStep(2, 'Medium')">Sélectionner</button>
+                    <h5 class="card-title">{{ "Moyenne Opération"|trans }}</h5>
+                    <p class="card-text">{{ "Pour une intervention d'environ 30 à 50 mètres carrés"|trans }}</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Medium')">{{ "Sélectionner"|trans }}</button>
                 </div>
             </div>
         </div>
         <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Grande Opération</h5>
-                    <p class="card-text">Pour une intervention d'environ 50 à 500 mètres carrés</p>
-                    <button class="btn btn-primary" onclick="showStep(2, 'Big')">Sélectionner</button>
+                    <h5 class="card-title">{{ "Grande Opération"|trans }}</h5>
+                    <p class="card-text">{{ "Pour une intervention d'environ 50 à 500 mètres carrés"|trans }}</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Big')">{{ "Sélectionner"|trans }}</button>
                 </div>
             </div>
         </div>
         <div class="col-md-6 mb-5">
             <div class="card text-center h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Opération Personnalisée</h5>
-                    <p class="card-text">Choisissez une opération personnalisée</p>
-                <button class="btn btn-primary" onclick="showStep(2, 'Custom')">Sélectionner</button>
+                    <h5 class="card-title">{{ "Opération Personnalisée"|trans }}</h5>
+                    <p class="card-text">{{ "Choisissez une opération personnalisée"|trans }}</p>
+                <button class="btn btn-primary" onclick="showStep(2, 'Custom')">{{ "Sélectionner"|trans }}</button>
             </div>
         </div>
     </div>
@@ -55,45 +76,46 @@
     <div class="container py-5">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title text-center">Services de Nettoyage</h3>
-                <div id="map" class="mb-4" style="height: 400px;"></div>
+
+                <h3 class="card-title text-center">{{ "Services de Nettoyage"|trans }}</h3>
+                <div id="map" class="mb-4" style="height: 800px;"></div>
                 <form id="operationForm" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="nettoyageService" class="form-label">Type de Service</label>
+                            <label for="nettoyageService" class="form-label">{{ "Type de Service"|trans }}</label>
                             <select id="nettoyageService" name="nettoyageService" class="form-select" required>
-                                <option value="">Choisir...</option>
+                                <option value="">{{ "Choisir..."|trans }}</option>
                                 <!-- Les options seront injectées ici -->
                             </select>
                             <div class="invalid-feedback">
-                                Veuillez sélectionner un service de nettoyage.
+                                {{ "Veuillez sélectionner un service de nettoyage."|trans }}
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="street_ope" class="form-label">Adresse</label>
+                            <label for="street_ope" class="form-label">{{ "Adresse"|trans }}</label>
                             <input type="text" class="form-control adresse-autocomplete" id="street_ope" name="street_ope" placeholder="1234 Main St" required>
                             <div class="invalid-feedback">
-                                Veuillez entrer l'adresse de l'opération.
+                                {{ "Veuillez entrer l'adresse de l'opération."|trans }}
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="zipcode_ope" class="form-label">Code Postal</label>
+                            <label for="zipcode_ope" class="form-label">{{ "Code Postal"|trans }}</label>
                             <input type="text" class="form-control zipcode_ope" id="zipcode_ope" name="zipcode_ope" placeholder="Code postal" required>
                             <div class="invalid-feedback">
-                                Veuillez entrer le code postal.
+                                {{ "Veuillez entrer le code postal."|trans }}
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="city_ope" class="form-label">Ville</label>
+                            <label for="city_ope" class="form-label">{{ "Ville"|trans }}</label>
                             <input type="text" class="form-control city_ope" id="city_ope" name="city_ope" placeholder="Ville" required>
                             <div class="invalid-feedback">
-                                Veuillez entrer la ville.
+                                {{ "Veuillez entrer la ville."|trans }}
                             </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button class="btn btn-warning" type="button" onclick="showStep(1)">Retour</button>
-                        <button class="btn btn-primary" type="button" onclick="showStep(3)">Continuer</button>
+                        <button class="btn btn-warning" type="button" onclick="showStep(1)">{{ "Retour"|trans }}</button>
+                        <button class="btn btn-primary" type="button" onclick="showStep(3)">{{ "Continuer"|trans }}</button>
                     </div>
                 </form>
             </div>
@@ -103,36 +125,46 @@
 
 <!-- Étape 3 : Description de l'opération -->
 <div id="step3" class="container d-none">
-    <h3 class="mb-4">Description de l'Opération</h3>
-    <p>Veuillez fournir une description détaillée du site où aura lieu l'opération de nettoyage. Ceci est crucial pour assurer que nos équipes soient correctement préparées et équipées pour répondre au mieux à vos besoins. Vous devriez inclure :</p>
+    <h3 class="mb-4">{{ "Description de l'Opération"|trans }}</h3>
+    <p>{{ "Veuillez fournir une description détaillée du site où aura lieu l'opération de nettoyage. Ceci est crucial pour assurer que nos équipes soient correctement préparées et équipées pour répondre au mieux à vos besoins. Vous devriez inclure :"|trans }}</p>
     <ul>
-        <li>La taille approximative de l'espace à nettoyer (en mètres carrés).</li>
-        <li>Toute condition spécifique ou exigence (par exemple, surfaces délicates, zones à éviter).</li>
-        <li>Des informations sur les types de surfaces et de matériaux présents (carrelage, moquette, bois, etc.).</li>
-        <li>Tout obstacle potentiel ou zone difficile d'accès.</li>
-        <li>Préférences concernant les produits de nettoyage (écologiques, hypoallergéniques, etc.).</li>
-        <li>Heures ou périodes souhaitées pour l'intervention.</li>
+        <li>{{ "La taille approximative de l'espace à nettoyer (en mètres carrés)."|trans }}</li>
+        <li>{{ "Toute condition spécifique ou exigence (par exemple, surfaces délicates, zones à éviter)."|trans }}</li>
+        <li>{{ "Des informations sur les types de surfaces et de matériaux présents (carrelage, moquette, bois, etc.)."|trans }}</li>
+        <li>{{ "Tout obstacle potentiel ou zone difficile d'accès."|trans }}</li>
+        <li>{{ "Préférences concernant les produits de nettoyage (écologiques, hypoallergéniques, etc.)."|trans }}</li>
+        <li>{{ "Heures ou périodes souhaitées pour l'intervention."|trans }}</li>
     </ul>
-    <p>Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace.</p>
+    <p>{{ "Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace."|trans }}</p>
     <textarea id="description" name="description" placeholder="Veuillez décrire le site de nettoyage" class="form-control" rows="4"></textarea>
-    <button class="btn btn-primary mt-3" onclick="showStep(4)">Continuer</button>
-    <button class="btn btn-warning mt-3" onclick="showStep(2)">Retour</button>
+    <button class="btn btn-primary mt-3" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
+    <button class="btn btn-warning mt-3" onclick="showStep(2)">{{ "Retour"|trans }}</button>
+     <div class="mb-3">
+        <label for="operationImage" class="form-label">Ajouter une image (optionnel)</label>
+        <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+        <div class="mb-3">
+    <div class="mb-3">
+        <label for="rdvDate" class="form-label">Date du Rendez-vous</label>
+        <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control" onchange="loadTimeSlots(this.value)">
+    </div>
+    </div>
+    </div>
 </div>
 
 <!-- Étape 4 : Confirmation des détails -->
 <div id="step4" class="container d-none">
-    <h3 class="text-center mb-4">Confirmation des Détails</h3>
+    <h3 class="text-center mb-4">{{ "Confirmation des Détails"|trans }}</h3>
     <div class="p-4 rounded">
         <ul class="list-group list-group-flush mb-4">
-            <li class="list-group-item">Type de l'opération: <span id="confirmationType" class="fw-bold"></span></li>
-            <li class="list-group-item">Service de nettoyage: <span id="confirmationService" class="fw-bold"></span></li>
-            <li class="list-group-item">Adresse: <span id="confirmationAddress" class="fw-bold"></span></li>
-            <li class="list-group-item">Description: <span id="confirmationDescription" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Type de l'opération: "|trans }}<span id="confirmationType" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Service de nettoyage: "|trans }}<span id="confirmationService" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Adresse: "|trans }}<span id="confirmationAddress" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Description: "|trans }}<span id="confirmationDescription" class="fw-bold"></span></li>
         </ul>
-        <p>Veuillez confirmer que toutes les informations ci-dessus sont correctes. Une fois confirmées, ces informations seront utilisées pour planifier et exécuter votre opération de nettoyage. Assurez-vous que les détails sont complets et précis.</p>
+        <p>{{ "Veuillez confirmer que toutes les informations ci-dessus sont correctes. Une fois confirmées, ces informations seront utilisées pour planifier et exécuter votre opération de nettoyage. Assurez-vous que les détails sont complets et précis."|trans }}</p>
         <div class="text-center">
-            <button class="btn btn-primary me-2" onclick="submitOperation()">Confirmer et Soumettre</button>
-            <button class="btn btn-warning" onclick="showStep(3)">Retour</button>
+            <button class="btn btn-primary me-2" onclick="submitOperation()">{{ "Confirmer et Soumettre"|trans }}</button>
+            <button class="btn btn-warning" onclick="showStep(3)">{{ "Retour"|trans }}</button>
         </div>
     </div>
 </div>
@@ -140,7 +172,7 @@
     <div class="row">
         <div class="col text-center">
             <p class="text-secondary"> 
-                <strong>Chez CleanThis,</strong> nous ne nous contentons pas de nettoyer - nous redéfinissons l'excellence du nettoyage. Avec une attention méticuleuse aux détails et une approche axée sur la satisfaction du client, nous vous offrons bien plus qu'un service de nettoyage standard. <strong>Choisir CleanThis,</strong> c'est opter pour un environnement éclatant, un espace de vie harmonieux et un bien-être renforcé. Nous nous engageons à transformer votre espace, en apportant la propreté et la sérénité qui dépassent vos attentes. Parce que votre confort, votre santé et votre tranquillité d'esprit sont notre priorité, <strong>faites confiance à CleanThis</strong> pour une expérience de nettoyage hors pair.
+                <strong>{{ "Chez CleanThis,"|trans }}</strong> {{ "nous ne nous contentons pas de nettoyer - nous redéfinissons l'excellence du nettoyage. Avec une attention méticuleuse aux détails et une approche axée sur la satisfaction du client, nous vous offrons bien plus qu'un service de nettoyage standard."|trans }} <strong>{{ "Choisir CleanThis,"|trans }}</strong> {{ "c'est opter pour un environnement éclatant, un espace de vie harmonieux et un bien-être renforcé. Nous nous engageons à transformer votre espace, en apportant la propreté et la sérénité qui dépassent vos attentes. Parce que votre confort, votre santé et votre tranquillité d'esprit sont notre priorité, "|trans }}<strong>{{ "faites confiance à CleanThis"|trans }}</strong> {{ "pour une expérience de nettoyage hors pair."|trans }}
             </p>
         </div>
     </div>
@@ -149,6 +181,73 @@
 
 {% block body_javascript %}
     {{ parent() }}
+
+<style>
+   
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ddd; /* Gris pour étape non-active */
+    color: #fff; /* Blanc pour le texte à l'intérieur du cercle */
+    margin: 0 auto; /* Centre le cercle dans la 'step-indicator' */
+    position: relative;
+    z-index: 2; /* S'assurer que le cercle est au-dessus des lignes */
+}
+
+.circle.active {
+    background-color: #007bff; /* Bleu pour étape active */
+}
+
+    .circle {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 50%;
+        background-color: #5a6268; /* Couleur pour les étapes non actives */
+        color: white;
+        font-weight: bold;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.5s ease;
+    }
+
+    .circle.active {
+        background-color: #007bff; /* Couleur pour les étapes actives */
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .step-indicator:not(:last-child)::after {
+        content: '';
+        width: 100%;
+        border-bottom: 3px solid #ddd; /* Connecteur pour les étapes non actives */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(50%) translateY(-50%);
+        z-index: -1;
+    }
+
+    .step-indicator.active + .step-indicator::after {
+        border-bottom: 3px solid #007bff; /* Connecteur pour les étapes actives */
+    }
+
+    /* Animation de clignotement */
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .blink {
+        animation: blink 1.5s ease-in-out infinite;
+    }
+</style>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
@@ -234,10 +333,29 @@ function validateStep2() {
         }
         return true;
     }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Mettre en évidence l'indicateur de l'étape 1 dès le chargement de la page
+    updateStepIndicators(1);
+});
+    function updateStepIndicators(stepNumber) {
+        var steps = document.querySelectorAll('.step-indicator .circle');
+        steps.forEach((step, index) => {
+            if (index < stepNumber) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+    }
 
     function showStep(stepNumber, selectedOperationType = null) {
-        // Validation avant de changer d'étape
-        if ((stepNumber === 3 && !validateStep2()) || (stepNumber === 4 && !validateStep3())) return;
+        if ((stepNumber === 3 && !validateStep2()) || (stepNumber === 4 && !validateStep3())) {
+            updateStepIndicators(stepNumber - 1);
+            return;
+        }
+
+        updateStepIndicators(stepNumber); // Mise à jour des indicateurs d'étape seulement après validation réussie
 
         if (selectedOperationType) {
             operationType = selectedOperationType;
@@ -254,10 +372,26 @@ function validateStep2() {
 
         if (stepNumber === 2 && selectedOperationType) {
             fetchOptions(operationType);
+            setTimeout(function() {
+            map.invalidateSize();
+        }, 400);
         } else if (stepNumber === 4) {
             updateConfirmation();
         }
     }
+
+
+function updateStepIndicators(stepNumber) {
+    var steps = document.querySelectorAll('.step-indicator .circle');
+    steps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
 
     function fetchOptions(operationType) {
         fetch('/ajax/get-cleaning-options', {
@@ -321,25 +455,30 @@ function validateStep2() {
 
     isFormSubmitted = true;
 
-    const description = document.getElementById('description').value;
-    const name = document.getElementById('nettoyageService').value;
-    const street = document.getElementById('street_ope').value;
-    const zipcode = document.getElementById('zipcode_ope').value;
-    const city = document.getElementById('city_ope').value;
+    // Créer un objet FormData pour envoyer les données du formulaire
+    var formData = new FormData();
+    formData.append('type', operationType);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('name', document.getElementById('nettoyageService').value);
+    formData.append('street', document.getElementById('street_ope').value);
+    formData.append('zipcode', document.getElementById('zipcode_ope').value);
+    formData.append('city', document.getElementById('city_ope').value);
+    
+    var rdvDate = document.getElementById('rdvDate').value;
+    if (rdvDate) {
+        formData.append('rdvDate', rdvDate);
+    }
+
+    // Ajouter l'image au FormData
+    var imageFile = document.getElementById('operationImage').files[0];
+    if (imageFile) {
+        formData.append('attachmentFile', imageFile);
+    }
 
     fetch('/ajax/create-operation', {
         method: 'POST',
-        body: JSON.stringify({
-            type: operationType,
-            description: description,
-            name: name,
-            street: street,
-            zipcode: zipcode,
-            city: city
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        body: formData // Utilisation de FormData
+        // Ne pas ajouter de header 'Content-Type', car il est nécessaire d'utiliser le 'boundary' généré par FormData
     })
     .then(response => response.json())
     .then(data => {
@@ -357,8 +496,13 @@ function validateStep2() {
         isFormSubmitted = false; // Réinitialisez l'état si une erreur survient
         handleError(error);
     });
+}
 
-   }
+function handleError(error) {
+    console.error('Erreur:', error);
+    Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
+}
+
     function handleResponse(data) {
         if (data.status === 'success') {
             Swal.fire('Succès!', 'Opération créée avec succès.', 'success');

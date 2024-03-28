@@ -1,0 +1,6 @@
+{% extends '@EasyAdmin/crud/new.html.twig' %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+{% endblock %}

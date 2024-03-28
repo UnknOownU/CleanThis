@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
+use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -89,7 +91,7 @@ public function delete(AdminContext $context)
         return $crud
             ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
             ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
-            ->setSearchFields(null);
+            ->setSearchFields(['name', 'type', 'status']);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
                 $crud->setDefaultSort(['status' => $statusFilter]);
@@ -122,46 +124,52 @@ public function delete(AdminContext $context)
         parent::updateEntity($entityManager, $entityInstance);
     }
     
-    private function setOperationPrice(Operation $operation) {
-        switch ($operation->getType()) {
-            case 'Little':
-                $operation->setPrice(100000);
-                break;
-            case 'Medium':
-                $operation->setPrice(250000);
-                break;
-            case 'Big':
-                $operation->setPrice(500000);
-                break;
-            case 'Custom':
-                break;
-        }
-    }
 
     public function configureFields(string $pageName): iterable {
         $fields = [];
 
         if ($this->isGranted('ROLE_CUSTOMER') && Crud::PAGE_INDEX === $pageName) {
+            $fields[] = FormField::addTab('Mission');
+            $fields[] = DateTimeField::new('created_at', 'Créé le')
+                ->hideOnForm();
             $fields[] = TextField::new('name', 'Mission');
-            $fields[] = TextField::new('descritpion', 'La description de la mission de néttoyage');
+            $fields[] = TextField::new('attachmentFile')
+            ->setLabel('Photo')
+            ->setFormType(VichImageType::class)
+                        ->onlyWhenCreating();
+
+            $fields[] = ImageField::new('attachment', 'Photo')
+                        ->setBasePath('/images/products')
+                        ->onlyOnIndex();
+
+            $fields[] = TextEditorField::new('description', 'Description')
+                        ->hideOnForm();
+
+            $fields[] = TextareaField::new('description', 'Description')
+                        ->renderAsHtml()
+                        ->hideOnIndex();
+
             $fields[] = ChoiceField::new('type', 'Type de mission')
                         ->setChoices([
                             'Petite - 1000€' => 'Little',
                             'Moyenne - 2500€' => 'Medium',
                             'Grande - 5000€' => 'Big',
                             'Personnalisée' => 'Custom',
-                        ])->renderAsBadges([
+                        ])
+                        ->renderAsBadges([
                             'Little' => 'info',
                             'Medium' => 'warning',
                             'Big' => 'success',
                             'Custom' => 'secondary',
                         ]);
-                        $fields[] = AssociationField::new('salarie', 'Employé En Charge de Votre Demande')
+                    
+            $fields[] = TextField::new('salarie', 'Opérateur assigné')
                         ->formatValue(function ($value, $entity) {
                             $salarie = $entity->getSalarie();
                             return $salarie ? sprintf('%s %s', $salarie->getFirstName(), $salarie->getName()) : 'Non assigné';
                         });
-                        $fields[] =ChoiceField::new('status')
+                    
+                $fields[] =ChoiceField::new('status')
                         ->setChoices([
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
@@ -172,13 +180,13 @@ public function delete(AdminContext $context)
                         'En cours' => 'primary',
                         'Terminée' => 'success',
                         'Refusée' => 'danger',
-                    ]);
-                    $fields[] = TextField::new('fullAddress', 'Adresse d\'intervention')
-                    ->formatValue(function ($value, $entity) {
-                        return $entity->getFullAddress();
-                    });
-                        
-        }
+                    ]); 
+                    
+            $fields[] = TextField::new('fullAddress', 'Adresse d\'intervention')
+                        ->formatValue(function ($value, $entity) {
+                            return $entity->getFullAddress();
+                        });
+            }
     
     
             if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
@@ -211,10 +219,74 @@ public function delete(AdminContext $context)
                 
             
         } else {
-            // Configuration des champs pour d'autres rôles...
-            // ...
+            if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR') && Crud::PAGE_INDEX === $pageName))
+ {
+            return [
+                FormField::addTab('Mission'),
+                DateTimeField::new('created_at', 'Créé le')
+                    ->hideOnForm(),
+                FormField::addColumn('col-lg-8 col-xl-3'),
+                IdField::new('id', 'Nº')
+                    ->hideOnForm(),
+                AssociationField::new('customer', 'Client')
+                    ->hideOnForm(),
+                AssociationField::new('salarie', 'Opérateur'),
+                TextField::new('name', 'Intitulé de l’opération')
+                    ->setLabel('Mission')
+                    ->hideOnIndex(),
+                TextField::new('attachmentFile')
+                    ->setLabel('Photo')
+                    ->setFormType(VichImageType::class)
+                    ->onlyWhenCreating(),
+                ImageField::new('attachment', 'Photo')
+                    ->setBasePath('/images/products')
+                    ->onlyOnIndex(),
+                ChoiceField::new('type', 'Type de mission')
+                    ->setChoices([
+                        'Petite - 1000€' => 'Little',
+                        'Moyenne - 2500€' => 'Medium',
+                        'Grande - 5000€' => 'Big',
+                        'Personnalisée' => 'Custom',
+                    ])
+                    ->renderAsBadges([
+                        'Little' => 'info',
+                        'Medium' => 'warning',
+                        'Big' => 'success',
+                        'Custom' => 'secondary',
+                    ]),
+                FormField::addColumn('col-lg-4 col-xl-4'),
+                DateTimeField::new('rdv_at', 'RDV'),
+                FormField::addColumn('col-lg-3 col-xl-6'),
+                TextEditorField::new('description', 'Description')
+                    ->hideOnForm(),
+                TextareaField::new('description', 'Description')
+                    ->renderAsHtml()
+                    ->hideOnIndex(),
+                ChoiceField::new('status')
+                    ->setChoices([
+                        'En attente' => 'En attente de Validation',
+                        'En cours' => 'En cours',
+                        'Terminée' => 'Terminée',
+                        'Refusée' => 'Refusée',
+                    ])
+                    ->renderAsBadges([
+                        'En attente de Validation' => 'info',
+                        'En cours' => 'warning',
+                        'Terminée' => 'success',
+                        'Archivée' => 'success',
+                    ])
+                    ->hideOnForm(),
+                TextField::new('street_ope', 'Rue')
+                    ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
+                TextField::new('zipcode_ope', 'CP')
+                    ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+                TextField::new('city_ope', 'Ville')
+                    ->setFormTypeOption('attr', ['class' => 'city_ope']),
+                DateTimeField::new('finished_at', 'Terminée le')
+                    ->hideOnForm(),
+            ];
         }
-    
+        }
         return $fields;
     }
     
@@ -241,10 +313,11 @@ public function delete(AdminContext $context)
             // Laisser l'administrateur voir toutes les opérations
         } else {
             // Restreindre les utilisateurs qui ne sont pas administrateurs.
-            $qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+            $qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR entity.status = :statusAccepted OR entity.status = :statusFinished AND entity.salarie = :user')
             ->setParameter('statusPending', 'En attente de Validation')
             ->setParameter('statusAccepted', 'En cours')
             ->setParameter('statusCancelled', 'Refusée')
+            ->setParameter('statusFinished', 'Terminée')
             ->setParameter('user', $user);
         }
     
@@ -284,11 +357,10 @@ public function delete(AdminContext $context)
                 && $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation'); 
-         $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
+            $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
             ->displayIf(function (Operation $operation) {
-                return ($this->isGranted('ROLE_ADMIN') || 
-                $this->isGranted('ROLE_SENIOR') || 
-                $this->isGranted('ROLE_APPRENTI'));
+                $user = $this->security->getUser();
+                return $this->isGranted('ROLE_ADMIN') || ($operation->getCustomer() === $user && $operation->getStatus() === 'Terminée');
             })
             ->linkToCrudAction('archiveOperation');
         return $actions
@@ -303,8 +375,9 @@ public function delete(AdminContext $context)
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
+        $customer = $operation->getCustomer();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
@@ -344,6 +417,19 @@ public function delete(AdminContext $context)
                     if (!$session->getFlashBag()->has('error')) {
                         $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
                     }
+                                try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Acceptation de votre opération',
+                    'opeaccept',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            } 
                     return new RedirectResponse('/admin');
                 }
             }
@@ -365,8 +451,9 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
+        $customer = $operation->getCustomer();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
@@ -377,14 +464,29 @@ public function delete(AdminContext $context)
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
-                    return new RedirectResponse('/admin');
-        }
+            try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Refus de votre opération',
+                    'opedecline',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            } 
+            return new RedirectResponse('/admin');
+        
+                }
     
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
+        $customer = $operation->getCustomer(); 
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
@@ -399,7 +501,20 @@ public function delete(AdminContext $context)
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
-                    return new RedirectResponse('/admin');
+            try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Opération terminée',
+                    'opefinished',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            } 
+            return new RedirectResponse('/admin');
         }
     
         return new Response('<script>window.location.reload();</script>');
