@@ -64,8 +64,8 @@ class Operation
     #[ORM\ManyToOne(inversedBy: 'operations')]
     private ?User $salarie = null;
 
-    #[ORM\Column]
-    private ?float $amount =null;
+    #[ORM\Column(nullable:true)]
+    private ?float $amount = null;
 
 /**
 *@ORM\ManyToOne(targetEntity=User::class)

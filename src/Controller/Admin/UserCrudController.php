@@ -61,13 +61,15 @@ class UserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
-            ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
+            ->overrideTemplate('crud/new', 'user/new.html.twig') //FIXME:
+            ->overrideTemplate('crud/edit', 'user/edit.html.twig') //FIXME:
             ->setPageTitle(Crud::PAGE_INDEX, 'Membres')
             ->setPageTitle(Crud::PAGE_EDIT, 'Modifier le Membre')
             ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un Membre')
             ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du Membre')
-            ->setSearchFields(null);
+            ->setSearchFields(['name', 'firstname', 'roles'])
+            ->setPaginatorPageSize(10)            
+            ->setPaginatorRangeSize(0);
             $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
             if ($rolesFilter) {
                 $crud->setDefaultSort(['roles' => $rolesFilter]);

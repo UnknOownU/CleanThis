@@ -1,29 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Statistiques{% endblock %}
+{% block title %}{{ "Statistiques"|trans }}{% endblock %}
 
 {% block body %}
 
 
     <div style="margin-bottom: 20px;">
-        <h1 style="margin-bottom: 10px;">Statistiques</h1>
+        <h1 style="margin-bottom: 10px;">{{ "Statistiques"|trans }}</h1>
         <div style="margin-bottom: 10px;">
-            <label for="chartTypeGraph">Choisir le type de graphique :</label>
+            <label for="chartTypeGraph">{{ "Choisir le type de graphique :"|trans }}</label>
             <select id="chartTypeGraph" onchange="changeChartType()">
-                <option value="pie">Camembert</option>
-                <option value="bar">Barre</option>
-                <option value="doughnut">Donuts</option>
+                <option value="pie">{{ "Camembert"|trans }}</option>
+                <option value="bar">{{ "Barre"|trans }}</option>
+                <option value="doughnut">{{ "Donuts"|trans }}</option>
             </select>
         </div>
 
         <div style="margin-bottom: 10px;">
-            <label for="chartType">Choisir le type de statistique :</label>
+            <label for="chartType">{{ "Choisir le type de statistique :"|trans }}</label>
             <select id="chartType" onchange="changeChartType()">
-                <option value="operations">Ventes par type d'opération</option>
-                <option value="salaries">Missions par salarié</option>
-                <option value="salariePlusDeMissions">Salarié avec le plus de missions</option>
-                <option value="chiffreAffaires">Chiffre d'affaires total</option>
-                <option value="chiffreAffairesParDate">Chiffre d'affaires par date</option>
+                <option value="operations">{{ "Ventes par type d'opération"|trans }}</option>
+                <option value="salaries">{{ "Missions par salarié"|trans }}</option>
+                <option value="salariePlusDeMissions">{{ "Salarié avec le plus de missions"|trans }}</option>
+                <option value="chiffreAffaires">{{ "Chiffre d'affaires total"|trans }}</option>
+                <option value="chiffreAffairesParDate">{{ "Chiffre d'affaires par date"|trans }}</option>
             </select>
         </div>
     </div>
