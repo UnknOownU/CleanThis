@@ -142,6 +142,12 @@
      <div class="mb-3">
         <label for="operationImage" class="form-label">Ajouter une image (optionnel)</label>
         <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+        <div class="mb-3">
+    <div class="mb-3">
+        <label for="rdvDate" class="form-label">Date du Rendez-vous</label>
+        <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control" onchange="loadTimeSlots(this.value)">
+    </div>
+    </div>
     </div>
 </div>
 
@@ -457,6 +463,11 @@ function updateStepIndicators(stepNumber) {
     formData.append('street', document.getElementById('street_ope').value);
     formData.append('zipcode', document.getElementById('zipcode_ope').value);
     formData.append('city', document.getElementById('city_ope').value);
+    
+    var rdvDate = document.getElementById('rdvDate').value;
+    if (rdvDate) {
+        formData.append('rdvDate', rdvDate);
+    }
 
     // Ajouter l'image au FormData
     var imageFile = document.getElementById('operationImage').files[0];

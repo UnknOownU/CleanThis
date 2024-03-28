@@ -1,30 +1,28 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
+{% block body_id 'page-content-wrapper' %}
+{% block title %}Statistiques{% endblock %}
 
-{% block title %}{{ "Statistiques"|trans }}{% endblock %}
-
-{% block body %}
-
-
-    <div style="margin-bottom: 20px;">
-        <h1 style="margin-bottom: 10px;">{{ "Statistiques"|trans }}</h1>
-        <div style="margin-bottom: 10px;">
-            <label for="chartTypeGraph">{{ "Choisir le type de graphique :"|trans }}</label>
-            <select id="chartTypeGraph" onchange="changeChartType()">
-                <option value="pie">{{ "Camembert"|trans }}</option>
-                <option value="bar">{{ "Barre"|trans }}</option>
-                <option value="doughnut">{{ "Donuts"|trans }}</option>
+{% block main %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Statistiques</h1>
+    
+    <!-- Sélection du Type de Graphique et de Statistique -->
+    <div class="d-flex justify-content-center mb-4">
+        <div class="mr-4">
+            <label for="chartTypeGraph">Type de graphique</label>
+            <select id="chartTypeGraph" class="form-control" onchange="changeChartType()">
+                <option value="pie">Camembert</option>
+                <option value="bar">Barre</option>
+                <option value="doughnut">Donuts</option>
             </select>
         </div>
-
-        <div style="margin-bottom: 10px;">
-            <label for="chartType">{{ "Choisir le type de statistique :"|trans }}</label>
-            <select id="chartType" onchange="changeChartType()">
-                <option value="operations">{{ "Ventes par type d'opération"|trans }}</option>
-                <option value="salaries">{{ "Missions par salarié"|trans }}</option>
-                <option value="salariePlusDeMissions">{{ "Salarié avec le plus de missions"|trans }}</option>
-                <option value="chiffreAffaires">{{ "Chiffre d'affaires total"|trans }}</option>
-                <option value="chiffreAffairesParDate">{{ "Chiffre d'affaires par date"|trans }}</option>
+        <div>
+            <label for="chartType">Type de statistique</label>
+            <select id="chartType" class="form-control" onchange="changeChartType()">
+                <option value="operations">Ventes par type d'opération</option>
+                <option value="salaries">Missions par salarié</option>
+                <option value="chiffreAffaires">Chiffre d'affaires total</option>
             </select>
         </div>
     </div>

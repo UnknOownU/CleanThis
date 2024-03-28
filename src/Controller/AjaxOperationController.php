@@ -105,9 +105,12 @@ public function createOperation(Request $request, EntityManagerInterface $entity
         $operation->setCityOpe($request->request->get('city'));
         $operation->setCustomer($user);
         $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
-        $operation->setCreatedAt(new \DateTimeImmutable());
 
-        // Autres propriétés de l'opération...
+
+        $rdvDate = $request->request->get('rdvDate');
+        if ($rdvDate) {
+            $operation->setRdvAt(new \DateTimeImmutable($rdvDate));
+        }
 
         $entityManager->persist($operation);
         $entityManager->flush();
@@ -175,6 +178,7 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
            $operation->setStreetOpe($request->request->get('street'));
            $operation->setCityOpe($request->request->get('city'));
            $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
+           $operation->setRdvAt(new \DateTimeImmutable());
        
            $entityManager->flush();
        
