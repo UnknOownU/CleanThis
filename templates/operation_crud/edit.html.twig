@@ -59,8 +59,9 @@
     <div class="container py-5">
         <div class="card">
             <div class="card-body">
+
                 <h3 class="card-title text-center">{{ "Services de Nettoyage"|trans }}</h3>
-                <div id="map" class="mb-4" style="height: 400px;"></div>
+                <div id="map" class="mb-4" style="height: 800px;"></div>
                 <form id="operationForm" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -120,8 +121,13 @@
             <p>{{ "Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace."|trans }}</p>
             <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici" required></textarea> 
             <div class="text-center mt-3">
+
             <button type="button" class="btn btn-primary mt-3" onclick="if (validateStep3()) showStep(4)">{{ "Continuer"|trans }}</button>
             <button type="button" class="btn btn-secondary mt-3" onclick="showStep(2)">{{ "Retour"|trans }}</button>
+<div class="mb-3">
+    <label for="operationImage" class="form-label">Ajouter une Image (optionnel)</label>
+    <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+</div>
         </div>
         </div>
 
@@ -229,7 +235,12 @@ function updateCleaningOptionsSelect(selectedName) {
     }
 }
 function showStep(stepNumber, operationType = null) {
-    // Vérification spécifique pour l'étape 3
+     if (stepNumber === 2) {
+        // Assurez-vous que l'exécution soit délayée jusqu'à ce que la transition ou l'animation soit terminée
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 400); // Le délai peut être ajusté selon la durée de votre animation/transition
+    }
     if (stepNumber === 3) {
         var service = document.getElementById('nettoyageService').value;
         var street = document.getElementById('street_ope').value;
@@ -312,24 +323,27 @@ function validateStep3() {
 
 
 function submitEditForm() {
-    var selectedOperationType = getSelectedOperationType();
-    var data = {
-        type: selectedOperationType,
-        name: document.getElementById('nettoyageService').value,
-        street: document.getElementById('street_ope').value,
-        zipcode: document.getElementById('zipcode_ope').value,
-        city: document.getElementById('city_ope').value,
-        description: document.getElementById('description').value
-    };
+    var formData = new FormData();
+    formData.append('type', getSelectedOperationType());
+    formData.append('name', document.getElementById('nettoyageService').value);
+    formData.append('street', document.getElementById('street_ope').value);
+    formData.append('zipcode', document.getElementById('zipcode_ope').value);
+    formData.append('city', document.getElementById('city_ope').value);
+    formData.append('description', document.getElementById('description').value);
 
-    compareOldAndNewData(data);
+    // Ajout de l'image si elle est présente
+    var imageFile = document.getElementById('operationImage').files[0];
+    if (imageFile) {
+        formData.append('attachmentFile', imageFile);
+    }
+
 
     fetch(`/ajax/update-operation/${operationId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: formData
+        // Ne pas définir 'Content-Type' header, FormData le fait automatiquement
     })
-.then(response => response.json())
+    .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
             Swal.fire({
@@ -349,6 +363,7 @@ function submitEditForm() {
         Swal.fire('Erreur', 'Un problème est survenu lors de la mise à jour de l\'opération.', 'error');
     });
 }
+
 
 function getSelectedOperationType() {
     var selectedButton = document.querySelector('#step1 .btn.selected');
@@ -432,5 +447,16 @@ document.getElementById('city_ope').addEventListener('keypress', function(event)
         updateMap();
     }
 });
+function updateStepIndicators(stepNumber) {
+    var steps = document.querySelectorAll('.step-indicator .circle');
+    steps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
 </script>
 {% endblock %}
