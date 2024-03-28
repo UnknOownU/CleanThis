@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User contact{% endblock %}
+{% block title %}{{ "Contact"|trans }}{% endblock %}
 
 {% block body %}
  <main>
@@ -12,15 +12,15 @@
                     <div class="row">
 
                         <div class="col-lg-7 col-12">
-                            <h1 class="text-white mb-lg-0">Contact</h1>
+                            <h1 class="text-white mb-lg-0">{{ "Contact"|trans }}</h1>
                         </div>
 
                         <div class="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center ms-auto">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
-                                    <li class="breadcrumb-item"><a href="templates\user\index.html.twig">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="templates\user\index.html.twig">{{ "Accueil"|trans }}</a></li>
 
-                                    <li class="breadcrumb-item active" aria-current="page">Contact</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ "Contact"|trans }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -35,12 +35,12 @@
                     <div class="row">
 
                         <div class="col-lg-5 col-12 me-auto mb-lg-0 mb-5">
-                            <h2 class="my-3">Nous sommes à votre écoute!</h2>
+                            <h2 class="my-3">{{ "Nous sommes à votre écoute!"|trans }}</h2>
 
-                            <p>Pour toute création de compte, il est nécessaire de nous contacter préalablement ou de nous envoyer votre demande via ce formulaire </p>
+                            <p>{{ "Pour toute création de compte, il est nécessaire de nous contacter préalablement ou de nous envoyer votre demande via ce formulaire"|trans }} </p>
 
                             <div class="contact-info bg-white shadow-lg">
-                                <h3 class="mb-4">Nous contacter</h3>
+                                <h3 class="mb-4">{{ "Nous contacter"|trans }}</h3>
 
                                 <h5 class="d-flex mt-3 mb-3">
                                     <i class="bi-geo-alt-fill custom-icon me-3"></i>
@@ -68,7 +68,7 @@
                         <div class="col-lg-6 col-12">
                             <form class="custom-form consulting-form bg-white shadow-lg mb-5 mb-lg-0" action="#" method="post" role="form">
                                 <div class="consulting-form-header d-flex align-items-center">
-                                    <h3 class="mb-4">Formulaire de contact</h3>
+                                    <h3 class="mb-4">{{ "Formulaire de contact"|trans }}</h3>
                                 </div>
 
                                 <div class="consulting-form-body">
@@ -83,17 +83,17 @@
                                     </div>
 
                                     <select class="form-select form-control" name="job-salary" id="job-salary" aria-label="Default select example">
-                                        <option selected>Type de service</option>
-                                        <option value="Petite surface">Petite surface (0-30m²)</option>
-                                        <option value="Moyenne surface">Moyenne surface (30-100m²)</option>
-                                        <option value="Grande surface">Grande surface (100-300m²)</option>
-                                        <option value="Custom">Opération personnalisée</option>
+                                        <option selected>{{ "Type de service"|trans }}</option>
+                                        <option value="Petite surface">{{ "Petite surface (0-30m²)"|trans }}</option>
+                                        <option value="Moyenne surface">{{ "Moyenne surface (30-100m²)"|trans }}</option>
+                                        <option value="Grande surface">{{ "Grande surface (100-300m²)"|trans }}</option>
+                                        <option value="Custom">{{ "Opération personnalisée"|trans }}</option>
                                     </select>
 
                                     <textarea name="volunteer-message" rows="3" class="form-control" id="volunteer-message" placeholder="Détails de l'opération (Type de surfaces, de missions, taille...)"></textarea>
 
                                     <div class="col-lg-6 col-md-10 col-8 mx-auto">
-                                        <button type="submit" class="form-control">Envoyer le formulaire</button>
+                                        <button type="submit" class="form-control">{{ "Envoyer le formulaire"|trans }}</button>
                                     </div>
                                 </div>
                             </form>

@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User about{% endblock %}
+{% block title %}{{ "Message envoyé"|trans }}{% endblock %}
 
 {% block body %}
 <main>
     <div class="container">
-        <h1>Votre message a été envoyé avec succès !</h1>
-        <h3>Nous vous répondrons dans les plus bref délais!</h3>
-        <p>Vous serez redirigé vers la page d'accueil dans <span id="redirect-timer">5</span> secondes.</p>
+        <h1>{{ "Votre message a été envoyé avec succès !"|trans }}</h1>
+        <h3>{{ "Nous vous répondrons dans les plus bref délais!"|trans }}</h3>
+        <p>{{ "Vous serez redirigé vers la page d'accueil dans"|trans }} <span id="redirect-timer">5</span> {{ "secondes."|trans }}</p>
     </div>
     
     <script>

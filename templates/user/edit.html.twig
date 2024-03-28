@@ -7,17 +7,17 @@
 <section class="content-body">
     <div class="row d-flex justify-content-around"> <!-- Modifier ici pour aligner à droite -->
         <div class="col-md-10">
-            <div class="user-info mb-4 p-5" id="profile-info" style="border-radius: 20px;"> <!-- Ajouter border-radius -->
-                <h2 class="h4 text-primary mb-4">Informations De Votre Profil</h2>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Nom:</strong> {{ user.name }}</p>
-                <p><strong>Prénom:</strong> {{ user.firstname }}</p>
-                <p><strong>Code Postal:</strong> {{ user.zipcode }}</p>
-                <p><strong>Ville:</strong> {{ user.city }}</p>
-                <p><strong>Rue:</strong> {{ user.street }}</p>
-                <p><strong>Téléphone:</strong> {{ user.phone }}</p>
+            <div class="user-info mb-4 p-5 bg-white shadow" id="profile-info" style="border-radius: 20px;"> <!-- Ajouter border-radius -->
+                <h2 class="h4 text-primary mb-4">{{ "Informations du Profil"|trans }}</h2>
+                <p><strong>{{ "Email:"|trans }}</strong> {{ user.email }}</p>
+                <p><strong>{{ "Nom:"|trans }}</strong> {{ user.name }}</p>
+                <p><strong>{{ "Prénom:"|trans }}</strong> {{ user.firstname }}</p>
+                <p><strong>{{ "Code Postal:"|trans }}</strong> {{ user.zipcode }}</p>
+                <p><strong>{{ "Ville:"|trans }}</strong> {{ user.city }}</p>
+                <p><strong>{{ "Rue:"|trans }}</strong> {{ user.street }}</p>
+                <p><strong>{{ "Téléphone:"|trans }}</strong> {{ user.phone }}</p>
                 <p>
-                    <strong>Rôle:</strong>
+                    <strong>{{ "Rôle:"|trans }}</strong>
                     <span class="{% if 'ROLE_ADMIN' in user.roles %}text-danger
                                  {% elseif 'ROLE_SENIOR' in user.roles %}text-success
                                  {% elseif 'ROLE_APPRENTI' in user.roles %}text-primary
@@ -25,12 +25,12 @@
                         {{ user.roles|join(', ')|replace({'ROLE_': ''})|title }}
                     </span>
                 </p>
-                <button class="btn btn-outline-primary" onclick="toggleEditForm()">Modifier</button>
+                <button class="btn btn-outline-primary" onclick="toggleEditForm()">{{ "Modifier"|trans }}</button>
             </div>
             
             <div class="edit-form d-none p-5" id="profile-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;"> <!-- Ajouter border-radius -->
                 {{ form_start(form, {'attr': {'id': 'profile-edit-form-twig'}}) }}
-                <h2 class="h4 text-primary mb-4">Éditer Votre Profil</h2>
+                <h2 class="h4 text-primary mb-4">{{ "Éditer le Profil"|trans }}</h2>
                 {{ form_row(form.email, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.name, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.firstname, {'attr': {'class': 'form-control mb-3'}}) }}
@@ -41,8 +41,8 @@
                 {{ form_row(form.newPassword.first, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.newPassword.second, {'attr': {'class': 'form-control mb-3'}}) }}
                     <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-success">Sauvegarder</button>
-                    <button type="button" class="btn btn-secondary" onclick="toggleEditForm()">Annuler</button>
+                    <button type="submit" class="btn btn-success">{{ "Sauvegarder"|trans }}</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleEditForm()">{{ "Annuler"|trans }}</button>
                 {{ form_end(form) }}
             </div>
         </div>

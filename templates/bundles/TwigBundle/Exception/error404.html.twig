@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User about{% endblock %}
+{% block title %}{{ "404 not found"|trans }}{% endblock %}
 
 {% block body %}
  <main>
@@ -12,15 +12,15 @@
                     <div class="row">
 
                         <div class="col-lg-7 col-12">
-                            <h1 class="text-white mb-lg-0">Page 404 coucou</h1>
+                            <h1 class="text-white mb-lg-0">{{ "Page 404 non trouvée"|trans }}</h1>
                         </div>
 
                         <div class="col-lg-4 col-12 d-flex justify-content-lg-end align-items-center ms-auto">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb justify-content-center">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="index.html">{{ "Accueil"|trans }}</a></li>
 
-                                    <li class="breadcrumb-item active" aria-current="page">Page 404</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ "Page 404"|trans }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -37,19 +37,19 @@
                         <div class="col-lg-10 col-12 text-center mx-auto">
                             <h2 class="page-404-title">404</h2>
 
-                            <h3>Cette page n'existe pas!</h3>
+                            <h3>{{ "Cette page n'existe pas!"|trans }}</h3>
 
-                            <p>La page que vous recherchez n'existe pas!</p>
+                            <p>{{ "La page que vous recherchez n'existe pas!"|trans }}</p>
 
                             <a class="custom-btn btn button button--atlas mt-4" href="index.html">
-                                <span>Retour à l'acceuil</span>
+                                <span>{{ "Retour à l'accueil"|trans }}</span>
 
                                 <div class="marquee" aria-hidden="true">
                                     <div class="marquee__inner">
-                                        <span>Retour à l'acceuil</span>
-                                        <span>Retour à l'acceuil</span>
-                                        <span>Retour à l'acceuil</span>
-                                        <span>Retour à l'acceuil</span>
+                                        <span>{{ "Retour à l'accueil"|trans }}</span>
+                                        <span>{{ "Retour à l'accueil"|trans }}</span>
+                                        <span>{{ "Retour à l'accueil"|trans }}</span>
+                                        <span>{{ "Retour à l'accueil"|trans }}</span>
                                     </div>
                                 </div>
                             </a>
