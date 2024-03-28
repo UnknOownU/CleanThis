@@ -120,6 +120,10 @@
             <p>Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace.</p>
             <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici" required></textarea> 
             <div class="text-center mt-3">
+<div class="mb-3">
+    <label for="operationImage" class="form-label">Ajouter une Image (optionnel)</label>
+    <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+</div>
             <button type="button" class="btn btn-primary mt-3" onclick="if (validateStep3()) showStep(4)">Continuer</button>
             <button type="button" class="btn btn-secondary mt-3" onclick="showStep(2)">Retour</button>
         </div>
@@ -317,24 +321,27 @@ function validateStep3() {
 
 
 function submitEditForm() {
-    var selectedOperationType = getSelectedOperationType();
-    var data = {
-        type: selectedOperationType,
-        name: document.getElementById('nettoyageService').value,
-        street: document.getElementById('street_ope').value,
-        zipcode: document.getElementById('zipcode_ope').value,
-        city: document.getElementById('city_ope').value,
-        description: document.getElementById('description').value
-    };
+    var formData = new FormData();
+    formData.append('type', getSelectedOperationType());
+    formData.append('name', document.getElementById('nettoyageService').value);
+    formData.append('street', document.getElementById('street_ope').value);
+    formData.append('zipcode', document.getElementById('zipcode_ope').value);
+    formData.append('city', document.getElementById('city_ope').value);
+    formData.append('description', document.getElementById('description').value);
 
-    compareOldAndNewData(data);
+    // Ajout de l'image si elle est présente
+    var imageFile = document.getElementById('operationImage').files[0];
+    if (imageFile) {
+        formData.append('attachmentFile', imageFile);
+    }
+
 
     fetch(`/ajax/update-operation/${operationId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: formData
+        // Ne pas définir 'Content-Type' header, FormData le fait automatiquement
     })
-.then(response => response.json())
+    .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
             Swal.fire({
@@ -354,6 +361,7 @@ function submitEditForm() {
         Swal.fire('Erreur', 'Un problème est survenu lors de la mise à jour de l\'opération.', 'error');
     });
 }
+
 
 function getSelectedOperationType() {
     var selectedButton = document.querySelector('#step1 .btn.selected');

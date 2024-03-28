@@ -136,6 +136,10 @@
     </ul>
     <p>Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace.</p>
     <textarea id="description" name="description" placeholder="Veuillez décrire le site de nettoyage" class="form-control" rows="4"></textarea>
+     <div class="mb-3">
+        <label for="operationImage" class="form-label">Ajouter une image (optionnel)</label>
+        <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+    </div>
     <button class="btn btn-primary mt-3" onclick="showStep(4)">Continuer</button>
     <button class="btn btn-warning mt-3" onclick="showStep(2)">Retour</button>
 </div>
@@ -444,25 +448,25 @@ function updateStepIndicators(stepNumber) {
 
     isFormSubmitted = true;
 
-    const description = document.getElementById('description').value;
-    const name = document.getElementById('nettoyageService').value;
-    const street = document.getElementById('street_ope').value;
-    const zipcode = document.getElementById('zipcode_ope').value;
-    const city = document.getElementById('city_ope').value;
+    // Créer un objet FormData pour envoyer les données du formulaire
+    var formData = new FormData();
+    formData.append('type', operationType);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('name', document.getElementById('nettoyageService').value);
+    formData.append('street', document.getElementById('street_ope').value);
+    formData.append('zipcode', document.getElementById('zipcode_ope').value);
+    formData.append('city', document.getElementById('city_ope').value);
+
+    // Ajouter l'image au FormData
+    var imageFile = document.getElementById('operationImage').files[0];
+    if (imageFile) {
+        formData.append('attachmentFile', imageFile);
+    }
 
     fetch('/ajax/create-operation', {
         method: 'POST',
-        body: JSON.stringify({
-            type: operationType,
-            description: description,
-            name: name,
-            street: street,
-            zipcode: zipcode,
-            city: city
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
+        body: formData // Utilisation de FormData
+        // Ne pas ajouter de header 'Content-Type', car il est nécessaire d'utiliser le 'boundary' généré par FormData
     })
     .then(response => response.json())
     .then(data => {
@@ -480,8 +484,13 @@ function updateStepIndicators(stepNumber) {
         isFormSubmitted = false; // Réinitialisez l'état si une erreur survient
         handleError(error);
     });
+}
 
-   }
+function handleError(error) {
+    console.error('Erreur:', error);
+    Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
+}
+
     function handleResponse(data) {
         if (data.status === 'success') {
             Swal.fire('Succès!', 'Opération créée avec succès.', 'success');

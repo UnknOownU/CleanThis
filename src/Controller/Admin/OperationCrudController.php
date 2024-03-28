@@ -127,43 +127,65 @@ public function delete(AdminContext $context)
         $fields = [];
 
         if ($this->isGranted('ROLE_CUSTOMER') && Crud::PAGE_INDEX === $pageName) {
+            $fields[] = FormField::addTab('Mission');
+            $fields[] = DateTimeField::new('created_at', 'Créé le')
+                ->hideOnForm();
             $fields[] = TextField::new('name', 'Mission');
-            $fields[] = TextField::new('descritpion', 'La description de la mission de néttoyage');
+            $fields[] = TextField::new('attachmentFile')
+            ->setLabel('Photo')
+            ->setFormType(VichImageType::class)
+                        ->onlyWhenCreating();
+
+            $fields[] = ImageField::new('attachment', 'Photo')
+                        ->setBasePath('/images/products')
+                        ->onlyOnIndex();
+
+            $fields[] = TextEditorField::new('description', 'Description')
+                        ->hideOnForm();
+
+            $fields[] = TextareaField::new('description', 'Description')
+                        ->renderAsHtml()
+                        ->hideOnIndex();
+
             $fields[] = ChoiceField::new('type', 'Type de mission')
                         ->setChoices([
                             'Petite - 1000€' => 'Little',
                             'Moyenne - 2500€' => 'Medium',
                             'Grande - 5000€' => 'Big',
                             'Personnalisée' => 'Custom',
-                        ])->renderAsBadges([
+                        ])
+                        ->renderAsBadges([
                             'Little' => 'info',
                             'Medium' => 'warning',
                             'Big' => 'success',
                             'Custom' => 'secondary',
                         ]);
-                        $fields[] = AssociationField::new('salarie', 'Employé En Charge de Votre Demande')
+                    
+            $fields[] = AssociationField::new('salarie', 'Employé En Charge de Votre Demande')
                         ->formatValue(function ($value, $entity) {
                             $salarie = $entity->getSalarie();
                             return $salarie ? sprintf('%s %s', $salarie->getFirstName(), $salarie->getName()) : 'Non assigné';
                         });
-                        $fields[] =ChoiceField::new('status')
+                    
+            $fields[] = ChoiceField::new('status')
                         ->setChoices([
-                        'En attente' => 'En attente de Validation',
-                        'En cours' => 'En cours',
-                        'Terminée' => 'Terminée',
-                        'Refusée' => 'Refusée',
-                    ])   ->renderAsBadges([
-                        'En attente de Validation' => 'warning',
-                        'En cours' => 'primary',
-                        'Terminée' => 'success',
-                        'Refusée' => 'danger',
-                    ]);
-                    $fields[] = TextField::new('fullAddress', 'Adresse d\'intervention')
-                    ->formatValue(function ($value, $entity) {
-                        return $entity->getFullAddress();
-                    });
-                        
-        }
+                            'En attente' => 'En attente de Validation',
+                            'En cours' => 'En cours',
+                            'Terminée' => 'Terminée',
+                            'Refusée' => 'Refusée',
+                        ])
+                        ->renderAsBadges([
+                            'En attente de Validation' => 'warning',
+                            'En cours' => 'primary',
+                            'Terminée' => 'success',
+                            'Refusée' => 'danger',
+                        ]);
+                    
+            $fields[] = TextField::new('fullAddress', 'Adresse d\'intervention')
+                        ->formatValue(function ($value, $entity) {
+                            return $entity->getFullAddress();
+                        });
+            }
     
     
             if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
@@ -196,10 +218,74 @@ public function delete(AdminContext $context)
                 
             
         } else {
-            // Configuration des champs pour d'autres rôles...
-            // ...
+            if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR') && Crud::PAGE_INDEX === $pageName))
+ {
+            return [
+                FormField::addTab('Mission'),
+                DateTimeField::new('created_at', 'Créé le')
+                    ->hideOnForm(),
+                FormField::addColumn('col-lg-8 col-xl-3'),
+                IdField::new('id', 'Nº')
+                    ->hideOnForm(),
+                AssociationField::new('customer', 'Client')
+                    ->hideOnForm(),
+                AssociationField::new('salarie', 'Opérateur'),
+                TextField::new('name', 'Intitulé de l’opération')
+                    ->setLabel('Mission')
+                    ->hideOnIndex(),
+                TextField::new('attachmentFile')
+                    ->setLabel('Photo')
+                    ->setFormType(VichImageType::class)
+                    ->onlyWhenCreating(),
+                ImageField::new('attachment', 'Photo')
+                    ->setBasePath('/images/products')
+                    ->onlyOnIndex(),
+                ChoiceField::new('type', 'Type de mission')
+                    ->setChoices([
+                        'Petite - 1000€' => 'Little',
+                        'Moyenne - 2500€' => 'Medium',
+                        'Grande - 5000€' => 'Big',
+                        'Personnalisée' => 'Custom',
+                    ])
+                    ->renderAsBadges([
+                        'Little' => 'info',
+                        'Medium' => 'warning',
+                        'Big' => 'success',
+                        'Custom' => 'secondary',
+                    ]),
+                FormField::addColumn('col-lg-4 col-xl-4'),
+                DateTimeField::new('rdv_at', 'RDV'),
+                FormField::addColumn('col-lg-3 col-xl-6'),
+                TextEditorField::new('description', 'Description')
+                    ->hideOnForm(),
+                TextareaField::new('description', 'Description')
+                    ->renderAsHtml()
+                    ->hideOnIndex(),
+                ChoiceField::new('status')
+                    ->setChoices([
+                        'En attente' => 'En attente de Validation',
+                        'En cours' => 'En cours',
+                        'Terminée' => 'Terminée',
+                        'Refusée' => 'Refusée',
+                    ])
+                    ->renderAsBadges([
+                        'En attente de Validation' => 'info',
+                        'En cours' => 'warning',
+                        'Terminée' => 'success',
+                        'Archivée' => 'success',
+                    ])
+                    ->hideOnForm(),
+                TextField::new('street_ope', 'Rue')
+                    ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
+                TextField::new('zipcode_ope', 'CP')
+                    ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
+                TextField::new('city_ope', 'Ville')
+                    ->setFormTypeOption('attr', ['class' => 'city_ope']),
+                DateTimeField::new('finished_at', 'Terminée le')
+                    ->hideOnForm(),
+            ];
         }
-    
+        }
         return $fields;
     }
     
@@ -226,10 +312,11 @@ public function delete(AdminContext $context)
             // Laisser l'administrateur voir toutes les opérations
         } else {
             // Restreindre les utilisateurs qui ne sont pas administrateurs.
-            $qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR (entity.status = :statusAccepted AND entity.salarie = :user)')
+            $qb->andWhere('entity.status = :statusPending OR entity.status = :statusCancelled OR entity.status = :statusAccepted OR entity.status = :statusFinished AND entity.salarie = :user')
             ->setParameter('statusPending', 'En attente de Validation')
             ->setParameter('statusAccepted', 'En cours')
             ->setParameter('statusCancelled', 'Refusée')
+            ->setParameter('statusFinished', 'Terminée')
             ->setParameter('user', $user);
         }
     
@@ -269,11 +356,10 @@ public function delete(AdminContext $context)
                 && $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation'); 
-         $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
+            $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
             ->displayIf(function (Operation $operation) {
-                return ($this->isGranted('ROLE_ADMIN') || 
-                $this->isGranted('ROLE_SENIOR') || 
-                $this->isGranted('ROLE_APPRENTI'));
+                $user = $this->security->getUser();
+                return $this->isGranted('ROLE_ADMIN') || ($operation->getCustomer() === $user && $operation->getStatus() === 'Terminée');
             })
             ->linkToCrudAction('archiveOperation');
         return $actions

@@ -95,6 +95,7 @@ class DashboardController extends AbstractDashboardController
                     'locale' => 'fr', 
                 ]
             );
+            yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
         //Senior dashboard-

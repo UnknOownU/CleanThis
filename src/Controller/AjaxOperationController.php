@@ -91,35 +91,31 @@ class AjaxOperationController extends AbstractController
  * @Route("/ajax/create-operation", name="ajax_create_operation")
  */
 public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $user = $security->getUser();
+{
+    $user = $security->getUser();
 
-        if ($user !== null) {
-            $operation = new Operation();
-            $operation->setType($data['type']);
-            $operation->setName($data['name']);
-            $operation->setDescription($data['description']);
-            $operation->setZipcodeOpe($data['zipcode']);
-            $operation->setstreetOpe($data['street']);
-            $operation->setcityOpe($data['city']);
-            $operation->setCustomer($user);  // Utilisation de l'identifiant de l'utilisateur
-            $operation->setPrice($this->determinePriceBasedOnType($data['type']));
-            $operation->setCreatedAt(new \DateTimeImmutable());
+    if ($user !== null) {
+        $operation = new Operation();
+        $operation->setType($request->request->get('type')); // Utiliser request->get pour les champs de texte
+        $operation->setAttachmentFile($request->files->get('attachmentFile')); // Utiliser request->files->get pour le fichier
+        $operation->setName($request->request->get('name'));
+        $operation->setDescription($request->request->get('description'));
+        $operation->setZipcodeOpe($request->request->get('zipcode'));
+        $operation->setStreetOpe($request->request->get('street'));
+        $operation->setCityOpe($request->request->get('city'));
+        $operation->setCustomer($user);
+        $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
+        $operation->setCreatedAt(new \DateTimeImmutable());
 
-            // Autres propriétés de l'opération...
+        // Autres propriétés de l'opération...
 
-            $entityManager->persist($operation);
-            $entityManager->flush();
+        $entityManager->persist($operation);
+        $entityManager->flush();
 
-            return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
-        } else {
-            // Gérer le cas où l'utilisateur n'est pas récupéré avec succès
-            // Par exemple, enregistrer un message d'erreur ou renvoyer une réponse d'erreur appropriée
-            return $this->json(['status' => 'error', 'message' => 'Utilisateur non trouvé']);
-        }
-    
-    
+        return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
+    } else {
+        return $this->json(['status' => 'error', 'message' => 'Utilisateur non trouvé']);
+    }
 }
 
         private function determinePriceBasedOnType(string $type): int
@@ -171,13 +167,14 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
        
            $data = json_decode($request->getContent(), true);
            
-           $operation->setType($data['type']);
-           $operation->setName($data['name']);
-           $operation->setDescription($data['description']);
-           $operation->setStreetOpe($data['street']);  // Modifier ici
-           $operation->setZipcodeOpe($data['zipcode']); // Modifier ici si nécessaire
-           $operation->setPrice($this->determinePriceBasedOnType($data['type']));
-           $operation->setCityOpe($data['city']); // Modifier ici si nécessaire
+           $operation->setType($request->request->get('type')); // Utiliser request->get pour les champs de texte
+           $operation->setAttachmentFile($request->files->get('attachmentFile')); // Utiliser request->files->get pour le fichier
+           $operation->setName($request->request->get('name'));
+           $operation->setDescription($request->request->get('description'));
+           $operation->setZipcodeOpe($request->request->get('zipcode'));
+           $operation->setStreetOpe($request->request->get('street'));
+           $operation->setCityOpe($request->request->get('city'));
+           $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
        
            $entityManager->flush();
        
