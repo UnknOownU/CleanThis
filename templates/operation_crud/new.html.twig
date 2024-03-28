@@ -4,6 +4,27 @@
 {% block page_title %}Demande D'opération{% endblock %}
 
 {% block main %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col text-center step-indicator">
+            <div class="circle">1</div>
+            <div>Étape 1</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">2</div>
+            <div>Étape 2</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">3</div>
+            <div>Étape 3</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">4</div>
+            <div>Étape 4</div>
+        </div>
+    </div>
+</div>
+
 <div class="ea-new-form">
 <div class="container mt-3">
     <h2 class="text-center mb-5">Nouvelle Demande De Nettoyage</h2>
@@ -56,7 +77,7 @@
         <div class="card">
             <div class="card-body">
                 <h3 class="card-title text-center">Services de Nettoyage</h3>
-                <div id="map" class="mb-4" style="height: 400px;"></div>
+                <div id="map" class="mb-4" style="height: 800px;"></div>
                 <form id="operationForm" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -149,6 +170,73 @@
 
 {% block body_javascript %}
     {{ parent() }}
+
+<style>
+   
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ddd; /* Gris pour étape non-active */
+    color: #fff; /* Blanc pour le texte à l'intérieur du cercle */
+    margin: 0 auto; /* Centre le cercle dans la 'step-indicator' */
+    position: relative;
+    z-index: 2; /* S'assurer que le cercle est au-dessus des lignes */
+}
+
+.circle.active {
+    background-color: #007bff; /* Bleu pour étape active */
+}
+
+    .circle {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 50%;
+        background-color: #5a6268; /* Couleur pour les étapes non actives */
+        color: white;
+        font-weight: bold;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.5s ease;
+    }
+
+    .circle.active {
+        background-color: #007bff; /* Couleur pour les étapes actives */
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .step-indicator:not(:last-child)::after {
+        content: '';
+        width: 100%;
+        border-bottom: 3px solid #ddd; /* Connecteur pour les étapes non actives */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(50%) translateY(-50%);
+        z-index: -1;
+    }
+
+    .step-indicator.active + .step-indicator::after {
+        border-bottom: 3px solid #007bff; /* Connecteur pour les étapes actives */
+    }
+
+    /* Animation de clignotement */
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .blink {
+        animation: blink 1.5s ease-in-out infinite;
+    }
+</style>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
@@ -234,10 +322,29 @@ function validateStep2() {
         }
         return true;
     }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Mettre en évidence l'indicateur de l'étape 1 dès le chargement de la page
+    updateStepIndicators(1);
+});
+    function updateStepIndicators(stepNumber) {
+        var steps = document.querySelectorAll('.step-indicator .circle');
+        steps.forEach((step, index) => {
+            if (index < stepNumber) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+    }
 
     function showStep(stepNumber, selectedOperationType = null) {
-        // Validation avant de changer d'étape
-        if ((stepNumber === 3 && !validateStep2()) || (stepNumber === 4 && !validateStep3())) return;
+        if ((stepNumber === 3 && !validateStep2()) || (stepNumber === 4 && !validateStep3())) {
+            updateStepIndicators(stepNumber - 1);
+            return;
+        }
+
+        updateStepIndicators(stepNumber); // Mise à jour des indicateurs d'étape seulement après validation réussie
 
         if (selectedOperationType) {
             operationType = selectedOperationType;
@@ -254,10 +361,26 @@ function validateStep2() {
 
         if (stepNumber === 2 && selectedOperationType) {
             fetchOptions(operationType);
+            setTimeout(function() {
+            map.invalidateSize();
+        }, 400);
         } else if (stepNumber === 4) {
             updateConfirmation();
         }
     }
+
+
+function updateStepIndicators(stepNumber) {
+    var steps = document.querySelectorAll('.step-indicator .circle');
+    steps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
 
     function fetchOptions(operationType) {
         fetch('/ajax/get-cleaning-options', {

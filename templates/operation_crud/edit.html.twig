@@ -60,7 +60,7 @@
         <div class="card">
             <div class="card-body">
                 <h3 class="card-title text-center">Services de Nettoyage</h3>
-                <div id="map" class="mb-4" style="height: 400px;"></div>
+                <div id="map" class="mb-4" style="height: 800px;"></div>
                 <form id="operationForm" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -229,7 +229,12 @@ function updateCleaningOptionsSelect(selectedName) {
     }
 }
 function showStep(stepNumber, operationType = null) {
-    // Vérification spécifique pour l'étape 3
+     if (stepNumber === 2) {
+        // Assurez-vous que l'exécution soit délayée jusqu'à ce que la transition ou l'animation soit terminée
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 400); // Le délai peut être ajusté selon la durée de votre animation/transition
+    }
     if (stepNumber === 3) {
         var service = document.getElementById('nettoyageService').value;
         var street = document.getElementById('street_ope').value;
@@ -432,5 +437,16 @@ document.getElementById('city_ope').addEventListener('keypress', function(event)
         updateMap();
     }
 });
+function updateStepIndicators(stepNumber) {
+    var steps = document.querySelectorAll('.step-indicator .circle');
+    steps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
 </script>
 {% endblock %}
