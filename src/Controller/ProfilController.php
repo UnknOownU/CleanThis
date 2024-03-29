@@ -1,25 +1,25 @@
 <?php
-// src/Controller/ProfilController.php
-
 namespace App\Controller;
 
-use App\Form\UserType;
-use App\Entity\User;
+use App\Form\ProfileType;
+use App\Form\SensitiveInfoType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\attribute\Route;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfilController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
     private UserPasswordHasherInterface $userPasswordHasher;
     private Security $security;
 
-    public function __construct(UserPasswordHasherInterface $userPasswordHasher, Security $security)
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher, Security $security)
     {
+        $this->entityManager = $entityManager;
         $this->userPasswordHasher = $userPasswordHasher;
         $this->security = $security;
     }
@@ -27,35 +27,57 @@ class ProfilController extends AbstractController
     /**
      * @Route("/profile/edit", name="profile_edit")
      */
-    public function edit(Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request)
     {
         $user = $this->security->getUser();
-
         if (!$user) {
-            // Redirige vers la page de connexion ou une page d'erreur
+            $this->addFlash('error', 'Vous devez être connecté pour accéder à cette page.');
             return $this->redirectToRoute('app_login');
         }
 
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        $profileForm = $this->createForm(ProfileType::class, $user);
+        $sensitiveInfoForm = $this->createForm(SensitiveInfoType::class, $user);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $newPassword = $form->get('newPassword')->getData();
-            if ($newPassword) {
-                $user->setPassword($this->userPasswordHasher->hashPassword($user, $newPassword));
+        $profileForm->handleRequest($request);
+        $sensitiveInfoForm->handleRequest($request);
+
+        if ($profileForm->isSubmitted() && $profileForm->isValid()) {
+            $this->entityManager->flush();
+            $this->addFlash('success', 'Vos informations ont été mises à jour.');
+        }
+
+        if ($sensitiveInfoForm->isSubmitted() && $sensitiveInfoForm->isValid()) {
+            $currentPassword = $sensitiveInfoForm->get('currentPassword')->getData();
+            if (!$this->userPasswordHasher->isPasswordValid($user, $currentPassword)) {
+                $this->addFlash('error_password', 'Le mot de passe actuel est incorrect.');
+            } else {
+                if ($newPassword = $sensitiveInfoForm->get('newPassword')->getData()) {
+                    $user->setPassword($this->userPasswordHasher->hashPassword($user, $newPassword));
+                }
+                $this->entityManager->flush();
+                $this->addFlash('success', 'Vos informations sensibles ont été mises à jour.');
             }
-
-            // Pas besoin de faire un persist sur une entité déjà gérée
-            $entityManager->flush();
-
-            // Message flash de succès et redirection
-            $this->addFlash('success', 'Votre profil a été mis à jour.');
-            return $this->redirectToRoute('admin');
         }
 
         return $this->render('user/edit.html.twig', [
-            'form' => $form->createView(),
-            'user' => $user,
+            'profileForm' => $profileForm->createView(),
+            'sensitiveInfoForm' => $sensitiveInfoForm->createView(),
         ]);
+    
+    }
+    /**
+     * @Route("/check-password", name="check_password", methods={"POST"})
+     */
+    public function checkPassword(Request $request): JsonResponse
+    {
+        $user = $this->security->getUser();
+        $data = json_decode($request->getContent(), true);
+        $isValid = false;
+
+        if ($user && isset($data['password'])) {
+            $isValid = $this->userPasswordHasher->isPasswordValid($user, $data['password']);
+        }
+
+        return new JsonResponse(['isValid' => $isValid]);
     }
 }
