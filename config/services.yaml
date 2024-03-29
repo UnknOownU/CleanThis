@@ -29,3 +29,11 @@ services:
             $projectDir: '%kernel.project_dir%'
             
     App\Controller\AjaxOperationController: ~
+    
+    App\Twig\AppExtension:
+        tags:
+            - { name: 'twig.extension' }
+     
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']

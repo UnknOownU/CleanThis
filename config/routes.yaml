@@ -67,3 +67,8 @@ operation_download_invoice:
     methods: GET
     requirements:
         id: '\d+'
+
+check_password:
+    path: /check-password
+    controller: App\Controller\ProfilController::checkPassword
+    methods: POST
