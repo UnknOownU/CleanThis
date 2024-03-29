@@ -91,7 +91,9 @@ public function delete(AdminContext $context)
         return $crud
             ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
             ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
-            ->setSearchFields(['name', 'type', 'status']);
+            ->setSearchFields(['name', 'type', 'status'])
+            ->setPaginatorPageSize(7)            
+            ->setPaginatorRangeSize(0);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
                 $crud->setDefaultSort(['status' => $statusFilter]);

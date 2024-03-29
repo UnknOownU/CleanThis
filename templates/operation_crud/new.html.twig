@@ -8,19 +8,19 @@
     <div class="row">
         <div class="col text-center step-indicator">
             <div class="circle">1</div>
-            <div>Étape 1</div>
+            <div>{{ "Étape 1"|trans }}</div>
         </div>
         <div class="col text-center step-indicator">
             <div class="circle">2</div>
-            <div>Étape 2</div>
+            <div>{{ "Étape 2"|trans }}</div>
         </div>
         <div class="col text-center step-indicator">
             <div class="circle">3</div>
-            <div>Étape 3</div>
+            <div>{{ "Étape 3"|trans }}</div>
         </div>
         <div class="col text-center step-indicator">
             <div class="circle">4</div>
-            <div>Étape 4</div>
+            <div>{{ "Étape 4"|trans }}</div>
         </div>
     </div>
 </div>
@@ -140,11 +140,11 @@
     <button class="btn btn-primary mt-3" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
     <button class="btn btn-warning mt-3" onclick="showStep(2)">{{ "Retour"|trans }}</button>
      <div class="mb-3">
-        <label for="operationImage" class="form-label">Ajouter une image (optionnel)</label>
+        <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
         <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
         <div class="mb-3">
     <div class="mb-3">
-        <label for="rdvDate" class="form-label">Date du Rendez-vous</label>
+        <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
         <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control" onchange="loadTimeSlots(this.value)">
     </div>
     </div>
