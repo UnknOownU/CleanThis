@@ -149,7 +149,7 @@ public function delete(AdminContext $context)
                         ->renderAsHtml()
                         ->hideOnIndex();
 
-            $fields[] = ChoiceField::new('type', 'Type de mission')
+            $fields[] = ChoiceField::new('type', 'Type')
                         ->setChoices([
                             'Petite - 1000€' => 'Little',
                             'Moyenne - 2500€' => 'Medium',
@@ -195,7 +195,7 @@ public function delete(AdminContext $context)
                     FormField::addPanel('Détails de la Mission'),
                     TextField::new('name', 'Intitulé de l’opération')
                         ->setLabel('Mission'),
-                    ChoiceField::new('type', 'Type de mission')
+                    ChoiceField::new('type', 'Type')
                         ->setChoices([
                             'Petite - 1000€' => 'Little',
                             'Moyenne - 2500€' => 'Medium',
@@ -241,7 +241,7 @@ public function delete(AdminContext $context)
                 ImageField::new('attachment', 'Photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
-                ChoiceField::new('type', 'Type de mission')
+                ChoiceField::new('type', 'Type')
                     ->setChoices([
                         'Petite - 1000€' => 'Little',
                         'Moyenne - 2500€' => 'Medium',
