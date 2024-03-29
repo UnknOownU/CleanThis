@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
@@ -419,19 +420,7 @@ public function delete(AdminContext $context)
                     if (!$session->getFlashBag()->has('error')) {
                         $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
                     }
-                                try {
-                $mail->send(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Acceptation de votre opération',
-                    'opeaccept',
-                    [
-                        'user' => $customer
-                    ]
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
+                
                     return new RedirectResponse('/admin');
                 }
             }
@@ -447,6 +436,20 @@ public function delete(AdminContext $context)
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
+
+            try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Acceptation de votre opération',
+                    'opeaccept',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            } 
             return new RedirectResponse('/admin');
         }
     
@@ -486,7 +489,7 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer(); 
         if (!$operation) {
@@ -497,23 +500,25 @@ public function delete(AdminContext $context)
         $operation->setStatus('Terminée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-
+        $invoicePdfContent = $invoiceService->generateInvoice($operation);
         
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
             try {
+                // Envoyer un e-mail à l'utilisateur avec la facture en pièce jointe
                 $mail->send(
                     'no-reply@cleanthis.fr',
                     $customer->getEmail(),
-                    'Opération terminée',
+                    'Opération terminée - Facture',
                     'opefinished',
                     [
                         'user' => $customer
-                    ]
+                    ],
                 );
             } catch (Exception $e) {
+                // Gérer l'échec de l'envoi d'e-mail
                 echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
             } 
             return new RedirectResponse('/admin');
