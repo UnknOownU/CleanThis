@@ -500,15 +500,17 @@ public function delete(AdminContext $context)
         $operation->setStatus('Terminée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-        $invoicePdfContent = $invoiceService->generateInvoice($operation);
         
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
             try {
-                // Envoyer un e-mail à l'utilisateur avec la facture en pièce jointe
-                $mail->send(
+                // Generate the invoice PDF and get its path
+                $pdfPath = $invoiceService->generateInvoiceMail($operation);
+
+                // Send an email to the user with the invoice attached
+                $mail->sendAttach(
                     'no-reply@cleanthis.fr',
                     $customer->getEmail(),
                     'Opération terminée - Facture',
@@ -516,11 +518,11 @@ public function delete(AdminContext $context)
                     [
                         'user' => $customer
                     ],
+                    $pdfPath 
                 );
             } catch (Exception $e) {
-                // Gérer l'échec de l'envoi d'e-mail
                 echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
+            }
             return new RedirectResponse('/admin');
         }
     
