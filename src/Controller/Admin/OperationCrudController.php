@@ -329,6 +329,15 @@ public function delete(AdminContext $context)
     
     
     public function configureActions(Actions $actions): Actions {
+        $security = $this->security; // Utiliser la propriété de classe
+    
+        $changeOperatorAction = Action::new('changeOperator', 'Changer Opérateur', 'fa fa-user-edit')
+        ->linkToRoute('admin_change_operator', function (Operation $operation) {
+            return ['id' => $operation->getId()];
+        })
+        ->displayIf(static function (Operation $operation) use ($security) {
+            return $security->isGranted('ROLE_ADMIN');
+        });
         $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
             ->displayIf(function (Operation $operation) {
                 return ($this->isGranted('ROLE_ADMIN') || 
@@ -367,6 +376,7 @@ public function delete(AdminContext $context)
             })
             ->linkToCrudAction('archiveOperation');
         return $actions
+            ->add(Crud::PAGE_INDEX, $changeOperatorAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
             ->add(Crud::PAGE_INDEX, $archiveAction)
             ->add(Crud::PAGE_INDEX, $finishAction)
