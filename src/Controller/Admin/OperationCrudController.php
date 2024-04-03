@@ -442,7 +442,7 @@ public function delete(AdminContext $context)
                 }
             }
         }
-        
+
     
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');

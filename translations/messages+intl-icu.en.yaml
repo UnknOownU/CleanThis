@@ -386,4 +386,20 @@ RDV: Date
 'Répétez le mot de passe': 'Repeat password'
 Archivées: Archived
 'Votre opération a été bien été crée ! Celle-ci est en attente de validation par notre équipe': 'Your operation has been successfully created! It is awaiting validation by our team.'
-"Un email vous sera envoyé lors de l'acceptation ou le refus de celle-ci": "An email will be sent to you upon acceptance or refusal."
+"Un email vous sera envoyé lors de l'acceptation ou le refus de celle-ci": 'An email will be sent to you upon acceptance or refusal.'
+'Veuillez fournir une description détaillée du site de nettoyage pour une préparation optimale.': 'Please provide a detailed description of the cleaning site for optimum preparation.'
+'Description du site de nettoyage': 'Description of the cleaning site'
+"Chiffre d'affaires": "Sales figures"
+"Chiffres d'affaires par mois": "Sales figures per months"
+Mois: Month
+"Chiffres d'affaires": "Sales"
+'Missions par statut': 'Missions per status'
+'Modifier Profil': 'Edit Profile'
+'Informations Confidentielles': 'Confidentials informations'
+'Mot de passe:': 'Password:'
+'Modifier Informations confidentielles': 'Edit confidentials informations'
+'Ajouter une Image (optionnel)': 'Add an image (optionnal)'
+'Acceptation de votre opération': 'Your operation has been accepted'
+'Refus de votre opération': 'Your operation has been declined'
+'Opération terminée - Facture': 'Operation finished - Billing'
+'Création de votre opération': 'Your operation has been submitted'

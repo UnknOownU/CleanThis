@@ -89,7 +89,7 @@ class AjaxOperationController extends AbstractController
                 ]
                 ; 
             default:
-                return [];
+                return ['Custom'];
         }
     }
 
