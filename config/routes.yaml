@@ -72,3 +72,17 @@ check_password:
     path: /check-password
     controller: App\Controller\ProfilController::checkPassword
     methods: POST
+
+ajax_update_operation_operator:
+    path: /ajax/update-operation-operator/{id}
+    controller: App\Controller\AjaxOperationController::updateOperationOperator
+    methods: [POST]
+    requirements:
+        id: '\d+'
+
+admin_change_operator:
+    path: /admin/change-operator/{id}
+    controller: App\Controller\AjaxOperationController::changeOperator
+    requirements:
+        id: '\d+'
+
