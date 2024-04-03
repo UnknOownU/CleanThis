@@ -85,4 +85,3 @@ admin_change_operator:
     controller: App\Controller\AjaxOperationController::changeOperator
     requirements:
         id: '\d+'
-
