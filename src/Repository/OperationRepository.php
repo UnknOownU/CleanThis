@@ -74,6 +74,7 @@ class OperationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    
     public function findMissionStatusStatistics(): array
     {
         return $this->createQueryBuilder('o')

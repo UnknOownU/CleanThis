@@ -12,6 +12,8 @@ class StatistiqueController extends AbstractController
     #[Route('/stats', name: 'stats')]
     public function statistiques(OperationRepository $operationRepository): Response
     {
+
+        
          // Récupérer les missions en coursdes salariés 
         $totalMissionsEnCours = $operationRepository->countMissionsEnCours();
 
