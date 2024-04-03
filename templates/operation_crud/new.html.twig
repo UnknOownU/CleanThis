@@ -5,27 +5,6 @@
 
 {% block main %}
 
-<div class="container my-4">
-    <div class="row">
-        <div class="col text-center step-indicator">
-            <div class="circle">1</div>
-            <div>{{ "Étape 1"|trans }}</div>
-        </div>
-        <div class="col text-center step-indicator">
-            <div class="circle">2</div>
-            <div>{{ "Étape 2"|trans }}</div>
-        </div>
-        <div class="col text-center step-indicator">
-            <div class="circle">3</div>
-            <div>{{ "Étape 3"|trans }}</div>
-        </div>
-        <div class="col text-center step-indicator">
-            <div class="circle">4</div>
-            <div>{{ "Étape 4"|trans }}</div>
-        </div>
-    </div>
-</div>
-
 <div class="ea-new-form">
 <div class="container mt-3">
     <h2 class="text-center mb-5">{{ "Nouvelle Demande De Nettoyage"|trans }}</h2>
@@ -114,7 +93,7 @@
                             </div>
                         </div>
                     </div>
-                       <div id="map" class="mb-4" style="height: 400px"></div>
+                    <div id="map" class="mb-4" style="height: 250px; width: 250px;"></div>
                     <div class="d-flex justify-content-between">
                         <button class="btn btn-warning" type="button" onclick="showStep(1)">{{ "Retour"|trans }}</button>
                         <button class="btn btn-primary" type="button" onclick="showStep(3)">{{ "Continuer"|trans }}</button>
@@ -125,30 +104,9 @@
     </div>
 </div>
 
-<!-- Étape 3 : Description de l'opération -->
-<div id="step3" class="container d-none">
-    <h3 class="mb-4">{{ "Description de l'Opération"|trans }}</h3>
-    <p>{{ "Veuillez fournir une description détaillée du site où aura lieu l'opération de nettoyage. Ceci est crucial pour assurer que nos équipes soient correctement préparées et équipées pour répondre au mieux à vos besoins. Vous devriez inclure :"|trans }}</p>
-    <ul>
-        <li>{{ "La taille approximative de l'espace à nettoyer (en mètres carrés)."|trans }}</li>
-        <li>{{ "Toute condition spécifique ou exigence (par exemple, surfaces délicates, zones à éviter)."|trans }}</li>
-        <li>{{ "Des informations sur les types de surfaces et de matériaux présents (carrelage, moquette, bois, etc.)."|trans }}</li>
-        <li>{{ "Tout obstacle potentiel ou zone difficile d'accès."|trans }}</li>
-        <li>{{ "Préférences concernant les produits de nettoyage (écologiques, hypoallergéniques, etc.)."|trans }}</li>
-        <li>{{ "Heures ou périodes souhaitées pour l'intervention."|trans }}</li>
-    </ul>
-    <p>{{ "Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace."|trans }}</p>
-    <textarea id="description" name="description" placeholder="Veuillez décrire le site de nettoyage" class="form-control" rows="4"></textarea>
-    <button class="btn btn-primary mt-3" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
-    <button class="btn btn-warning mt-3" onclick="showStep(2)">{{ "Retour"|trans }}</button>
-     <div class="mb-3">
-        <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
-        <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
-        <div class="mb-3">
-    <div class="mb-3">
-        <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
-        <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control" onchange="loadTimeSlots(this.value)">
-    </div>
+<div id="step3" class="card border-0 shadow my-4 d-none">
+    <div class="card-header">
+        <h3 class="card-title text-center">{{ "Description de l'Opération"|trans }}</h3>
     </div>
     <div class="card-body">
         <p>{{ "Veuillez fournir une description détaillée du site de nettoyage pour une préparation optimale."|trans }}</p>

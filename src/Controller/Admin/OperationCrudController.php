@@ -6,7 +6,6 @@ use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
-use App\Service\InvoiceService;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;

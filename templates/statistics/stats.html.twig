@@ -1,9 +1,9 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 {% block body_id 'page-content-wrapper' %}
-{% block title %}Statistiques
+{% block title %}{{ "Statistiques"|trans }}
 {% endblock %}
 {% block main %}
-	<h1 class="text-center mb-6">Statistiques</h1><br><br><br>
+	<h1 class="text-center mb-6">{{ "Statistiques"|trans }}</h1><br><br><br>
 	<div
 		class="container mt-4">
 		<!-- Conteneur pour les Graphiques -->
@@ -11,10 +11,10 @@
 			class="row">
 			<!-- Affichage du chiffre d'affaires total -->
 			<div class="col-md-4">
-				<h2 class="text-center mb-4">Chiffre d'affaires</h2><br>
+				<h2 class="text-center mb-4">{{ "Chiffre d'affaires"|trans }}</h2><br>
 				<div class="card">
 					<div class="card-body">
-						<h5 class="card-title text-center">Chiffre d'affaires total</h5>
+						<h5 class="card-title text-center">{{ "Chiffre d'affaires total"|trans }}</h5>
 						<div class="text-center mb-3">
 							<i class="fas fa-chart-line fa-4x"></i>
 						</div>
@@ -37,13 +37,13 @@
 						</div> #}
 			{# tbleau pure #}
 
-				<div class="col-md-6"> <h2 class="text-center mb-2">Chiffres d'affaires par mois</h2>
+				<div class="col-md-6"> <h2 class="text-center mb-2">{{ "Chiffres d'affaires par mois"|trans }}</h2>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">Mois</th>
-								<th scope="col" class="text-right">Chiffres d'affaires (€)</th>
+								<th scope="col">{{ "Mois"|trans }}</th>
+								<th scope="col" class="text-right">{{ "Chiffres d'affaires"|trans }} (€)</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,26 +65,26 @@
 					class="row">
 					<!-- Graphique pour 'Ventes par type d'opération' -->
 					<div class="col-md-4">
-						<h2 class="text-center mb-2">Ventes par type d'opération</h2>
+						<h2 class="text-center mb-2">{{ "Ventes par type d'opération"|trans }}</h2>
 						<div class="mb-2">
-							<label for="operationsChartType">Type de graphique</label>
+							<label for="operationsChartType">{{ "Type de graphique"|trans }}</label>
 							<select id="operationsChartType" class="form-control" onchange="changeChartType('operationsChart')">
-								<option value="pie">Camembert</option>
-								<option value="bar">Barre</option>
-								<option value="doughnut">Donuts</option>
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
 							</select>
 						</div>
 						<canvas id="operationsChart"></canvas>
 					</div>
 					<!-- Graphique pour 'Missions par statut' -->
 					<div class="col-md-4">
-						<h2 class="text-center mb-2">Missions par statut</h2>
+						<h2 class="text-center mb-2">{{ "Missions par statut"|trans }}</h2>
 						<div class="mb-2">
-							<label for="missionStatusChartType">Type de graphique</label>
+							<label for="missionStatusChartType">{{ "Type de graphique"|trans }}</label>
 							<select id="missionStatusChartType" class="form-control" onchange="changeChartType('missionStatusChart')">
-								<option value="pie">Camembert</option>
-								<option value="bar">Barre</option>
-								<option value="doughnut">Donuts</option>
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
 							</select>
 						</div>
 						<canvas id="missionStatusChart"></canvas>
