@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\OperationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +12,12 @@ class StatistiqueController extends AbstractController
     #[Route('/stats', name: 'stats')]
     public function statistiques(OperationRepository $operationRepository): Response
     {
+         // Récupérer les missions en coursdes salariés 
+        $totalMissionsEnCours = $operationRepository->countMissionsEnCours();
+
+         // Récupérer les missions terminées des salariés 
+        $operationsTerminees = $operationRepository->countOperationsTerminees();
+
         // Récupérer les statistiques des salariés en fonction du nombre de missions
         $statistiquesSalaries = $operationRepository->getMissionStatistics();
 
@@ -24,24 +29,28 @@ class StatistiqueController extends AbstractController
 
         // Récupérer les données du chiffre d'affaires par date
         $chiffreAffairesParDate = $operationRepository->getSalesByDate();
-        dump($chiffreAffairesParDate);
+        
         // Récupérer les statistiques des missions par statut
         $missionStatusStatistics = $operationRepository->findMissionStatusStatistics();
-
-
         
+
         // Récupérer les salariés sur le podium
-         $podiumEmployees = $operationRepository->getPodiumEmployees();
+        $podiumEmployees = $operationRepository->getPodiumEmployees();
+
+        // Récupérer les missions en cours
+        $missionsEnCours = $operationRepository->countMissionsEnCours();
 
         // Passer les données récupérées à la vue Twig
         return $this->render('statistics/stats.html.twig', [
+            'totalMissionsEnCours' => $totalMissionsEnCours,
             'statistiquesSalaries' => $statistiquesSalaries,
             'statistiquesOperations' => $statistiquesOperations,
             'chiffreAffairesParDate' => $chiffreAffairesParDate,
             'missionStatusStatistics' => $missionStatusStatistics,
             'chiffreAffaires' => $chiffreAffaires, 
             'podiumEmployees' => $podiumEmployees,
-            
+            'missionsEnCours' => $missionsEnCours,
+            'operationsTerminees' => $operationsTerminees,
         ]);
     }
 }

@@ -130,7 +130,7 @@ public function createOperation(Request $request, EntityManagerInterface $entity
                 ]
             );
         } catch (Exception $e) {
-            echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+           
         } 
 
         return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
