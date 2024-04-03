@@ -134,7 +134,6 @@ public function createOperation(Request $request, EntityManagerInterface $entity
                 ]
             );
         } catch (Exception $e) {
-
         } 
 
         return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
