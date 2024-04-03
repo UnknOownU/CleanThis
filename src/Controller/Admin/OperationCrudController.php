@@ -484,7 +484,7 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer(); 
         if (!$operation) {
@@ -493,8 +493,9 @@ public function delete(AdminContext $context)
         
         // Logique pour accepter l'opération
         $operation->setStatus('Terminée');
+        $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
-        $entityManager->flush();
+        $entityManager->flush(); 
 
         
         // Vérifier si le message flash a déjà été affiché dans la session
