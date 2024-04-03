@@ -6,6 +6,7 @@ use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
+use App\Service\InvoiceService;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -501,7 +502,8 @@ public function delete(AdminContext $context)
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush(); 
-       
+
+      
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
