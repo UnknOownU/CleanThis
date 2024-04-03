@@ -91,13 +91,13 @@
 					</div>
 					<!-- Graphique pour 'Missions par salarié' -->
 					<div class="col-md-4">
-						<h2 class="text-center mb-2">Missions par salarié</h2>
+						<h2 class="text-center mb-2">{{ "Missions par salarié"|trans }}</h2>
 						<div class="mb-2">
-							<label for="salariesChartType">Type de graphique</label>
+							<label for="salariesChartType">{{ "Type de graphique"|trans }}</label>
 							<select id="salariesChartType" class="form-control" onchange="changeChartType('salariesChart')">
-								<option value="pie">Camembert</option>
-								<option value="bar">Barre</option>
-								<option value="doughnut">Donuts</option>
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
 							</select>
 						</div>
 						<canvas id="salariesChart"></canvas>
