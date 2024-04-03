@@ -115,11 +115,11 @@
             <textarea id="description" name="description" class="form-control" rows="4" placeholder="{{ "Description du site de nettoyage"|trans }}"></textarea>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3" id="imagewrapper">
             <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
             <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
         </div>
-        <div class="mb-3">
+        <div class="mb-3 mt-3" id="datewrapper">
             <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
             <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control">
         </div>
@@ -130,10 +130,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 <!-- Étape 4 : Confirmation des détails -->
 <div id="step4" class="container d-none">
@@ -250,6 +246,16 @@
     .blink {
         animation: blink 1.5s ease-in-out infinite;
     }
+
+    #rdvDate, #operationImage {
+        width: 300px;
+        margin: 0 auto;
+    }
+
+    #imagewrapper, #datewrapper {
+        text-align:center;
+    }
+    
 </style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />

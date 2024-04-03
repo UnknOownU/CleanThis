@@ -382,6 +382,7 @@ public function delete(AdminContext $context)
             ->add(Crud::PAGE_INDEX, $finishAction)
             ->add(Crud::PAGE_INDEX, $declineAction)
             ->add(Crud::PAGE_INDEX, $acceptAction)
+            
             ;
     }
     
@@ -435,7 +436,7 @@ public function delete(AdminContext $context)
                 }
             }
         }
-        
+
     
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');
