@@ -4,23 +4,24 @@
 {% block page_title %}{{ "Demande D'opération"|trans }}{% endblock %}
 
 {% block main %}
+
 <div class="container my-4">
     <div class="row">
         <div class="col text-center step-indicator">
             <div class="circle">1</div>
-            <div>Étape 1</div>
+            <div>{{ "Étape 1"|trans }}</div>
         </div>
         <div class="col text-center step-indicator">
             <div class="circle">2</div>
-            <div>Étape 2</div>
+            <div>{{ "Étape 2"|trans }}</div>
         </div>
         <div class="col text-center step-indicator">
             <div class="circle">3</div>
-            <div>Étape 3</div>
+            <div>{{ "Étape 3"|trans }}</div>
         </div>
         <div class="col text-center step-indicator">
             <div class="circle">4</div>
-            <div>Étape 4</div>
+            <div>{{ "Étape 4"|trans }}</div>
         </div>
     </div>
 </div>
@@ -78,7 +79,7 @@
             <div class="card-body">
 
                 <h3 class="card-title text-center">{{ "Services de Nettoyage"|trans }}</h3>
-                <div id="map" class="mb-4" style="height: 800px;"></div>
+        
                 <form id="operationForm" class="needs-validation" novalidate>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -113,6 +114,7 @@
                             </div>
                         </div>
                     </div>
+                       <div id="map" class="mb-4" style="height: 400px"></div>
                     <div class="d-flex justify-content-between">
                         <button class="btn btn-warning" type="button" onclick="showStep(1)">{{ "Retour"|trans }}</button>
                         <button class="btn btn-primary" type="button" onclick="showStep(3)">{{ "Continuer"|trans }}</button>
@@ -140,16 +142,40 @@
     <button class="btn btn-primary mt-3" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
     <button class="btn btn-warning mt-3" onclick="showStep(2)">{{ "Retour"|trans }}</button>
      <div class="mb-3">
-        <label for="operationImage" class="form-label">Ajouter une image (optionnel)</label>
+        <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
         <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
         <div class="mb-3">
     <div class="mb-3">
-        <label for="rdvDate" class="form-label">Date du Rendez-vous</label>
+        <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
         <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control" onchange="loadTimeSlots(this.value)">
     </div>
     </div>
+    <div class="card-body">
+        <p>{{ "Veuillez fournir une description détaillée du site de nettoyage pour une préparation optimale."|trans }}</p>
+
+        <div class="form-group my-3">
+            <textarea id="description" name="description" class="form-control" rows="4" placeholder="{{ "Description du site de nettoyage"|trans }}"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
+            <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+        </div>
+        <div class="mb-3">
+            <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
+            <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control">
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-secondary" onclick="showStep(2)">{{ "Retour"|trans }}</button>
+            <button class="btn btn-primary" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
+        </div>
     </div>
 </div>
+
+
+
+
 
 <!-- Étape 4 : Confirmation des détails -->
 <div id="step4" class="container d-none">
@@ -172,8 +198,28 @@
     <div class="row">
         <div class="col text-center">
             <p class="text-secondary"> 
-                <strong>{{ "Chez CleanThis,"|trans }}</strong> {{ "nous ne nous contentons pas de nettoyer - nous redéfinissons l'excellence du nettoyage. Avec une attention méticuleuse aux détails et une approche axée sur la satisfaction du client, nous vous offrons bien plus qu'un service de nettoyage standard."|trans }} <strong>{{ "Choisir CleanThis,"|trans }}</strong> {{ "c'est opter pour un environnement éclatant, un espace de vie harmonieux et un bien-être renforcé. Nous nous engageons à transformer votre espace, en apportant la propreté et la sérénité qui dépassent vos attentes. Parce que votre confort, votre santé et votre tranquillité d'esprit sont notre priorité, "|trans }}<strong>{{ "faites confiance à CleanThis"|trans }}</strong> {{ "pour une expérience de nettoyage hors pair."|trans }}
+                {# <strong>{{ "Chez CleanThis,"|trans }}</strong> {{ "nous ne nous contentons pas de nettoyer - nous redéfinissons l'excellence du nettoyage. Avec une attention méticuleuse aux détails et une approche axée sur la satisfaction du client, nous vous offrons bien plus qu'un service de nettoyage standard."|trans }} <strong>{{ "Choisir CleanThis,"|trans }}</strong> {{ "c'est opter pour un environnement éclatant, un espace de vie harmonieux et un bien-être renforcé. Nous nous engageons à transformer votre espace, en apportant la propreté et la sérénité qui dépassent vos attentes. Parce que votre confort, votre santé et votre tranquillité d'esprit sont notre priorité, "|trans }}<strong>{{ "faites confiance à CleanThis"|trans }}</strong> {{ "pour une expérience de nettoyage hors pair."|trans }} #}
             </p>
+        </div>
+    </div>
+</div>
+<div class="container my-1">
+    <div class="row">
+        <div class="col text-center step-indicator">
+            <div class="circle">1</div>
+            <div>Étape 1</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">2</div>
+            <div>Étape 2</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">3</div>
+            <div>Étape 3</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">4</div>
+            <div>Étape 4</div>
         </div>
     </div>
 </div>

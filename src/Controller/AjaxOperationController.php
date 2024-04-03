@@ -3,14 +3,16 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Security\Core\Security;
+use Exception;
 use App\Entity\user;
 use App\Entity\Operation;
+use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AjaxOperationController extends AbstractController
 {
@@ -90,7 +92,7 @@ class AjaxOperationController extends AbstractController
 /**
  * @Route("/ajax/create-operation", name="ajax_create_operation")
  */
-public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security): JsonResponse
+public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security, SendMailService $mail): JsonResponse
 {
     $user = $security->getUser();
 
@@ -114,6 +116,22 @@ public function createOperation(Request $request, EntityManagerInterface $entity
 
         $entityManager->persist($operation);
         $entityManager->flush();
+
+        $customer = $operation->getCustomer();
+
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Création de votre opération',
+                'opecreate',
+                [
+                    'user' => $customer
+                ]
+            );
+        } catch (Exception $e) {
+            echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+        } 
 
         return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
     } else {

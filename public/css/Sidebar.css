@@ -35,7 +35,7 @@
 
 /* Mode clair */
 [data-bs-theme="light"] .sidebar {
-    background-color: #ffffff; /* Fond blanc pour le mode clair */
+    background-color: #e90a0a; /* Fond blanc pour le mode clair */
 }
 
 [data-bs-theme="light"] #main-menu .menu .menu-header::before {

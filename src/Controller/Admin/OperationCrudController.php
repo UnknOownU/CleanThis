@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
+use App\Service\InvoiceService;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,7 +93,9 @@ public function delete(AdminContext $context)
         return $crud
             ->overrideTemplate('crud/new', 'operation_crud/new.html.twig')
             ->overrideTemplate('crud/edit', 'operation_crud/edit.html.twig')
-            ->setSearchFields(['name', 'type', 'status']);
+            ->setSearchFields(['name', 'type', 'status'])
+            ->setPaginatorPageSize(7)            
+            ->setPaginatorRangeSize(0);
             $statusFilter = $this->getContext()->getRequest()->query->get('status');
             if ($statusFilter) {
                 $crud->setDefaultSort(['status' => $statusFilter]);
@@ -149,7 +153,7 @@ public function delete(AdminContext $context)
                         ->renderAsHtml()
                         ->hideOnIndex();
 
-            $fields[] = ChoiceField::new('type', 'Type de mission')
+            $fields[] = ChoiceField::new('type', 'Type')
                         ->setChoices([
                             'Petite - 1000€' => 'Little',
                             'Moyenne - 2500€' => 'Medium',
@@ -195,7 +199,7 @@ public function delete(AdminContext $context)
                     FormField::addPanel('Détails de la Mission'),
                     TextField::new('name', 'Intitulé de l’opération')
                         ->setLabel('Mission'),
-                    ChoiceField::new('type', 'Type de mission')
+                    ChoiceField::new('type', 'Type')
                         ->setChoices([
                             'Petite - 1000€' => 'Little',
                             'Moyenne - 2500€' => 'Medium',
@@ -241,7 +245,7 @@ public function delete(AdminContext $context)
                 ImageField::new('attachment', 'Photo')
                     ->setBasePath('/images/products')
                     ->onlyOnIndex(),
-                ChoiceField::new('type', 'Type de mission')
+                ChoiceField::new('type', 'Type')
                     ->setChoices([
                         'Petite - 1000€' => 'Little',
                         'Moyenne - 2500€' => 'Medium',
@@ -417,19 +421,7 @@ public function delete(AdminContext $context)
                     if (!$session->getFlashBag()->has('error')) {
                         $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
                     }
-                                try {
-                $mail->send(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Acceptation de votre opération',
-                    'opeaccept',
-                    [
-                        'user' => $customer
-                    ]
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
+                
                     return new RedirectResponse('/admin');
                 }
             }
@@ -445,6 +437,20 @@ public function delete(AdminContext $context)
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
+
+            try {
+                $mail->send(
+                    'no-reply@cleanthis.fr',
+                    $customer->getEmail(),
+                    'Acceptation de votre opération',
+                    'opeaccept',
+                    [
+                        'user' => $customer
+                    ]
+                );
+            } catch (Exception $e) {
+                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
+            } 
             return new RedirectResponse('/admin');
         }
     
@@ -484,7 +490,7 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer(); 
         if (!$operation) {
@@ -495,26 +501,31 @@ public function delete(AdminContext $context)
         $operation->setStatus('Terminée');
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
-        $entityManager->flush();
+        $entityManager->flush(); 
 
-        
+      
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
             try {
-                $mail->send(
+                // Generate the invoice PDF and get its path
+                $pdfPath = $invoiceService->generateInvoiceMail($operation);
+
+                // Send an email to the user with the invoice attached
+                $mail->sendAttach(
                     'no-reply@cleanthis.fr',
                     $customer->getEmail(),
-                    'Opération terminée',
+                    'Opération terminée - Facture',
                     'opefinished',
                     [
                         'user' => $customer
-                    ]
+                    ],
+                    $pdfPath 
                 );
             } catch (Exception $e) {
                 echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
+            }
             return new RedirectResponse('/admin');
         }
     
