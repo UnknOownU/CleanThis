@@ -7,12 +7,16 @@ use Exception;
 use App\Entity\user;
 use App\Entity\Operation;
 use App\Service\SendMailService;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AjaxOperationController extends AbstractController
 {
@@ -85,7 +89,7 @@ class AjaxOperationController extends AbstractController
                 ]
                 ; 
             default:
-                return [];
+                return ['Custom'];
         }
     }
 
@@ -130,7 +134,6 @@ public function createOperation(Request $request, EntityManagerInterface $entity
                 ]
             );
         } catch (Exception $e) {
-           
         } 
 
         return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
@@ -202,5 +205,70 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
        
            return $this->json(['status' => 'success', 'message' => 'Opération mise à jour avec succès']);
         }
+        /**
+ * @Route("/ajax/update-operation-operator/{id}", name="ajax_update_operation_operator")
+ */
 
+ public function updateOperationOperator(int $id, Request $request, EntityManagerInterface $entityManager, Security $security, UrlGeneratorInterface $urlGenerator): RedirectResponse
+ {
+     // Vérification des autorisations
+     if (!$security->isGranted('ROLE_ADMIN')) {
+         // Redirection en cas d'accès non autorisé
+         return new RedirectResponse($urlGenerator->generate('your_login_route_name'));
+     }
+ 
+     // Récupération de l'opération à mettre à jour
+     $operation = $entityManager->getRepository(Operation::class)->find($id);
+     if (!$operation) {
+         // Gérer l'opération non trouvée
+         // Redirection vers une page d'erreur par exemple
+         return new RedirectResponse($urlGenerator->generate('your_error_route_name'));
+     }
+ 
+     // Récupération des données de la requête
+     $data = $request->request->all();
+     $newOperatorId = $data['newOperatorId'] ?? null;
+ 
+     // Vérification si l'ID de l'opérateur est fourni
+     if (null === $newOperatorId) {
+         // Redirection en cas d'ID d'opérateur non fourni
+         return new RedirectResponse($urlGenerator->generate('your_error_route_name'));
+     }
+ 
+     // Recherche du nouvel opérateur
+     $newOperator = $entityManager->getRepository(User::class)->find($newOperatorId);
+     if (!$newOperator) {
+         // Gérer l'opérateur non trouvé
+         // Redirection vers une page d'erreur par exemple
+         return new RedirectResponse($urlGenerator->generate('your_error_route_name'));
+     }
+ 
+     // Mise à jour de l'opération avec le nouvel opérateur
+     $operation->setSalarie($newOperator);
+     $entityManager->flush();
+ 
+     // Réaliser la redirection vers la page spécifiée
+     return new RedirectResponse('/admin');
+ }
+
+
+
+        /**
+         * @Route("/admin/change-operator/{id}", name="admin_change_operator")
+         */
+        public function changeOperator(int $id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+            $operation = $entityManager->getRepository(Operation::class)->find($id);
+            if (!$operation) {
+                throw $this->createNotFoundException('Opération non trouvée');
+            }
+        
+            $operators = $userRepository->findByRoles(['ROLE_SENIOR', 'ROLE_ADMIN', 'ROLE_APPRENTI']);
+        
+            return $this->render('admin/change.operator.twig', [
+                'operation' => $operation,
+                'operators' => $operators,
+            ]);
         }
+}

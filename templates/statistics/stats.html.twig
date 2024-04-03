@@ -96,14 +96,14 @@
 						<canvas id="missionStatusChart"></canvas>
 					</div>
 					<!-- Graphique pour 'Missions par salarié' -->
-					<div class="mps col-md-4">
-						<h2 class="text-center mb-2">Missions par salarié</h2>
+					<div class="col-md-4">
+						<h2 class="text-center mb-2">{{ "Missions par salarié"|trans }}</h2>
 						<div class="mb-2">
-							<label for="salariesChartType">Type de graphique</label>
+							<label for="salariesChartType">{{ "Type de graphique"|trans }}</label>
 							<select id="salariesChartType" class="form-control" onchange="changeChartType('salariesChart')">
-								<option value="pie">Camembert</option>
-								<option value="bar">Barre</option>
-								<option value="doughnut">Donuts</option>
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
 							</select>
 						</div>
 						<canvas id="salariesChart"></canvas>
@@ -214,39 +214,36 @@ createChart(document.getElementById(chartId).getContext('2d'), getChartData(char
 
 // Fonction pour récupérer les données du graphique en fonction de l'ID du graphique
 function getChartData(chartId) {
-switch (chartId) {
-case 'operationsChart':
-return getOperationsChartData();
-case 'salariesChart':
-return getSalariesChartData();
-case 'chiffreAffairesChart':
-return getChiffreAffairesChartData();
-case 'missionStatusChart':
-return getMissionStatusChartData();
-default:
-return {};
-}
-}
+	switch (chartId) {
+		case 'operationsChart':
+			return getOperationsChartData();
+		case 'salariesChart':
+			return getSalariesChartData();
+		case 'chiffreAffairesChart':
+			return getChiffreAffairesChartData();
+		case 'missionStatusChart':
+			return getMissionStatusChartData();
+		default:
+		return {};
+	}}
 
 // Fonction pour récupérer les données des opérations pour le graphique
 function getOperationsChartData() {
-return {
-labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}",{% endfor %}],
-datasets: [
-{
-label: 'Nombre d\'opérations',
-data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }},{% endfor %}],
-backgroundColor: [
-'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
-],
-borderColor: [
-'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
-],
-borderWidth: 1
-}
-]
-};
-}
+	return {
+		labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}",{% endfor %}],
+		datasets: [
+			{
+				label: 'Nombre d\'opérations',
+				data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }},{% endfor %}],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
+					],
+				borderColor: [
+					'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
+					],
+				borderWidth: 1
+				}]};
+		}
 
 // Fonction pour récupérer les données des salariés pour le graphique
 function getSalariesChartData() {
@@ -295,50 +292,47 @@ function getMissionsEnCoursChartData() {
     };
 }
 
-
 // Fonction pour récupérer les données du chiffre d'affaires pour le graphique
 function getChiffreAffairesChartData() {
-var labels = [];
-var salesData = [];{% for sale in chiffreAffairesParDate %}labels.push("{{ sale.monthYear }}");
-salesData.push({{ sale.totalSales }});{% endfor %}return {
-labels: labels,
-datasets: [
-{
-label: 'Chiffre d\'affaires par mois (€)',
-data: salesData,
-backgroundColor: 'rgba(75, 192, 192, 0.2)',
-borderColor: 'rgba(75, 192, 192, 1)',
-borderWidth: 1,
-fill: false
-}
-]
-};
-}
+	var labels = [];
+	var salesData = [];{% for sale in chiffreAffairesParDate %}labels.push("{{ sale.monthYear }}");
+		salesData.push({{ sale.totalSales }});{% endfor %} return {
+		labels: labels,
+		datasets: [
+			{
+				label: 'Chiffre d\'affaires par mois (€)',
+				data: salesData,
+				backgroundColor: 'rgba(75, 192, 192, 0.2)',
+				borderColor: 'rgba(75, 192, 192, 1)',
+				borderWidth: 1,
+				fill: false
+				}]};
+		}
+
 // Fonction pour récupérer les données du statut des missions pour le graphique
 function getMissionStatusChartData() {
-return {
-labels: [{% for stat in missionStatusStatistics %}"{{ stat.status }}",{% endfor %}],
-datasets: [
-{
-label: 'Nombre de missions',
-data: [{% for stat in missionStatusStatistics %}{{ stat.numMissions }},{% endfor %}],
-backgroundColor: [
-'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
-],
-borderColor: [
-'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
-],
-borderWidth: 1
-}
-]
-};
-}
+	return {
+		labels: [{% for stat in missionStatusStatistics %}"{{ stat.status }}",{% endfor %}],
+		datasets: [
+			{
+				label: 'Nombre de missions',
+				data: [{% for stat in missionStatusStatistics %}{{ stat.numMissions }},{% endfor %}],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
+					],
+				borderColor: [
+					'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
+					],
+				borderWidth: 1
+				}]};
+		}
 
 document.addEventListener('DOMContentLoaded', function () {
     changeChartType('operationsChart');
     changeChartType('salariesChart');
     changeChartType('chiffreAffairesChart');
     changeChartType('missionStatusChart');
+
     createChart(document.getElementById('missionsEnCoursChart').getContext('2d'), getMissionsEnCoursChartData(), 'bar');
 });
 	</script>
@@ -364,4 +358,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 </style>
+=======
+	});
+
+</script>
 {% endblock %}
