@@ -256,9 +256,9 @@ Continuer: Continue
 'pour une expérience de nettoyage hors pair.': 'for an unrivalled cleaning experience.'
 Statistiques: Statistics
 'Choisir le type de graphique :': 'Choose the type of graph :'
-Camembert: Camembert
+Camembert: Pie
 Barre: Bar
-Donuts: Donuts
+Donuts: Doughnut
 'Choisir le type de statistique :': 'Choose the type of statistics :'
 "Ventes par type d'opération": 'Sales by type of transaction'
 'Missions par salarié': 'Missions per employee'
@@ -303,9 +303,9 @@ Disponibilités: Availability
 Dashboard: Dashboard
 Profil: Profile
 'On clean vos': 'We clean your'
-'Opérateur': 'Operator'
-'CP': 'Zipcode'
-'Archiver': 'Archive'
+Opérateur: Operator
+CP: Zipcode
+Archiver: Archive
 'Nettoyage de bureau': 'Office cleaning'
 'Nettoyage de fenêtres': 'Windows cleaning'
 'Nettoyage de sols': 'Floors cleaning'
@@ -333,7 +333,6 @@ Profil: Profile
 'Nettoyage de parkings': 'Parking lot cleaning'
 'Nettoyage de terrasses': 'Terrace cleaning'
 'Nettoyage de jardins': 'Garden cleaning'
-'Nettoyage de grandes surfaces vitrées':
 "Nettoyage de halls d'entrée": 'Cleaning large glass surfaces'
 'Nettoyage de restaurants': 'Restaurant cleaning'
 'Nettoyage de magasins': 'Store cleaning'
@@ -341,11 +340,11 @@ Profil: Profile
 'Nettoyage de salles de conférence': 'Conference room cleaning'
 'Nettoyage de zones de réception': 'Cleaning reception areas'
 'Nettoyage de piscines': 'Pool cleaning'
-"Nettoyage de salles d'exposition": "Showroom cleaning"
+"Nettoyage de salles d'exposition": 'Showroom cleaning'
 'Nettoyage de salles de sport': 'Sports hall cleaning'
 'Nettoyage de grandes cuisines': 'Cleaning large kitchens'
 'Nettoyage de vestiaires': 'Locker room cleaning'
-"Nettoyage d'aires de jeux": "Playground cleaning"
+"Nettoyage d'aires de jeux": 'Playground cleaning'
 'Nettoyage de façade': 'Facade cleaning'
 'Nettoyage de grandes structures': 'Cleaning large structures'
 'Nettoyage de chantiers': 'Construction site cleaning'
@@ -365,3 +364,26 @@ Profil: Profile
 'Nettoyage de centres logistiques': 'Logistics center cleaning'
 'Nettoyage de docks': 'Dock cleaning'
 'Nettoyage de grandes aires de jeux': 'Cleaning large play areas'
+"Ventes par Type d'Opération": 'Operations repartition'
+'Missions par Salarié': 'Operations by employee'
+"Chiffre d'Affaires par Date": 'Sales by Date'
+"Un problème est survenu lors de la création de l'opération.": 'A problem occurred when creating the operation.'
+'Étape 1': 'Step 1'
+'Étape 2': 'Step 2'
+'Étape 3': 'Step 3'
+'Étape 4': 'Step 4'
+'Ajouter une image (optionnel)': 'Add an image (optionnal)'
+'Date du Rendez-vous': 'Appointement date'
+'Type de graphique': 'Graphic type'
+'Type de statistique': 'Statistic type'
+'Nos retours clients!': 'Our feedbacks!'
+Français: French
+"Chiffre d'affaires par mois (€)": 'Sales by months'
+'Type de mission': 'Operation type'
+RDV: Date
+'Opérateur assigné': Operator
+"Adresse d'intervention": 'Intervention address'
+'Répétez le mot de passe': 'Repeat password'
+Archivées: Archived
+'Votre opération a été bien été crée ! Celle-ci est en attente de validation par notre équipe': 'Your operation has been successfully created! It is awaiting validation by our team.'
+"Un email vous sera envoyé lors de l'acceptation ou le refus de celle-ci": "An email will be sent to you upon acceptance or refusal."
