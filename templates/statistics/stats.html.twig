@@ -1,152 +1,253 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
-
 {% block body_id 'page-content-wrapper' %}
-{% block title %}Statistiques{% endblock %}
-
+{% block title %}Statistiques
+{% endblock %}
 {% block main %}
-<div class="container mt-4">
-    <h1 class="text-center mb-4">Statistiques</h1>
-    
-    <!-- Sélection du Type de Graphique et de Statistique -->
-    <div class="d-flex justify-content-center mb-4">
-        <div class="mr-4">
-            <label for="chartTypeGraph">Type de graphique</label>
-            <select id="chartTypeGraph" class="form-control" onchange="changeChartType()">
-                <option value="pie">Camembert</option>
-                <option value="bar">Barre</option>
-                <option value="doughnut">Donuts</option>
-            </select>
-        </div>
-        <div>
-            <label for="chartType">Type de statistique</label>
-            <select id="chartType" class="form-control" onchange="changeChartType()">
-                <option value="operations">Ventes par type d'opération</option>
-                <option value="salaries">Missions par salarié</option>
-                <option value="chiffreAffaires">Chiffre d'affaires total</option>
-            </select>
-        </div>
-    </div>
-    
-    <!-- Conteneur pour le Graphique -->
-    <div id="chartContainer" style="width: 30%; margin: auto;">
-        <h2 id="chartTitle" style="margin-bottom: 10px;">Chiffre d'affaires par date</h2>
-        <canvas id="myChart"></canvas>
-    </div>
-</div>
+	<h1 class="text-center mb-6">Statistiques</h1><br><br><br>
+	<div
+		class="container mt-4">
+		<!-- Conteneur pour les Graphiques -->
+		<div
+			class="row">
+			<!-- Affichage du chiffre d'affaires total -->
+			<div class="col-md-4">
+				<h2 class="text-center mb-4">Chiffre d'affaires</h2><br>
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title text-center">Chiffre d'affaires total</h5>
+						<div class="text-center mb-3">
+							<i class="fas fa-chart-line fa-4x"></i>
+						</div>
+						<p class="lead text-center">{{ chiffreAffaires }}
+							€</p>
+					</div>
+				</div>
+			</div>
+			<!-- Graphique pour 'Chiffre d'affaires par mois' -->
+			{# <div class="col-md-4">
+							<h2 class="text-center mb-2">Chiffre d'affaires par mois</h2>
+							<div class="mb-2">
+								<label for="chiffreAffairesChartType">Type de graphique</label>
+								<select id="chiffreAffairesChartType" class="form-control" onchange="changeChartType('chiffreAffairesChart')">
+									<option value="line">Ligne</option>
+									<option value="bar">Barre</option>
+								</select>
+							</div>
+							<canvas id="chiffreAffairesChart"></canvas>
+						</div> #}
+			{# tbleau pure #}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart;
+				<div class="col-md-6"> <h2 class="text-center mb-2">Chiffres d'affaires par mois</h2>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">Mois</th>
+								<th scope="col" class="text-right">Chiffres d'affaires (€)</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for salesData in chiffreAffairesParDate %}
+								<tr>
+									<td>{{ salesData.monthYear }}</td>
+									<td class="text-right">{{ salesData.totalSales }}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 
-    function createChart(data, chartType) {
-        if (myChart) {
-            myChart.destroy();
-        }
+			{# fin tableau #}
+			<div
+				class="container mt-4">
+				<!-- Conteneur pour les Graphiques -->
+				<div
+					class="row">
+					<!-- Graphique pour 'Ventes par type d'opération' -->
+					<div class="col-md-4">
+						<h2 class="text-center mb-2">Ventes par type d'opération</h2>
+						<div class="mb-2">
+							<label for="operationsChartType">Type de graphique</label>
+							<select id="operationsChartType" class="form-control" onchange="changeChartType('operationsChart')">
+								<option value="pie">Camembert</option>
+								<option value="bar">Barre</option>
+								<option value="doughnut">Donuts</option>
+							</select>
+						</div>
+						<canvas id="operationsChart"></canvas>
+					</div>
+					<!-- Graphique pour 'Missions par statut' -->
+					<div class="col-md-4">
+						<h2 class="text-center mb-2">Missions par statut</h2>
+						<div class="mb-2">
+							<label for="missionStatusChartType">Type de graphique</label>
+							<select id="missionStatusChartType" class="form-control" onchange="changeChartType('missionStatusChart')">
+								<option value="pie">Camembert</option>
+								<option value="bar">Barre</option>
+								<option value="doughnut">Donuts</option>
+							</select>
+						</div>
+						<canvas id="missionStatusChart"></canvas>
+					</div>
+					<!-- Graphique pour 'Missions par salarié' -->
+					<div class="col-md-4">
+						<h2 class="text-center mb-2">Missions par salarié</h2>
+						<div class="mb-2">
+							<label for="salariesChartType">Type de graphique</label>
+							<select id="salariesChartType" class="form-control" onchange="changeChartType('salariesChart')">
+								<option value="pie">Camembert</option>
+								<option value="bar">Barre</option>
+								<option value="doughnut">Donuts</option>
+							</select>
+						</div>
+						<canvas id="salariesChart"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-        myChart = new Chart(ctx, {
-            type: chartType,
-            data: data,
-            options: {
-                responsive: true,
-                legend: {
-                    display: chartType !== 'line',
-                    position: 'top',
-                },
-                scales: chartType !== 'pie' && chartType !== 'doughnut' ? {
-                    yAxes: [{ 
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                } : {}
-            }
-        });
-    }
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script>
+		var charts = {};
 
-    function changeChartType() {
-        var chartTypeGraph = document.getElementById('chartTypeGraph').value;
-        var chartType = document.getElementById('chartType').value;
-        var data;
+function createChart(ctx, data, chartType) {
+if (charts[ctx.canvas.id]) {
+charts[ctx.canvas.id].destroy();
+}
 
-        switch (chartType) {
-            case 'operations':
-            data = {
-                labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}", {% endfor %}],
-                datasets: [{
-                    label: 'Nombre d\'opérations',
-                    data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }}, {% endfor %}],
-                    backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-                    borderColor: ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-                    borderWidth: 1
-                }]
-            };
-            break;
-            case 'salaries':
-               var labels = [];
-               var dataValues = [];
-               {% for stat in statistiquesSalaries %}
-                   labels.push("{{ stat.name }}");
-                   dataValues.push({{ stat.numMissions }});
-               {% else %}
-                   labels.push("Aucun Salarié");
-                   dataValues.push(0);
-               {% endfor %}
+charts[ctx.canvas.id] = new Chart(ctx, {
+type: chartType,
+data: data,
+options: {
+responsive: true,
+legend: {
+display: chartType !== 'line',
+position: 'top'
+},
+scales: chartType !== 'pie' && chartType !== 'doughnut' ? {
+yAxes: [
+{
+ticks: {
+beginAtZero: true
+}
+}
+]
+} : {}
+}
+});
+}
 
-               data = {
-                   labels: labels,
-                   datasets: [{
-                       label: 'Nombre de missions',
-                       data: dataValues,
-                       backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-                       borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
-                       borderWidth: 1
-                   }]
-               };
-               break;
+// Fonction pour changer le type de graphique
+function changeChartType(chartId) {
+var chartType = document.getElementById(chartId + 'Type').value;
+createChart(document.getElementById(chartId).getContext('2d'), getChartData(chartId), chartType);
+}
 
-            case 'chiffreAffaires':
-                var labels = [];
-                var salesData = [];
-                {% for sale in chiffreAffairesParDate %}
-                    labels.push("{{ sale.monthYear }}");
-                    salesData.push({{ sale.totalSales }});
-                {% endfor %}
-                data = {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Chiffre d\'affaires par mois (€)',
-                        data: salesData,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    }]
-                };
-    break;
-            default:
-                data = {};
-        }
+// Fonction pour récupérer les données du graphique en fonction de l'ID du graphique
+function getChartData(chartId) {
+switch (chartId) {
+case 'operationsChart':
+return getOperationsChartData();
+case 'salariesChart':
+return getSalariesChartData();
+case 'chiffreAffairesChart':
+return getChiffreAffairesChartData();
+case 'missionStatusChart':
+return getMissionStatusChartData();
+default:
+return {};
+}
+}
 
-        createChart(data, chartTypeGraph);
-        document.getElementById('chartTitle').innerText = getTitleText(chartType);
-    }
+// Fonction pour récupérer les données des opérations pour le graphique
+function getOperationsChartData() {
+return {
+labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}",{% endfor %}],
+datasets: [
+{
+label: 'Nombre d\'opérations',
+data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }},{% endfor %}],
+backgroundColor: [
+'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
+],
+borderColor: [
+'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
+],
+borderWidth: 1
+}
+]
+};
+}
 
-    function getTitleText(chartType) {
-        switch (chartType) {
-            case 'operations':
-                return 'Ventes par Type d\'Opération';
-            case 'salaries':
-                return 'Missions par Salarié';
-            case 'chiffreAffaires':
-                return 'Chiffre d\'Affaires par Date';
-            default:
-                return 'Statistiques';
-        }
-    }
+// Fonction pour récupérer les données des salariés pour le graphique
+function getSalariesChartData() {
+var labels = [];
+var dataValues = [];{% for stat in statistiquesSalaries %}labels.push("{{ stat.name }}");
+dataValues.push({{ stat.numMissions }});
+{% else %}labels.push("Aucun Salarié");
+dataValues.push(0);{% endfor %}return {
+labels: labels,
+datasets: [
+{
+label: 'Nombre de missions',
+data: dataValues,
+backgroundColor: [
+'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'
+],
+borderColor: [
+'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'
+],
+borderWidth: 1
+}
+]
+};
+}
 
-    document.addEventListener('DOMContentLoaded', function() {
-        changeChartType();
-    });
-</script>
+// Fonction pour récupérer les données du chiffre d'affaires pour le graphique
+function getChiffreAffairesChartData() {
+var labels = [];
+var salesData = [];{% for sale in chiffreAffairesParDate %}labels.push("{{ sale.monthYear }}");
+salesData.push({{ sale.totalSales }});{% endfor %}return {
+labels: labels,
+datasets: [
+{
+label: 'Chiffre d\'affaires par mois (€)',
+data: salesData,
+backgroundColor: 'rgba(75, 192, 192, 0.2)',
+borderColor: 'rgba(75, 192, 192, 1)',
+borderWidth: 1,
+fill: false
+}
+]
+};
+}
+// Fonction pour récupérer les données du statut des missions pour le graphique
+function getMissionStatusChartData() {
+return {
+labels: [{% for stat in missionStatusStatistics %}"{{ stat.status }}",{% endfor %}],
+datasets: [
+{
+label: 'Nombre de missions',
+data: [{% for stat in missionStatusStatistics %}{{ stat.numMissions }},{% endfor %}],
+backgroundColor: [
+'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
+],
+borderColor: [
+'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
+],
+borderWidth: 1
+}
+]
+};
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+changeChartType('operationsChart');
+changeChartType('salariesChart');
+changeChartType('chiffreAffairesChart');
+changeChartType('missionStatusChart');
+});
+	</script>
 {% endblock %}

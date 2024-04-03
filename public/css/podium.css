@@ -1,0 +1,26 @@
+/* CSS pour le podium des salariés */
+.podium {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.podium-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 80%;
+}
+
+.position {
+    font-size: 24px;
+}
+
+.name {
+    font-size: 18px;
+}
+
+.num-operations {
+    font-size: 18px;
+}

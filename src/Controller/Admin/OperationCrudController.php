@@ -493,6 +493,7 @@ public function delete(AdminContext $context)
         
         // Logique pour accepter l'opération
         $operation->setStatus('Terminée');
+        $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
 
