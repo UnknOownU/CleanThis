@@ -74,6 +74,7 @@ class OperationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    
     public function findMissionStatusStatistics(): array
     {
         return $this->createQueryBuilder('o')
@@ -104,6 +105,27 @@ public function getSalesByDate(): array
         ->getResult();
 }
 
+// Compte opérations terminées
+public function countOperationsTerminees()
+{
+    return $this->createQueryBuilder('o')
+        ->select('COUNT(o.id)')
+        ->andWhere('o.status = :status')
+        ->setParameter('status', 'Terminée')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+// Compte opérations en cours
+public function countMissionsEnCours()
+{
+    return $this->createQueryBuilder('o')
+        ->select('COUNT(o.id)')
+        ->andWhere('o.status = :status')
+        ->setParameter('status', 'En cours')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
 public function getPodiumEmployees(): array
 {
     $qb = $this->createQueryBuilder('o');

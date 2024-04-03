@@ -11,7 +11,7 @@
 			class="row">
 			<!-- Affichage du chiffre d'affaires total -->
 			<div class="col-md-4">
-				<h2 class="text-center mb-4">{{ "Chiffre d'affaires"|trans }}</h2><br>
+				
 				<div class="card">
 					<div class="card-body">
 						<h5 class="card-title text-center">{{ "Chiffre d'affaires total"|trans }}</h5>
@@ -23,8 +23,98 @@
 					</div>
 				</div>
 			</div>
-			<!-- Graphique pour 'Chiffre d'affaires par mois' -->
-			{# <div class="col-md-4">
+			<div class="col-md-4">
+				
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title text-center">{{ "Opérations en cours"|trans }}</h5>
+						<div class="text-center mb-3">
+							<i class="fas fa-hourglass-half fa-4x"></i>
+						</div>
+						<p class="lead text-center">{{  totalMissionsEnCours  }}
+							En cours</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+			
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title text-center">{{ "Opérations terminées"|trans }}</h5>
+						<div class="text-center mb-3">
+							<i class="fas fa-check fa-4x"></i>
+						</div>
+						<p class="lead text-center">{{ operationsTerminees }}
+							Terminées</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+			
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title text-center">{{ "Opérations terminées"|trans }}</h5>
+						<div class="text-center mb-3">
+							<i class="fas fa-check fa-4x"></i>
+						</div>
+						<p class="lead text-center">{{ operationsTerminees }}
+							Terminées</p>
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="container mt-4">
+				<!-- Conteneur pour les Graphiques -->
+				<div
+					class="row">
+					<!-- Graphique pour 'Ventes par type d'opération' -->
+					<div class="mps col-md-4">
+						<h2 class="text-center mb-2">{{ "Type d'opération"|trans }}</h2>
+						<div class="mb-2">
+							<label for="operationsChartType">{{ "Type de graphique"|trans }}</label>
+							<select id="operationsChartType" class="form-control" onchange="changeChartType('operationsChart')">
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
+							</select>
+						</div>
+						<canvas id="operationsChart"></canvas>
+					</div>
+					<!-- Graphique pour 'Missions par statut' -->
+					<div class="mps col-md-4 ">
+						<h2 class="text-center mb-2 ">{{ "Missions par statut"|trans }}</h2>
+						<div class="mb-2">
+							<label for="missionStatusChartType">{{ "Type de graphique"|trans }}</label>
+							<select id="missionStatusChartType" class="form-control" onchange="changeChartType('missionStatusChart')">
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
+							</select>
+						</div>
+						<canvas id="missionStatusChart"></canvas>
+					</div>
+					<!-- Graphique pour 'Missions par salarié' -->
+					<div class="col-md-4">
+						<h2 class="text-center mb-2">{{ "Missions par salarié"|trans }}</h2>
+						<div class="mb-2">
+							<label for="salariesChartType">{{ "Type de graphique"|trans }}</label>
+							<select id="salariesChartType" class="form-control" onchange="changeChartType('salariesChart')">
+								<option value="pie">{{ "Camembert"|trans }}</option>
+								<option value="bar">{{ "Barre"|trans }}</option>
+								<option value="doughnut">{{ "Donuts"|trans }}</option>
+							</select>
+						</div>
+						<canvas id="salariesChart"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+				<!-- Graphique pour 'Chiffre d'affaires par mois' -->
+			<div class="col-md-4">
 							<h2 class="text-center mb-2">Chiffre d'affaires par mois</h2>
 							<div class="mb-2">
 								<label for="chiffreAffairesChartType">Type de graphique</label>
@@ -34,10 +124,14 @@
 								</select>
 							</div>
 							<canvas id="chiffreAffairesChart"></canvas>
-						</div> #}
-			{# tbleau pure #}
+						</div> 
+						
+			{# tbleau pure#}
 
-				<div class="col-md-6"> <h2 class="text-center mb-2">{{ "Chiffres d'affaires par mois"|trans }}</h2>
+
+			{# fin tableau #}
+
+					<div class="col-md-6"> <h2 class="text-center mb-2">{{ "Chiffres d'affaires par mois"|trans }}</h2>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped">
 						<thead class="thead-dark">
@@ -57,55 +151,7 @@
 					</table>
 				</div>
 			</div>
-			{# fin tableau #}
-			<div
-				class="container mt-4">
-				<!-- Conteneur pour les Graphiques -->
-				<div
-					class="row">
-					<!-- Graphique pour 'Ventes par type d'opération' -->
-					<div class="col-md-4">
-						<h2 class="text-center mb-2">{{ "Ventes par type d'opération"|trans }}</h2>
-						<div class="mb-2">
-							<label for="operationsChartType">{{ "Type de graphique"|trans }}</label>
-							<select id="operationsChartType" class="form-control" onchange="changeChartType('operationsChart')">
-								<option value="pie">{{ "Camembert"|trans }}</option>
-								<option value="bar">{{ "Barre"|trans }}</option>
-								<option value="doughnut">{{ "Donuts"|trans }}</option>
-							</select>
-						</div>
-						<canvas id="operationsChart"></canvas>
-					</div>
-					<!-- Graphique pour 'Missions par statut' -->
-					<div class="col-md-4">
-						<h2 class="text-center mb-2">{{ "Missions par statut"|trans }}</h2>
-						<div class="mb-2">
-							<label for="missionStatusChartType">{{ "Type de graphique"|trans }}</label>
-							<select id="missionStatusChartType" class="form-control" onchange="changeChartType('missionStatusChart')">
-								<option value="pie">{{ "Camembert"|trans }}</option>
-								<option value="bar">{{ "Barre"|trans }}</option>
-								<option value="doughnut">{{ "Donuts"|trans }}</option>
-							</select>
-						</div>
-						<canvas id="missionStatusChart"></canvas>
-					</div>
-					<!-- Graphique pour 'Missions par salarié' -->
-					<div class="col-md-4">
-						<h2 class="text-center mb-2">Missions par salarié</h2>
-						<div class="mb-2">
-							<label for="salariesChartType">Type de graphique</label>
-							<select id="salariesChartType" class="form-control" onchange="changeChartType('salariesChart')">
-								<option value="pie">Camembert</option>
-								<option value="bar">Barre</option>
-								<option value="doughnut">Donuts</option>
-							</select>
-						</div>
-						<canvas id="salariesChart"></canvas>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+			
 
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script>
@@ -138,6 +184,28 @@ beginAtZero: true
 });
 }
 
+function getOperationsTermineesChartData() {
+    var labels = [];
+    var dataValues = [];
+    
+    // Boucle à travers les statistiques des opérations terminées pour récupérer les données
+    {% for operation in operationsTerminees %}
+        labels.push("{{ operation.name }}");
+        dataValues.push(1); // Ajoutez simplement 1 pour chaque opération terminée
+    {% endfor %}
+    
+    return {
+        labels: labels,
+        datasets: [{
+            label: 'Nombre d\'opérations terminées',
+            data: dataValues,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            fill: false
+        }]
+    };
+}
 // Fonction pour changer le type de graphique
 function changeChartType(chartId) {
 var chartType = document.getElementById(chartId + 'Type').value;
@@ -146,39 +214,36 @@ createChart(document.getElementById(chartId).getContext('2d'), getChartData(char
 
 // Fonction pour récupérer les données du graphique en fonction de l'ID du graphique
 function getChartData(chartId) {
-switch (chartId) {
-case 'operationsChart':
-return getOperationsChartData();
-case 'salariesChart':
-return getSalariesChartData();
-case 'chiffreAffairesChart':
-return getChiffreAffairesChartData();
-case 'missionStatusChart':
-return getMissionStatusChartData();
-default:
-return {};
-}
-}
+	switch (chartId) {
+		case 'operationsChart':
+			return getOperationsChartData();
+		case 'salariesChart':
+			return getSalariesChartData();
+		case 'chiffreAffairesChart':
+			return getChiffreAffairesChartData();
+		case 'missionStatusChart':
+			return getMissionStatusChartData();
+		default:
+		return {};
+	}}
 
 // Fonction pour récupérer les données des opérations pour le graphique
 function getOperationsChartData() {
-return {
-labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}",{% endfor %}],
-datasets: [
-{
-label: 'Nombre d\'opérations',
-data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }},{% endfor %}],
-backgroundColor: [
-'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
-],
-borderColor: [
-'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
-],
-borderWidth: 1
-}
-]
-};
-}
+	return {
+		labels: [{% for stat in statistiquesOperations %}"{{ stat.type }}",{% endfor %}],
+		datasets: [
+			{
+				label: 'Nombre d\'opérations',
+				data: [{% for stat in statistiquesOperations %}{{ stat.numOperations }},{% endfor %}],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
+					],
+				borderColor: [
+					'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
+					],
+				borderWidth: 1
+				}]};
+		}
 
 // Fonction pour récupérer les données des salariés pour le graphique
 function getSalariesChartData() {
@@ -203,51 +268,98 @@ borderWidth: 1
 ]
 };
 }
-
+// Fonction pour récupérer les données des missions en cours pour le graphique
+function getMissionsEnCoursChartData() {
+    var labels = [];
+    var dataValues = [];
+    
+    // Boucle à travers les statistiques des missions pour récupérer les missions en cours
+    {% for mission in missionsEnCours %}
+        labels.push("{{ mission.name }}");
+        dataValues.push(1); // Ajoutez simplement 1 pour chaque mission en cours, sans utiliser la durée
+    {% endfor %}
+    
+    return {
+        labels: labels,
+        datasets: [{
+            label: 'Nombre de missions en cours',
+            data: dataValues,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            fill: false
+        }]
+    };
+}
 
 // Fonction pour récupérer les données du chiffre d'affaires pour le graphique
 function getChiffreAffairesChartData() {
-var labels = [];
-var salesData = [];{% for sale in chiffreAffairesParDate %}labels.push("{{ sale.monthYear }}");
-salesData.push({{ sale.totalSales }});{% endfor %}return {
-labels: labels,
-datasets: [
-{
-label: 'Chiffre d\'affaires par mois (€)',
-data: salesData,
-backgroundColor: 'rgba(75, 192, 192, 0.2)',
-borderColor: 'rgba(75, 192, 192, 1)',
-borderWidth: 1,
-fill: false
-}
-]
-};
-}
+	var labels = [];
+	var salesData = [];{% for sale in chiffreAffairesParDate %}labels.push("{{ sale.monthYear }}");
+		salesData.push({{ sale.totalSales }});{% endfor %} return {
+		labels: labels,
+		datasets: [
+			{
+				label: 'Chiffre d\'affaires par mois (€)',
+				data: salesData,
+				backgroundColor: 'rgba(75, 192, 192, 0.2)',
+				borderColor: 'rgba(75, 192, 192, 1)',
+				borderWidth: 1,
+				fill: false
+				}]};
+		}
+
 // Fonction pour récupérer les données du statut des missions pour le graphique
 function getMissionStatusChartData() {
-return {
-labels: [{% for stat in missionStatusStatistics %}"{{ stat.status }}",{% endfor %}],
-datasets: [
-{
-label: 'Nombre de missions',
-data: [{% for stat in missionStatusStatistics %}{{ stat.numMissions }},{% endfor %}],
-backgroundColor: [
-'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
-],
-borderColor: [
-'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
-],
-borderWidth: 1
-}
-]
-};
-}
+	return {
+		labels: [{% for stat in missionStatusStatistics %}"{{ stat.status }}",{% endfor %}],
+		datasets: [
+			{
+				label: 'Nombre de missions',
+				data: [{% for stat in missionStatusStatistics %}{{ stat.numMissions }},{% endfor %}],
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'
+					],
+				borderColor: [
+					'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'
+					],
+				borderWidth: 1
+				}]};
+		}
 
 document.addEventListener('DOMContentLoaded', function () {
-changeChartType('operationsChart');
-changeChartType('salariesChart');
-changeChartType('chiffreAffairesChart');
-changeChartType('missionStatusChart');
+    changeChartType('operationsChart');
+    changeChartType('salariesChart');
+    changeChartType('chiffreAffairesChart');
+    changeChartType('missionStatusChart');
+
+    createChart(document.getElementById('missionsEnCoursChart').getContext('2d'), getMissionsEnCoursChartData(), 'bar');
 });
 	</script>
+
+	
+<style>
+.card{
+	background-color: #6fccc44b;
+	border-radius: 15px;
+	color: #7cb8eb;
+
+}
+.col-md-4{
+	border-radius: 15px;
+	width: 25%;
+}
+
+.mps{
+	margin: 50px;
+	
+}
+
+
+
+</style>
+=======
+	});
+
+</script>
 {% endblock %}

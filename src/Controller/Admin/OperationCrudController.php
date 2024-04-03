@@ -329,51 +329,68 @@ public function delete(AdminContext $context)
     
     
     public function configureActions(Actions $actions): Actions {
+        $security = $this->security; // Utiliser la propriété de classe
+    
+        // Définir les actions avec leurs icônes et les rendre visibles selon les conditions de sécurité
         $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
             ->displayIf(function (Operation $operation) {
-                return ($this->isGranted('ROLE_ADMIN') || 
-                $this->isGranted('ROLE_SENIOR') || 
-                $this->isGranted('ROLE_APPRENTI')) 
-                && $operation->getStatus() === 'En attente de Validation';
+                return $operation->getStatus() === 'En attente de Validation';
             })
             ->linkToCrudAction('acceptOperation');
+    
         $declineAction = Action::new('decline', 'Refuser', 'fa fa-times')
             ->displayIf(function (Operation $operation) {
-                return ($this->isGranted('ROLE_ADMIN') || 
-                $this->isGranted('ROLE_SENIOR') || 
-                $this->isGranted('ROLE_APPRENTI')) 
-                && $operation->getStatus() === 'En attente de Validation';
+                return $operation->getStatus() === 'En attente de Validation';
             })
             ->linkToCrudAction('declineOperation');
-        $downloadInvoice = Action::new('downloadInvoice', 'Télécharger Facture', 'fa fa-download')
-            ->linkToRoute('operation_download_invoice', function (Operation $operation) {
-                return ['id' => $operation->getId()];
+    
+        $finishAction = Action::new('finish', 'Terminer', 'fa fa-flag-checkered')
+            ->displayIf(function (Operation $operation) {
+                return $operation->getStatus() === 'En cours';
             })
-            ->displayIf(static function (Operation $operation) {
+            ->linkToCrudAction('finishOperation');
+    
+        $archiveAction = Action::new('archive', 'Archiver', 'fa fa-archive')
+            ->displayIf(function (Operation $operation) use ($security) {
                 return $operation->getStatus() === 'Terminée';
-            });
-            $finishAction = Action::new('terminée', 'Terminer', 'fa fa-check')
-            ->displayIf(function (Operation $operation) {
-                return ($this->isGranted('ROLE_ADMIN') || 
-                $this->isGranted('ROLE_SENIOR') || 
-                $this->isGranted('ROLE_APPRENTI')) 
-                && $operation->getStatus() === 'En cours';
-            })
-            ->linkToCrudAction('finishOperation'); 
-            $archiveAction = Action::new('archivée', 'Archiver', 'fa fa-history')
-            ->displayIf(function (Operation $operation) {
-                $user = $this->security->getUser();
-                return $this->isGranted('ROLE_ADMIN') || ($operation->getCustomer() === $user && $operation->getStatus() === 'Terminée');
             })
             ->linkToCrudAction('archiveOperation');
+    
+        $downloadInvoice = Action::new('downloadInvoice', 'Télécharger Facture', 'fa fa-download')
+            ->displayIf(static function (Operation $operation) {
+                return $operation->getStatus() === 'Terminée';
+            })
+            ->linkToRoute('operation_download_invoice', function (Operation $operation) {
+                return ['id' => $operation->getId()];
+            });
+    
+        $changeOperatorAction = Action::new('changeOperator', 'Changer Opérateur', 'fa fa-exchange-alt')
+            ->displayIf(static function (Operation $operation) use ($security) {
+                return $security->isGranted('ROLE_ADMIN');
+            })
+            ->linkToRoute('admin_change_operator', function (Operation $operation) {
+                return ['id' => $operation->getId()];
+            });
+    
+    // Mettre à jour l'action "Modifier" pour ajouter une icône
+    $actions->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
+        return $action->setIcon('fa fa-edit')->setLabel('Modifier');
+    });
+    // Mettre à jour l'action "Supprimer" pour ajouter une icône
+    $actions->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) {
+        return $action->setIcon('fa fa-trash')->setLabel('Supprimer');
+    });
+    
+        // Ajouter toutes les actions à la page index
         return $actions
+            ->add(Crud::PAGE_INDEX, $changeOperatorAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
             ->add(Crud::PAGE_INDEX, $archiveAction)
             ->add(Crud::PAGE_INDEX, $finishAction)
             ->add(Crud::PAGE_INDEX, $declineAction)
-            ->add(Crud::PAGE_INDEX, $acceptAction)
-            ;
+            ->add(Crud::PAGE_INDEX, $acceptAction);
     }
+
     
     /**
      * Méthode personnalisée pour l'action "Accepter".
@@ -425,7 +442,7 @@ public function delete(AdminContext $context)
                 }
             }
         }
-        
+
     
         // Logique pour accepter l'opération
         $operation->setStatus('En cours');
