@@ -63,6 +63,7 @@ class OperationCrudController extends AbstractCrudController {
         ]);
     }
     
+    
 public function delete(AdminContext $context)
 {
     $operation = $context->getEntity()->getInstance();
