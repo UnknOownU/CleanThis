@@ -53,6 +53,26 @@ public function add(User $user,bool $flush=false):void
         $this->getEntityManager()->flush();
     }
 
+    public function findByRoles(array $roles): array
+    {
+        $qb = $this->createQueryBuilder('u');
+    
+        $qb->where(
+            $qb->expr()->orX(
+                ...array_map(
+                    fn($role) => $qb->expr()->like('u.roles', ":role_$role"),
+                    $roles
+                )
+            )
+        );
+    
+        foreach ($roles as $role) {
+            $qb->setParameter("role_$role", '%"'.$role.'"%');
+        }
+    
+        return $qb->getQuery()->getResult();
+    }
+    
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
