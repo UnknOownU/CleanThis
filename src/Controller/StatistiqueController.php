@@ -13,7 +13,7 @@ class StatistiqueController extends AbstractController
     public function statistiques(OperationRepository $operationRepository): Response
     {
 
-        
+        $chiffreAffairesMoisEnCours = $operationRepository->findSalesForCurrentMonth();
          // Récupérer les missions en coursdes salariés 
         $totalMissionsEnCours = $operationRepository->countMissionsEnCours();
 
@@ -53,6 +53,7 @@ class StatistiqueController extends AbstractController
             'podiumEmployees' => $podiumEmployees,
             'missionsEnCours' => $missionsEnCours,
             'operationsTerminees' => $operationsTerminees,
+            'chiffreAffairesMoisEnCours' => $chiffreAffairesMoisEnCours,
         ]);
     }
 }

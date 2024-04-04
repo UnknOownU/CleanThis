@@ -73,7 +73,19 @@ class OperationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
+    public function findSalesForCurrentMonth(): ?float
+    {
+        $startOfMonth = new \DateTime('first day of this month');
+        $endOfMonth = new \DateTime('last day of this month');
+    
+        return $this->createQueryBuilder('o')
+            ->select('SUM(o.price) AS totalSales')
+            ->andWhere('o.created_at BETWEEN :startOfMonth AND :endOfMonth')
+            ->setParameter('startOfMonth', $startOfMonth)
+            ->setParameter('endOfMonth', $endOfMonth)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     
     public function findMissionStatusStatistics(): array
     {
