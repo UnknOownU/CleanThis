@@ -118,7 +118,7 @@
 <div class="row">
     <div class="col-md-12 text-center">
         <!-- Titre -->
-        <h2>Chiffre d'affaires par mois</h2>
+        <h2{{ "Chiffre d'affaires par mois"|trans }}></h2>
     </div>
 </div>
 <div class="row">
@@ -126,10 +126,10 @@
         <!-- Graphique -->
         <div class="cam">
             <div class="mb-2">
-                <label for="chiffreAffairesChartType">Type de graphique</label>
+                <label for="chiffreAffairesChartType">{{ "Type de graphique"|trans }}</label>
                 <select id="chiffreAffairesChartType" class="form-control" onchange="changeChartType('chiffreAffairesChart')">
-                    <option value="line">Ligne</option>
-                    <option value="bar">Barre</option>
+                    <option value="line">{{ "Ligne"|trans }}</option>
+                    <option value="bar">{{ "Barre"|trans }}</option>
                 </select>
             </div>
             <canvas id="chiffreAffairesChart"></canvas>
