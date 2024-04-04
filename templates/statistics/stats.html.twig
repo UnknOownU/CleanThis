@@ -115,49 +115,17 @@
 	</div>
 
 				<!-- Graphique pour 'Chiffre d'affaires par mois' -->
-<div class="row">
-    <div class="col-md-12 text-center">
-        <!-- Titre -->
-        <h2>Chiffre d'affaires par mois</h2>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <!-- Graphique -->
-        <div class="cam">
-            <div class="mb-2">
-                <label for="chiffreAffairesChartType">Type de graphique</label>
-                <select id="chiffreAffairesChartType" class="form-control" onchange="changeChartType('chiffreAffairesChart')">
-                    <option value="line">Ligne</option>
-                    <option value="bar">Barre</option>
-                </select>
-            </div>
-            <canvas id="chiffreAffairesChart"></canvas>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <!-- Tableau -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">{{ "Mois"|trans }}</th>
-                        <th scope="col" class="text-right">{{ "Chiffres d'affaires"|trans }} (€)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for salesData in chiffreAffairesParDate %}
-                        <tr>
-                            <td>{{ salesData.monthYear }}</td>
-                            <td class="text-right">{{ salesData.totalSales }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-						
+			{# <div class="col-md-4">
+							<h2 class="text-center mb-2">Chiffre d'affaires par mois</h2>
+							<div class="mb-2">
+								<label for="chiffreAffairesChartType">Type de graphique</label>
+								<select id="chiffreAffairesChartType" class="form-control" onchange="changeChartType('chiffreAffairesChart')">
+									<option value="line">Ligne</option>
+									<option value="bar">Barre</option>
+								</select>
+							</div>
+							<canvas id="chiffreAffairesChart"></canvas>
+						</div>  #}	
 			{# tbleau pure#}
 
 
@@ -395,8 +363,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 </style>
-=======
-	});
 
 </script>
 {% endblock %}
