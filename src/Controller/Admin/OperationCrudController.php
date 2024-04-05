@@ -224,7 +224,7 @@ public function delete(AdminContext $context)
             
         } else {
             if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR') && Crud::PAGE_INDEX === $pageName))
- {
+        {
             return [
                 FormField::addTab('Mission'),
                 DateTimeField::new('created_at', 'Créé le')
@@ -333,7 +333,8 @@ public function delete(AdminContext $context)
         $security = $this->security; // Utiliser la propriété de classe
     
         // Définir les actions avec leurs icônes et les rendre visibles selon les conditions de sécurité
-        $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR'))) {
+             $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
             ->displayIf(function (Operation $operation) {
                 return $operation->getStatus() === 'En attente de Validation';
             })
@@ -350,7 +351,17 @@ public function delete(AdminContext $context)
                 return $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation');
-    
+
+            $changeOperatorAction = Action::new('changeOperator', 'Changer Opérateur', 'fa fa-exchange-alt')
+            ->displayIf(static function (Operation $operation) use ($security) {
+                return $security->isGranted('ROLE_ADMIN');
+            })
+            ->linkToRoute('admin_change_operator', function (Operation $operation) {
+                return ['id' => $operation->getId()];
+            });
+        } 
+       
+        //Début des actions disponibles également pour customer
         $archiveAction = Action::new('archive', 'Archiver', 'fa fa-archive')
             ->displayIf(function (Operation $operation) use ($security) {
                 return $operation->getStatus() === 'Terminée';
@@ -365,13 +376,7 @@ public function delete(AdminContext $context)
                 return ['id' => $operation->getId()];
             });
     
-        $changeOperatorAction = Action::new('changeOperator', 'Changer Opérateur', 'fa fa-exchange-alt')
-            ->displayIf(static function (Operation $operation) use ($security) {
-                return $security->isGranted('ROLE_ADMIN');
-            })
-            ->linkToRoute('admin_change_operator', function (Operation $operation) {
-                return ['id' => $operation->getId()];
-            });
+
     
     // Mettre à jour l'action "Modifier" pour ajouter une icône
     $actions->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
@@ -382,7 +387,9 @@ public function delete(AdminContext $context)
         return $action->setIcon('fa fa-trash')->setLabel('Supprimer');
     });
     
-        // Ajouter toutes les actions à la page index
+        // Ajouter toutes les actions à la page index selon rôle
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR'))) {
+
         return $actions
             ->add(Crud::PAGE_INDEX, $changeOperatorAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
@@ -390,7 +397,11 @@ public function delete(AdminContext $context)
             ->add(Crud::PAGE_INDEX, $finishAction)
             ->add(Crud::PAGE_INDEX, $declineAction)
             ->add(Crud::PAGE_INDEX, $acceptAction);
-    }
+            } else {
+                return $actions
+                ->add(Crud::PAGE_INDEX, $downloadInvoice)
+                ->add(Crud::PAGE_INDEX, $archiveAction);
+            }}
 
     
     /**
