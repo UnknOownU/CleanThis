@@ -2,11 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
+use App\Service\InvoiceService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +34,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OperationCrudController extends AbstractCrudController {
@@ -47,47 +48,42 @@ class OperationCrudController extends AbstractCrudController {
     public static function getEntityFqcn(): string {
         return Operation::class;
     }
+    
     public function edit(AdminContext $context)
     {
         $operation = $context->getEntity()->getInstance();
-        $user = $this->getUser();
-    
-        if (!$operation instanceof Operation || ($operation->getCustomer() !== $user && !$this->isGranted('ROLE_ADMIN'))) {
+        $currentUser = $this->security->getUser();
+        
+        if (!$operation instanceof Operation || 
+            ($operation->getCustomer() !== $currentUser && !$this->isGranted('ROLE_ADMIN'))) {
             $this->addFlash('error', 'Vous n\'avez pas le droit de modifier cette opération.');
-            return $this->redirectToRoute('admin'); // Assurez-vous que la route 'admin' est correcte
+            return $this->redirectToRoute('admin');
         }
     
-        // Assurez-vous que vous avez accès à Twig ou injectez le service Twig
         return $this->render('operation_crud/edit.html.twig', [
             'operation' => $operation
         ]);
     }
     
     
-public function delete(AdminContext $context)
-{
-    $operation = $context->getEntity()->getInstance();
-    if (!$operation instanceof Operation) {
-        throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
-    }
-
-    // Vérifier les droits de l'utilisateur sur l'opération
-    $this->denyAccessUnlessGranted('DELETE', $operation);
-
-    return parent::delete($context);
-}
-
     
-    protected function initialize(Request $request): void
+    
+    public function delete(AdminContext $context)
     {
-        parent::initialize($request);
+        $operation = $context->getEntity()->getInstance();
+        $currentUser = $this->security->getUser();
     
-        $entityId = $request->query->get('entityId');
-        if ($entityId) {
-            $operation = $this->entityManager->getRepository(Operation::class)->find($entityId);
-            $this->denyAccessUnlessGranted('EDIT', $operation);
+        if (!$operation instanceof Operation || 
+            ($operation->getCustomer() !== $currentUser && !$this->isGranted('ROLE_ADMIN'))) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette opération.');
+            return $this->redirectToRoute('admin');
         }
+    
+        return parent::delete($context);
     }
+    
+
+
     
     public function configureCrud(Crud $crud): Crud {
         return $crud
@@ -113,18 +109,20 @@ public function delete(AdminContext $context)
     }
     
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation) {
-            $this->setOperationPrice($entityInstance);
+        if ($entityInstance instanceof Operation && 
+            $entityInstance->getCustomer() !== $this->getUser() && 
+            !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Action non autorisée.');
         }
         parent::persistEntity($entityManager, $entityInstance);
     }
     
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation) {
-            $this->denyAccessUnlessGranted('EDIT', $entityInstance);
-            $this->setOperationPrice($entityInstance);
+        if ($entityInstance instanceof Operation && 
+            $entityInstance->getCustomer() !== $this->getUser() && 
+            !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Action non autorisée.');
         }
-    
         parent::updateEntity($entityManager, $entityInstance);
     }
     
@@ -173,7 +171,7 @@ public function delete(AdminContext $context)
                             return $salarie ? sprintf('%s %s', $salarie->getFirstName(), $salarie->getName()) : 'Non assigné';
                         });
                     
-                $fields[] =ChoiceField::new('status')
+            $fields[] =ChoiceField::new('status')
                         ->setChoices([
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
@@ -334,20 +332,30 @@ public function delete(AdminContext $context)
     
         // Définir les actions avec leurs icônes et les rendre visibles selon les conditions de sécurité
         $acceptAction = Action::new('accept', 'Accepter', 'fa fa-check')
-            ->displayIf(function (Operation $operation) {
-                return $operation->getStatus() === 'En attente de Validation';
+        ->displayIf(function (Operation $operation) use ($security) {
+            return $operation->getStatus() === 'En attente de Validation' &&
+                       ($security->isGranted('ROLE_ADMIN') || 
+                        $security->isGranted('ROLE_SENIOR') || 
+                        $security->isGranted('ROLE_APPRENTI'));
             })
-            ->linkToCrudAction('acceptOperation');
-    
+        ->linkToCrudAction('acceptOperation');
+
+    // Définir l'action 'decline'
         $declineAction = Action::new('decline', 'Refuser', 'fa fa-times')
-            ->displayIf(function (Operation $operation) {
-                return $operation->getStatus() === 'En attente de Validation';
-            })
-            ->linkToCrudAction('declineOperation');
+        ->displayIf(function (Operation $operation) use ($security) {
+            return $operation->getStatus() === 'En attente de Validation' && 
+                        ($security->isGranted('ROLE_ADMIN') || 
+                        $security->isGranted('ROLE_SENIOR') || 
+                        $security->isGranted('ROLE_APPRENTI'));
+})
+        ->linkToCrudAction('declineOperation');
     
         $finishAction = Action::new('finish', 'Terminer', 'fa fa-flag-checkered')
-            ->displayIf(function (Operation $operation) {
-                return $operation->getStatus() === 'En cours';
+            ->displayIf(function (Operation $operation) use ($security) {
+                return $operation->getStatus() === 'En cours'&& 
+                        ($security->isGranted('ROLE_ADMIN') || 
+                        $security->isGranted('ROLE_SENIOR') || 
+                        $security->isGranted('ROLE_APPRENTI')); 
             })
             ->linkToCrudAction('finishOperation');
     
