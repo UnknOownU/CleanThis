@@ -559,23 +559,27 @@ class OperationCrudController extends AbstractCrudController {
 
     public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
         $operation = $context->getEntity()->getInstance();
+        $currentUser = $this->security->getUser();
+    
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
-        
-        // Logique pour accepter l'opération
-        $operation->setStatus('Archivée');
-        $operation->setSalarie($this->security->getUser());
-        $entityManager->flush();
-
-        
-        // Vérifier si le message flash a déjà été affiché dans la session
-        if (!$session->getFlashBag()->has('success')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
-                    return new RedirectResponse('/admin');
-        }
     
-        return new Response('<script>window.location.reload();</script>');
-    } 
+        // Vérifiez si l'utilisateur actuel est le client ou le salarié de l'opération ou s'il a le rôle ADMIN
+        if ($operation->getCustomer() !== $currentUser && 
+            $operation->getSalarie() !== $currentUser && 
+            !$this->isGranted('ROLE_ADMIN')) {
+            // Si non, ajouter un message d'erreur et rediriger
+            $session->getFlashBag()->add('error', 'Vous n\'êtes pas autorisé à archiver cette opération.');
+            return $this->redirectToRoute('admin');
+        }
+        
+        // Logique pour archiver l'opération
+        $operation->setStatus('Archivée');
+        $entityManager->flush();
+    
+        // Ajouter un message de succès
+        $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
+        return new RedirectResponse('/admin');
+    }
 }
