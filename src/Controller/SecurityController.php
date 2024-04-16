@@ -93,7 +93,8 @@ public function check():Response
             UserRepository $userRepository,
             TokenGeneratorInterface $tokenGenerator,
             EntityManagerInterface $entityManager,
-            SendMailService $mail
+            SendMailService $mail,
+            LogsService $logsService
             ): Response
         {
             $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -121,6 +122,17 @@ public function check():Response
                         'password_reset',
                         $context
                     );
+                    // Log forgotten pass
+                    try {
+                        $logsService->postLog([
+                        'loggerName' => 'Operation',
+                        'user' => $user->getEmail(),
+                        'message' => 'User used forgotten pass link',
+                        'level' => 'info'
+                    ]);
+                    } catch (Exception $e) {
+                    }
+                    
                     return $this->redirectToRoute('app_login');
                 }
 
@@ -138,7 +150,8 @@ public function check():Response
         Request $request,
         UserRepository $userRepository,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        LogsService $logsService
         ): Response 
     {
         $user = $userRepository->findOneByResetToken($token);
@@ -158,7 +171,16 @@ public function check():Response
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-
+            // Log new pass
+            try {
+                $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => $user->getEmail(),
+                'message' => 'User set new password from forgotten pass',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+            }
                     return $this->redirectToRoute('app_login');
             }
 

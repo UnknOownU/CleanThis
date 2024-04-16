@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\LogsService;
 use Exception;
 use DateTimeImmutable;
 use App\Service\SendMailService;
@@ -16,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'contact')]
-    public function index(Request $request, MailerInterface $mailer, SendMailService $mail): Response
+    public function index(Request $request, MailerInterface $mailer, SendMailService $mail, LogsService $logsService): Response
     {
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
@@ -75,6 +76,17 @@ class ContactController extends AbstractController
             } catch (Exception $e) {
                 echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
             } 
+
+             // Log edit operation
+             try {
+                $logsService->postLog([
+                'loggerName' => 'Contact',
+                'user' => $volunteerEmail,
+                'message' => 'User send email contact',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+            }
 
             // Redirection vers une page de confirmation ou tout autre traitement après l'envoi du formulaire
             return $this->redirectToRoute('confirmation_page');
