@@ -549,7 +549,7 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer(); 
         if (!$operation) {
@@ -561,6 +561,20 @@ public function delete(AdminContext $context)
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush(); 
+
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+        // Log successful finished operation
+            try {
+                $logsService->postLog([
+                    'loggerName' => 'Operation',
+                    'user' => $salarieMail,
+                    'message' => 'User set operation to finished',
+                    'level' => 'info'
+                ]);
+                } catch (Exception $e) {
+            }
 
       
         // Vérifier si le message flash a déjà été affiché dans la session
@@ -591,7 +605,7 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
     } 
 
-    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
@@ -601,7 +615,19 @@ public function delete(AdminContext $context)
         $operation->setStatus('Archivée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
 
+        // Log successful finished operation
+            try {
+                $logsService->postLog([
+                    'loggerName' => 'Operation',
+                    'user' => $salarieMail,
+                    'message' => 'User archived operation',
+                    'level' => 'info'
+                ]);
+                } catch (Exception $e) {
+            }
         
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {

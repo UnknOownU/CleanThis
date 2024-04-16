@@ -58,7 +58,7 @@ class RegistrationController extends AbstractController
             // Log successful registration
             try {
                 $logsService->postLog([
-                'loggerName' => 'RegistrationController',
+                'loggerName' => 'Registration',
                 'user' => $user->getEmail(),
                 'message' => 'User registered successfully',
                 'level' => 'info'
@@ -77,7 +77,7 @@ class RegistrationController extends AbstractController
         // Log failed registration
         try {
             $logsService->postLog([
-            'loggerName' => 'RegistrationController',
+            'loggerName' => 'Registration',
             'user' => 'N\C',
             'message' => 'User failed at register',
             'level' => 'warning'

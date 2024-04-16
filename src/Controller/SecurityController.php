@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
         // Log successful logout
         try {
             $logsService->postLog([
-            'loggerName' => 'SecurityController',
+            'loggerName' => 'login',
             'user' => 'N\C',
             'message' => 'User logout successfully',
             'level' => 'info'
@@ -125,7 +125,7 @@ public function check():Response
                     // Log forgotten pass
                     try {
                         $logsService->postLog([
-                        'loggerName' => 'Operation',
+                        'loggerName' => 'Security',
                         'user' => $user->getEmail(),
                         'message' => 'User used forgotten pass link',
                         'level' => 'info'
@@ -174,7 +174,7 @@ public function check():Response
             // Log new pass
             try {
                 $logsService->postLog([
-                'loggerName' => 'Operation',
+                'loggerName' => 'Security',
                 'user' => $user->getEmail(),
                 'message' => 'User set new password from forgotten pass',
                 'level' => 'info'
