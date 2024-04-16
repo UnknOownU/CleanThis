@@ -8,6 +8,7 @@ use App\Entity\user;
 use App\Entity\Operation;
 use App\Service\SendMailService;
 use App\Repository\UserRepository;
+use App\Service\LogsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -96,7 +97,7 @@ class AjaxOperationController extends AbstractController
 /**
  * @Route("/ajax/create-operation", name="ajax_create_operation")
  */
-public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security, SendMailService $mail): JsonResponse
+public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security, SendMailService $mail, LogsService $logsService): JsonResponse
 {
     $user = $security->getUser();
 
@@ -123,6 +124,18 @@ public function createOperation(Request $request, EntityManagerInterface $entity
 
         $customer = $operation->getCustomer();
 
+        // Log successful creation
+        try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => $customer->getEmail(),
+                'message' => 'User created operation successfully',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+            }
+
+        //Send mail
         try {
             $mail->send(
                 'no-reply@cleanthis.fr',
@@ -135,8 +148,11 @@ public function createOperation(Request $request, EntityManagerInterface $entity
             );
         } catch (Exception $e) {
         } 
+        
 
         return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
+
+
     } else {
         return $this->json(['status' => 'error', 'message' => 'Utilisateur non trouvé']);
     }
@@ -183,7 +199,7 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
         /**
         * @Route("/ajax/update-operation/{id}", name="ajax_update_operation")
         */
-        public function updateOperation(Request $request, Operation $operation, EntityManagerInterface $entityManager): JsonResponse
+        public function updateOperation(Request $request, Operation $operation, EntityManagerInterface $entityManager, LogsService $logsService): JsonResponse
         {
            if (!$operation) {
                return $this->json(['status' => 'error', 'message' => 'Opération non trouvée']);
@@ -202,6 +218,17 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
            $operation->setRdvAt(new \DateTimeImmutable());
        
            $entityManager->flush();
+           $customer = $operation->getCustomer();
+            // Log edit operation
+         try {
+            $logsService->postLog([
+            'loggerName' => 'Operation',
+            'user' => $customer->getEmail(),
+            'message' => 'User edit operation successfully',
+            'level' => 'info'
+        ]);
+        } catch (Exception $e) {
+        }
        
            return $this->json(['status' => 'success', 'message' => 'Opération mise à jour avec succès']);
         }
@@ -209,7 +236,7 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
  * @Route("/ajax/update-operation-operator/{id}", name="ajax_update_operation_operator")
  */
 
- public function updateOperationOperator(int $id, Request $request, EntityManagerInterface $entityManager, Security $security, UrlGeneratorInterface $urlGenerator): RedirectResponse
+ public function updateOperationOperator(int $id, Request $request, EntityManagerInterface $entityManager, Security $security, UrlGeneratorInterface $urlGenerator, LogsService $logsService): RedirectResponse
  {
      // Vérification des autorisations
      if (!$security->isGranted('ROLE_ADMIN')) {
@@ -245,7 +272,20 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
  
      // Mise à jour de l'opération avec le nouvel opérateur
      $operation->setSalarie($newOperator);
+     $user = $operation->getSalarie();
+     $operator = $user->getEmail();
      $entityManager->flush();
+
+                 // Log edit operation
+                 try {
+                    $logsService->postLog([
+                    'loggerName' => 'Operation',
+                    'user' => $operator,
+                    'message' => 'User changed operator successfully',
+                    'level' => 'info'
+                ]);
+                } catch (Exception $e) {
+                }
  
      // Réaliser la redirection vers la page spécifiée
      return new RedirectResponse('/admin');

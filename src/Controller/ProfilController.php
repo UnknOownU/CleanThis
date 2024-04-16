@@ -1,7 +1,9 @@
 <?php
 namespace App\Controller;
 
+use Exception;
 use App\Form\ProfileType;
+use App\Service\LogsService;
 use App\Form\SensitiveInfoType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +29,7 @@ class ProfilController extends AbstractController
     /**
      * @Route("/profile/edit", name="profile_edit")
      */
-    public function edit(Request $request)
+    public function edit(Request $request, LogsService $logsService)
     {
         $user = $this->security->getUser();
         if (!$user) {
@@ -55,6 +57,8 @@ class ProfilController extends AbstractController
                     $user->setPassword($this->userPasswordHasher->hashPassword($user, $newPassword));
                 }
                 $this->entityManager->flush();
+
+
                 $this->addFlash('success', 'Vos informations sensibles ont été mises à jour.');
             }
         }

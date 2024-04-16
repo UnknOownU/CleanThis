@@ -6,6 +6,7 @@ use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
 use App\Entity\Operation;
+use App\Service\LogsService;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -109,6 +110,7 @@ public function delete(AdminContext $context)
         $operation->setCustomer($this->getUser());
         $operation->setCreatedAt(new DateTimeImmutable());
         $operation->setSalarie(null);
+        
         return $operation;
     }
     
@@ -407,7 +409,7 @@ public function delete(AdminContext $context)
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer();
         if (!$operation) {
@@ -461,6 +463,20 @@ public function delete(AdminContext $context)
         $operation->setSalarie($user);
         $entityManager->flush();
     
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+            // Log successful acceptation
+            try {
+                $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => $salarieMail,
+                'message' => 'User accepted operation successfully',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+            }
+
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
@@ -485,7 +501,7 @@ public function delete(AdminContext $context)
         return new Response('<script>window.location.reload();</script>');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer();
         if (!$operation) {
@@ -495,6 +511,21 @@ public function delete(AdminContext $context)
         $operation->setStatus('Refusée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
+
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+            // Log successful acceptation
+            try {
+                $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => $salarieMail,
+                'message' => 'User declined operation',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+            }
+
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
