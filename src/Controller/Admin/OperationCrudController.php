@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Exception;
 use DateTimeImmutable;
+use DateTimeInterface;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\InvoiceService;
@@ -176,11 +177,13 @@ class OperationCrudController extends AbstractCrudController {
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
+                        'Archivée' => 'Archivée',
                         'Refusée' => 'Refusée',
                     ])   ->renderAsBadges([
                         'En attente de Validation' => 'warning',
                         'En cours' => 'primary',
                         'Terminée' => 'success',
+                        'Archivée' => 'info',
                         'Refusée' => 'danger',
                     ]); 
                     
@@ -189,6 +192,25 @@ class OperationCrudController extends AbstractCrudController {
                             return $entity->getFullAddress();
                         });
             }
+            
+            $fields[] = DateTimeField::new('rdv_at', 'Date d\'intervention')
+            ->formatValue(function (?DateTimeInterface $value) {
+                if ($value) {
+                    // Définir le locale en français
+                    $formatter = new \IntlDateFormatter(
+                        'fr_FR',
+                        \IntlDateFormatter::FULL,
+                        \IntlDateFormatter::SHORT,
+                        date_default_timezone_get()
+                    );
+                    
+                    // Formatage de la date pour qu'elle soit lisible
+                    return $formatter->format($value);
+                } else {
+                    return 'À définir';
+                }
+            });
+
     
     
             if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
@@ -228,7 +250,7 @@ class OperationCrudController extends AbstractCrudController {
                 DateTimeField::new('created_at', 'Créé le')
                     ->hideOnForm(),
                 FormField::addColumn('col-lg-8 col-xl-3'),
-                IdField::new('id', 'Nº')
+                TextField::new('name', 'Mission')
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
@@ -269,13 +291,14 @@ class OperationCrudController extends AbstractCrudController {
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
+                        'Archivée' => 'Archivée',
                         'Refusée' => 'Refusée',
                     ])
                     ->renderAsBadges([
                         'En attente de Validation' => 'info',
                         'En cours' => 'warning',
                         'Terminée' => 'success',
-                        'Archivée' => 'success',
+                        'Archivée' => 'info',
                     ])
                     ->hideOnForm(),
                 TextField::new('street_ope', 'Rue')
