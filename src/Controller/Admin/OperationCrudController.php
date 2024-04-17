@@ -6,6 +6,7 @@ use Exception;
 use DateTimeImmutable;
 use DateTimeInterface;
 use App\Entity\Operation;
+use App\Service\LogsService;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\InvoiceService;
 use App\Service\SendMailService;
@@ -106,6 +107,7 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setCustomer($this->getUser());
         $operation->setCreatedAt(new DateTimeImmutable());
         $operation->setSalarie(null);
+        
         return $operation;
     }
     
@@ -244,7 +246,7 @@ class OperationCrudController extends AbstractCrudController {
             
         } else {
             if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR') && Crud::PAGE_INDEX === $pageName))
- {
+        {
             return [
                 FormField::addTab('Mission'),
                 DateTimeField::new('created_at', 'Créé le')
@@ -381,7 +383,17 @@ class OperationCrudController extends AbstractCrudController {
                         $security->isGranted('ROLE_APPRENTI')); 
             })
             ->linkToCrudAction('finishOperation');
-    
+
+            $changeOperatorAction = Action::new('changeOperator', 'Changer Opérateur', 'fa fa-exchange-alt')
+            ->displayIf(static function (Operation $operation) use ($security) {
+                return $security->isGranted('ROLE_ADMIN');
+            })
+            ->linkToRoute('admin_change_operator', function (Operation $operation) {
+                return ['id' => $operation->getId()];
+            });
+        } 
+       
+        //Début des actions disponibles également pour customer
         $archiveAction = Action::new('archive', 'Archiver', 'fa fa-archive')
             ->displayIf(function (Operation $operation) use ($security) {
                 return $operation->getStatus() === 'Terminée';
@@ -396,13 +408,7 @@ class OperationCrudController extends AbstractCrudController {
                 return ['id' => $operation->getId()];
             });
     
-        $changeOperatorAction = Action::new('changeOperator', 'Changer Opérateur', 'fa fa-exchange-alt')
-            ->displayIf(static function (Operation $operation) use ($security) {
-                return $security->isGranted('ROLE_ADMIN');
-            })
-            ->linkToRoute('admin_change_operator', function (Operation $operation) {
-                return ['id' => $operation->getId()];
-            });
+
     
     // Mettre à jour l'action "Modifier" pour ajouter une icône
     $actions->update(Crud::PAGE_INDEX, Action::EDIT, function (Action $action) {
@@ -413,7 +419,9 @@ class OperationCrudController extends AbstractCrudController {
         return $action->setIcon('fa fa-trash')->setLabel('Supprimer');
     });
     
-        // Ajouter toutes les actions à la page index
+        // Ajouter toutes les actions à la page index selon rôle
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_APPRENTI') || ($this->isGranted('ROLE_SENIOR'))) {
+
         return $actions
             ->add(Crud::PAGE_INDEX, $changeOperatorAction)
             ->add(Crud::PAGE_INDEX, $downloadInvoice)
@@ -421,13 +429,17 @@ class OperationCrudController extends AbstractCrudController {
             ->add(Crud::PAGE_INDEX, $finishAction)
             ->add(Crud::PAGE_INDEX, $declineAction)
             ->add(Crud::PAGE_INDEX, $acceptAction);
-    }
+            } else {
+                return $actions
+                ->add(Crud::PAGE_INDEX, $downloadInvoice)
+                ->add(Crud::PAGE_INDEX, $archiveAction);
+            }}
 
     
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer();
         if (!$operation) {
@@ -481,6 +493,27 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setSalarie($user);
         $entityManager->flush();
     
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+        $customer = $operation->getCustomer();
+        $customerMail = $customer->getEmail();
+
+            // Log successful acceptation
+            try {
+                $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => $salarieMail,
+                'message' => 'User accepted operation successfully',
+                'level' => 'info',
+                'data' => [
+                    'customer' => $customerMail,
+                    'salarie' => $salarieMail
+                ]
+            ]);
+            } catch (Exception $e) {
+            }
+
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
@@ -505,7 +538,7 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer();
         if (!$operation) {
@@ -515,6 +548,21 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setStatus('Refusée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
+
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+            // Log successful acceptation
+            try {
+                $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => $salarieMail,
+                'message' => 'User declined operation',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+            }
+
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
@@ -538,7 +586,7 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer(); 
         if (!$operation) {
@@ -550,6 +598,20 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush(); 
+
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+        // Log successful finished operation
+            try {
+                $logsService->postLog([
+                    'loggerName' => 'Operation',
+                    'user' => $salarieMail,
+                    'message' => 'User set operation to finished',
+                    'level' => 'info'
+                ]);
+                } catch (Exception $e) {
+            }
 
       
         // Vérifier si le message flash a déjà été affiché dans la session
@@ -580,7 +642,7 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
     } 
 
-    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         $currentUser = $this->security->getUser();
     
@@ -600,6 +662,26 @@ class OperationCrudController extends AbstractCrudController {
         // Logique pour archiver l'opération
         $operation->setStatus('Archivée');
         $entityManager->flush();
+        $salarie = $operation->getSalarie();
+        $salarieMail = $salarie->getEmail();
+
+        // Log successful finished operation
+            try {
+                $logsService->postLog([
+                    'loggerName' => 'Operation',
+                    'user' => $salarieMail,
+                    'message' => 'User archived operation',
+                    'level' => 'info'
+                ]);
+                } catch (Exception $e) {
+            }
+        
+        // Vérifier si le message flash a déjà été affiché dans la session
+        if (!$session->getFlashBag()->has('success')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
+                    return new RedirectResponse('/admin');
+        }
     
         // Ajouter un message de succès
         $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
