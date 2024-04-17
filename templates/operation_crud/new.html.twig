@@ -119,14 +119,23 @@
             <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
             <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
         </div>
-        <div class="mb-3 mt-3" id="datewrapper">
-            <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
-            <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control">
-        </div>
+<div class="mb-3" id="datewrapper">
+    <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
+    <input type="date" id="rdvDate" name="rdvDate" class="form-control">
+    <div id="dateError" style="color: red; display: none; margin-top: 10px;"></div>
+</div>
 
+
+<div class="mb-3" id="timewrapper">
+    <label for="rdvTime" class="form-label">{{ "Heure du Rendez-vous"|trans }}</label>
+    <select id="rdvTime" name="rdvTime" class="form-control">
+        <!-- Les options d'heure seront injectées ici par JavaScript -->
+    </select>
+</div>
         <div class="d-flex justify-content-between mt-4">
             <button class="btn btn-secondary" onclick="showStep(2)">{{ "Retour"|trans }}</button>
-            <button class="btn btn-primary" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
+            <button class="btn btn-primary" type="button" id="continueButton" onclick="showStep(4)" disabled>{{ "Continuer"|trans }}</button>
+
         </div>
     </div>
 </div>
@@ -268,14 +277,83 @@
     var map;
     var marker;
 
-function initMap() {
-        map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris par défaut
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+    initDateInput();
+    document.getElementById('rdvDate').addEventListener('change', handleDateChange);
+    document.getElementById('rdvTime').addEventListener('change', validateRdvDate);
+});
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+function initMap() {
+    map = L.map('map').setView([48.8566, 2.3522], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+}
+
+function initDateInput() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minDate = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days from today
+    document.getElementById('rdvDate').setAttribute('min', minDate.toISOString().split('T')[0]);
+    document.getElementById('rdvDate').value = minDate.toISOString().split('T')[0];
+    handleDateChange();
+}
+
+function handleDateChange() {
+    const selectedDay = new Date(document.getElementById('rdvDate').value).getDay();
+    const timeSelect = document.getElementById('rdvTime');
+    let hours = generateHoursBasedOnDay(selectedDay);
+
+    timeSelect.innerHTML = hours.length > 0 ? hours.map(hour => `<option value="${hour}">${hour}</option>`).join('') : '<option>Aucun créneau disponible</option>';
+    validateRdvDate();
+}
+
+function generateHoursBasedOnDay(day) {
+    if (day === 0) { // Sunday
+        return [];
+    } else if (day === 6) { // Saturday
+        return generateHours(8, 14);
+    } else if (day === 5) { // Friday
+        return generateHours(12, 19);
+    } else { // Monday to Thursday
+        return generateHours(8, 22);
     }
+}
+
+function generateHours(start, end) {
+    let times = [];
+    for (let hour = start; hour <= end; hour++) {
+        times.push(`${hour}:00`);
+        if (hour < end) times.push(`${hour}:30`);
+    }
+    return times;
+}
+
+function validateRdvDate() {
+    const rdvDateInput = document.getElementById('rdvDate');
+    const timeInput = document.getElementById('rdvTime').value;
+    const continueButton = document.getElementById('continueButton');
+    const dateError = document.getElementById('dateError');
+    const selectedDate = new Date(rdvDateInput.value + 'T' + timeInput);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const twoDaysLater = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
+
+    if (selectedDate < twoDaysLater) {
+        dateError.textContent = 'Les rendez-vous doivent être pris au moins deux jours à l\'avance.';
+        continueButton.disabled = true;
+    } else if (selectedDate.getDay() === 0) {
+        dateError.textContent = 'Les rendez-vous ne peuvent pas être pris un dimanche.';
+        continueButton.disabled = true;
+    } else {
+        dateError.textContent = '';
+        continueButton.disabled = false;
+    }
+    dateError.style.display = continueButton.disabled ? 'block' : 'none';
+}
 
 function updateMap() {
     var street = document.getElementById('street_ope').value;
@@ -341,6 +419,7 @@ function validateStep2() {
             Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
             return false;
         }
+         return validateRdvDate();
         return true;
     }
     
@@ -455,7 +534,7 @@ function updateStepIndicators(stepNumber) {
     }
  }
 
-   function submitOperation() {
+function submitOperation() {
     if (isFormSubmitted) {
         Swal.fire('Erreur!', 'Le formulaire a déjà été soumis.', 'error');
         return;
@@ -474,10 +553,16 @@ function updateStepIndicators(stepNumber) {
     formData.append('zipcode', document.getElementById('zipcode_ope').value);
     formData.append('city', document.getElementById('city_ope').value);
     
+    // Obtenir la date et l'heure
     var rdvDate = document.getElementById('rdvDate').value;
-    if (rdvDate) {
-        formData.append('rdvDate', rdvDate);
+    var rdvTime = document.getElementById('rdvTime').value;
+
+    // Combine la date et l'heure dans un format compatible ISO 8601
+    if (rdvDate && rdvTime) {
+        var rdvDateTime = rdvDate + 'T' + rdvTime + ':00';
+        formData.append('rdvDateTime', rdvDateTime);
     }
+
 
     // Ajouter l'image au FormData
     var imageFile = document.getElementById('operationImage').files[0];
@@ -507,6 +592,7 @@ function updateStepIndicators(stepNumber) {
         handleError(error);
     });
 }
+
 
 function handleError(error) {
     console.error('Erreur:', error);

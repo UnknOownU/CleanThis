@@ -102,6 +102,18 @@ public function createOperation(Request $request, EntityManagerInterface $entity
     $user = $security->getUser();
 
     if ($user !== null) {
+        $rdvDateTimeString = $request->request->get('rdvDateTime');
+        $rdvDateTime = new \DateTime($rdvDateTimeString);
+        $today = new \DateTime();
+        $today->setTime(0, 0, 0);
+    
+        if ($rdvDateTime < $today) {
+            return $this->json(['status' => 'error', 'message' => 'Les rendez-vous pour le jour même ne sont pas autorisés.']);
+        }
+    
+        if ($rdvDateTime->format('w') == 0) { // Dimanche
+            return $this->json(['status' => 'error', 'message' => 'Les rendez-vous le dimanche ne sont pas autorisés.']);
+        }
         $operation = new Operation();
         $operation->setType($request->request->get('type')); // Utiliser request->get pour les champs de texte
         $operation->setAttachmentFile($request->files->get('attachmentFile')); // Utiliser request->files->get pour le fichier
@@ -112,13 +124,16 @@ public function createOperation(Request $request, EntityManagerInterface $entity
         $operation->setCityOpe($request->request->get('city'));
         $operation->setCustomer($user);
         $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
+        
 
-
-        $rdvDate = $request->request->get('rdvDate');
-        if ($rdvDate) {
-            $operation->setRdvAt(new \DateTimeImmutable($rdvDate));
+        $rdvDateTime = $request->request->get('rdvDateTime');
+        if ($rdvDateTime) {
+            try {
+                $operation->setRdvAt(new \DateTimeImmutable($rdvDateTime));
+            } catch (\Exception $e) {
+                return $this->json(['status' => 'error', 'message' => 'Invalid date format']);
+            }
         }
-
         $entityManager->persist($operation);
         $entityManager->flush();
 
