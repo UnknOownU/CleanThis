@@ -44,6 +44,18 @@ class ProfilController extends AbstractController
         $sensitiveInfoForm->handleRequest($request);
 
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
+
+        // Log user edit profil
+        try {
+            $logsService->postLog([
+            'loggerName' => 'User',
+            'user' => 'N\C',
+            'message' => 'User edited infos',
+            'level' => 'info'
+        ]);
+        } catch (Exception $e) {
+        }
+
             $this->entityManager->flush();
             $this->addFlash('success', 'Vos informations ont été mises à jour.');
         }
@@ -56,8 +68,19 @@ class ProfilController extends AbstractController
                 if ($newPassword = $sensitiveInfoForm->get('newPassword')->getData()) {
                     $user->setPassword($this->userPasswordHasher->hashPassword($user, $newPassword));
                 }
-                $this->entityManager->flush();
 
+                        // Log user edit sensitive profil info
+        try {
+            $logsService->postLog([
+            'loggerName' => 'User',
+            'user' => 'N\C',
+            'message' => 'User edited sensitives infos',
+            'level' => 'info'
+        ]);
+        } catch (Exception $e) {
+            // echo 'Insertion du log échoué';
+        }
+                $this->entityManager->flush();
 
                 $this->addFlash('success', 'Vos informations sensibles ont été mises à jour.');
             }

@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserAuthenticatorController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils, LogsService $logsService): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
 
@@ -29,21 +29,12 @@ class UserAuthenticatorController extends AbstractController
     }
 
     #[Route('/logout', name: 'app_logout')]
-    public function logout(Request $request, LogsService $logsService): Response
+    public function logout(Request $request): Response
     {
+
         // Clear the session including the stored locale
         $request->getSession()->invalidate();
-        // Log successful logout
-        try {
-            $logsService->postLog([
-            'loggerName' => 'AuthController',
-            'user' => 'N\C',
-            'message' => 'User logout successfully',
-            'level' => 'info'
-        ]);
-        } catch (Exception $e) {
-            echo 'Insertion du log échoué';
-        }
+
         // Redirect to the login page or any other page
         return $this->redirectToRoute('app_login');
     }

@@ -466,13 +466,20 @@ public function delete(AdminContext $context)
         $salarie = $operation->getSalarie();
         $salarieMail = $salarie->getEmail();
 
+        $customer = $operation->getCustomer();
+        $customerMail = $customer->getEmail();
+
             // Log successful acceptation
             try {
                 $logsService->postLog([
                 'loggerName' => 'Operation',
                 'user' => $salarieMail,
                 'message' => 'User accepted operation successfully',
-                'level' => 'info'
+                'level' => 'info',
+                'data' => [
+                    'customer' => $customerMail,
+                    'salarie' => $salarieMail
+                ]
             ]);
             } catch (Exception $e) {
             }

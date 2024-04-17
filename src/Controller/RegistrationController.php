@@ -67,24 +67,13 @@ class RegistrationController extends AbstractController
                 echo 'Insertion du log échoué';
             }
             
-            
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
         }
-        // Log failed registration
-        try {
-            $logsService->postLog([
-            'loggerName' => 'Registration',
-            'user' => 'N\C',
-            'message' => 'User failed at register',
-            'level' => 'warning'
-        ]);
-        } catch (Exception $e) {
-            echo 'Insertion du log échoué';
-        }
+
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);

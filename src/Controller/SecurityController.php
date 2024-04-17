@@ -35,8 +35,10 @@ class SecurityController extends AbstractController
      ];
 
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, LogsService $logsService): Response
     {
+
+
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
@@ -44,6 +46,7 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     
     
@@ -52,31 +55,30 @@ class SecurityController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(Request $request, LogsService $logsService): Response
     {
-        $user = $this->getUser();
         // Clear the session including the stored locale
         $request->getSession()->invalidate();
-        // Log successful logout
-        try {
-            $logsService->postLog([
-            'loggerName' => 'login',
-            'user' => 'N\C',
-            'message' => 'User logout successfully',
-            'level' => 'info'
-        ]);
-        } catch (Exception $e) {
-            echo 'Insertion du log échoué';
-        }
+
         // Redirect to the login page or any other page
         return $this->redirectToRoute('app_login');
     }
 
     #[Route(path:'/oauth/connect/{service}', name:'auth_oauth_connect', methods: ['GET'])]
-        public function connect(string $service, ClientRegistry $clientRegistery): RedirectResponse
+        public function connect(string $service, ClientRegistry $clientRegistery, LogsService $logsService): RedirectResponse
     {
         if (!in_array($service, array_keys(self::SCOPES), true)){
           throw $this->createNotFoundException();  
         }
-        
+                // Log successful login google
+                try {
+                    $logsService->postLog([
+                    'loggerName' => 'login',
+                    'user' => 'N\C',
+                    'message' => 'User logged successfully with google',
+                    'level' => 'info'
+                ]);
+                } catch (Exception $e) {
+                    echo 'Insertion du log échoué';
+                }
         return $clientRegistery
         ->getClient($service)
         ->redirect(self::SCOPES[$service]);

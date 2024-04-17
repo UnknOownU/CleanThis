@@ -23,20 +23,10 @@ class MainController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(Request $request, LogsService $logsService): Response
     {
-        $user = $this->getUser();
+
         // Clear the session including the stored locale
         $request->getSession()->invalidate();
-        // Log successful logout
-        try {
-            $logsService->postLog([
-            'loggerName' => 'MainController',
-            'user' => 'N\C',
-            'message' => 'User logout successfully',
-            'level' => 'info'
-        ]);
-        } catch (Exception $e) {
-            echo 'Insertion du log échoué';
-        }
+
         // Redirect to the login page or any other page
         return $this->redirectToRoute('app_login');
     }
