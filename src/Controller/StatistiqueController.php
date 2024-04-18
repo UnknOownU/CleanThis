@@ -3,16 +3,21 @@
 namespace App\Controller;
 
 use App\Repository\OperationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class StatistiqueController extends AbstractController
 {
     #[Route('/stats', name: 'stats')]
     public function statistiques(OperationRepository $operationRepository): Response
     {
-
+            try {
+                $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            } catch (AccessDeniedException $e) {
+                return $this->redirectToRoute('admin');
+            }
         $chiffreAffairesMoisEnCours = $operationRepository->findSalesForCurrentMonth();
          // Récupérer les missions en coursdes salariés 
         $totalMissionsEnCours = $operationRepository->countMissionsEnCours();
