@@ -179,7 +179,6 @@ public function createOperation(Request $request, EntityManagerInterface $entity
 
 
     } else {
->>>>>>> b05d992d2b13462a1fd37d3b645fac5d96d48cf6
         return $this->json(['status' => 'error', 'message' => 'Utilisateur non trouvé']);
     }
 
