@@ -75,10 +75,10 @@ class DashboardController extends AbstractDashboardController
                     MenuItem::linkToCrud('Employés', 'fa fa-briefcase', User::class)
                         ->setQueryParameter('userType', 'employee'),
             ]);        
-            // yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route'); TODO:
+            // yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route');
 
             yield MenuItem::section('Support');
-            // yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class); FIXME:
+            // yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
             yield MenuItem::linkToRoute(
                 'English', 
                 "fa-solid fa-globe", 

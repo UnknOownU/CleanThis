@@ -55,16 +55,22 @@ class RegistrationController extends AbstractController
                 
             }
 
+            $role = $user->getRoles();
+            $userId = $user->getId();
+
             // Log successful registration
             try {
                 $logsService->postLog([
                 'loggerName' => 'Registration',
-                'user' => $user->getEmail(),
-                'message' => 'User registered successfully',
-                'level' => 'info'
+                'user' => 'Anonymous',
+                'message' => 'User registered',
+                'level' => 'info',
+                'data' => [
+                    'role' => $role,
+                    'userId' => $userId
+                ]
             ]);
             } catch (Exception $e) {
-                echo 'Insertion du log échoué';
             }
             
             return $userAuthenticator->authenticateUser(

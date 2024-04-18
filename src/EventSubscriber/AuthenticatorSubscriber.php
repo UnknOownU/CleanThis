@@ -37,8 +37,8 @@ class LogoutEventListener implements EventSubscriberInterface
             //Send logs using LogsService
             $logData = [
                 'loggerName' => 'Logout',
-                'user' => 'N\C',
-                'message' => 'User logged out',
+                'user' => 'Anonymous',
+                'message' => 'User logout',
                 'level' => 'info'
             ];
             $this->logsService->postLog($logData);
@@ -54,8 +54,8 @@ class LogoutEventListener implements EventSubscriberInterface
         try {
             $logData = [
                 'loggerName' => 'Login',
-                'user' => 'N\C',
-                'message' => 'User authentication successful',
+                'user' => 'Anonymous',
+                'message' => 'User login',
                 'level' => 'info'
             ];
             $this->logsService->postLog($logData);
@@ -68,8 +68,8 @@ class LogoutEventListener implements EventSubscriberInterface
         try {
             $logData = [
                 'loggerName' => 'Login',
-                'user' => 'N\C',
-                'message' => 'User failed to log',
+                'user' => 'Anonymous',
+                'message' => 'User failed login',
                 'level' => 'error'
             ];
             $this->logsService->postLog($logData);

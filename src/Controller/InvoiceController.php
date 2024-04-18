@@ -49,8 +49,8 @@ class InvoiceController extends AbstractController
         try {
             $logsService->postLog([
             'loggerName' => 'Operation',
-            'user' => $user,
-            'message' => 'User consulted invoice',
+            'user' => 'Anonymous',
+            'message' => 'User downloaded invoice',
             'level' => 'info'
         ]);
         } catch (Exception $e) {

@@ -49,8 +49,8 @@ class ProfilController extends AbstractController
         try {
             $logsService->postLog([
             'loggerName' => 'User',
-            'user' => 'N\C',
-            'message' => 'User edited infos',
+            'user' => 'Anonymous',
+            'message' => 'User edited profil',
             'level' => 'info'
         ]);
         } catch (Exception $e) {
@@ -73,8 +73,8 @@ class ProfilController extends AbstractController
         try {
             $logsService->postLog([
             'loggerName' => 'User',
-            'user' => 'N\C',
-            'message' => 'User edited sensitives infos',
+            'user' => 'Anonymous',
+            'message' => 'User edited password',
             'level' => 'info'
         ]);
         } catch (Exception $e) {

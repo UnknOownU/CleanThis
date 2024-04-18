@@ -81,7 +81,7 @@ class ContactController extends AbstractController
              try {
                 $logsService->postLog([
                 'loggerName' => 'Contact',
-                'user' => $volunteerEmail,
+                'user' => 'Anonymous',
                 'message' => 'User send email contact',
                 'level' => 'info'
             ]);

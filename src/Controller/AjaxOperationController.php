@@ -138,14 +138,24 @@ public function createOperation(Request $request, EntityManagerInterface $entity
         $entityManager->flush();
 
         $customer = $operation->getCustomer();
+        $created = $operation->getCreatedAt();
+        $idOpe = $operation->getId();
+        $customerId = $customer->getId();
+
 
         // Log successful creation
         try {
             $logsService->postLog([
                 'loggerName' => 'Operation',
-                'user' => $customer->getEmail(),
-                'message' => 'User created operation successfully',
-                'level' => 'info'
+                'user' => 'Anonymous',
+                'message' => 'User created operation',
+                'level' => 'info',
+                'data' => [
+                    'id_ope' => $idOpe,
+                    'created' => $created,
+                    'customer_id' => $customerId
+                ]
+
             ]);
             } catch (Exception $e) {
             }
@@ -233,14 +243,18 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
            $operation->setRdvAt(new \DateTimeImmutable());
        
            $entityManager->flush();
-           $customer = $operation->getCustomer();
+           $idOpe = $operation->getId();
+
             // Log edit operation
          try {
             $logsService->postLog([
             'loggerName' => 'Operation',
-            'user' => $customer->getEmail(),
-            'message' => 'User edit operation successfully',
-            'level' => 'info'
+            'user' => 'Anonymous',
+            'message' => 'User edited operation',
+            'level' => 'info',
+            'data' => [
+                'id_ope' => $idOpe
+            ]
         ]);
         } catch (Exception $e) {
         }
@@ -287,17 +301,19 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
  
      // Mise à jour de l'opération avec le nouvel opérateur
      $operation->setSalarie($newOperator);
-     $user = $operation->getSalarie();
-     $operator = $user->getEmail();
+     $idOpe = $operation->getId();
      $entityManager->flush();
 
                  // Log edit operation
                  try {
                     $logsService->postLog([
                     'loggerName' => 'Operation',
-                    'user' => $operator,
-                    'message' => 'User changed operator successfully',
-                    'level' => 'info'
+                    'user' => 'Anonymous',
+                    'message' => 'User changed operator',
+                    'level' => 'info',
+                    'data' => [
+                        'id_ope' => $idOpe
+                    ]
                 ]);
                 } catch (Exception $e) {
                 }

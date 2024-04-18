@@ -481,24 +481,32 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setStatus('En cours');
         $operation->setSalarie($user);
         $entityManager->flush();
-    
-        $salarie = $operation->getSalarie();
-        $salarieMail = $salarie->getEmail();
+
 
         $customer = $operation->getCustomer();
-        $customerMail = $customer->getEmail();
+        $idOpe = $operation->getId();
+        $created = $operation->getCreatedAt();
+        $type = $operation->getType();
+        $price = $operation->getPrice();
+        $city = $operation->getCityOpe();
+        $customerId = $customer->getId();
 
-            // Log successful acceptation
-            try {
-                $logsService->postLog([
+        // Log successful acceptation
+        try {
+            $logsService->postLog([
                 'loggerName' => 'Operation',
-                'user' => $salarieMail,
-                'message' => 'User accepted operation successfully',
+                'user' => 'Anonymous',
+                'message' => 'User accepted operation',
                 'level' => 'info',
                 'data' => [
-                    'customer' => $customerMail,
-                    'salarie' => $salarieMail
+                    'id_ope' => $idOpe,
+                    'created' => $created,
+                    'type' => $type,
+                    'price' => $price,
+                    'city' => $city,
+                    'customer_id' => $customerId
                 ]
+
             ]);
             } catch (Exception $e) {
             }
@@ -539,21 +547,30 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
 
-        $salarie = $operation->getSalarie();
-        $salarieMail = $salarie->getEmail();
         $customer = $operation->getCustomer();
-        $customerMail = $customer->getEmail();
 
-            // Log successful acceptation
-            try {
-                $logsService->postLog([
+
+        $idOpe = $operation->getId();
+        $created = $operation->getCreatedAt();
+        $type = $operation->getType();
+        $price = $operation->getPrice();
+        $city = $operation->getCityOpe();
+        $customerId = $customer->getId();
+
+        // Log operation declined
+        try {
+            $logsService->postLog([
                 'loggerName' => 'Operation',
-                'user' => $salarieMail,
+                'user' => 'Anonymous',
                 'message' => 'User declined operation',
                 'level' => 'info',
                 'data' => [
-                    'customer' => $customerMail,
-                    'salarie' => $salarieMail
+                    'id_ope' => $idOpe,
+                    'created' => $created,
+                    'type' => $type,
+                    'price' => $price,
+                    'city' => $city,
+                    'customer_id' => $customerId
                 ]
 
             ]);
@@ -596,28 +613,33 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush(); 
 
-        $salarie = $operation->getSalarie();
-        $salarieMail = $salarie->getEmail();
+        //Get infos for logs and send mail services
         $customer = $operation->getCustomer();
-        $customerMail = $customer->getEmail();
+        $idOpe = $operation->getId();
+        $finished = $operation->getFinishedAt();
         $type = $operation->getType();
         $price = $operation->getPrice();
+        $city = $operation->getCityOpe();
+        $customerId = $customer->getId();
+        
+        //Log operation finished
+        try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => 'Anonymous',
+                'message' => 'User finished operation',
+                'level' => 'info',
+                'data' => [
+                    'id_ope' => $idOpe,
+                    'finished' => $finished,
+                    'type' => $type,
+                    'price' => $price,
+                    'city' => $city,
+                    'customer_id' => $customerId
+                ]
 
-        // Log successful finished operation
-            try {
-                $logsService->postLog([
-                    'loggerName' => 'Operation',
-                    'user' => $salarieMail,
-                    'message' => 'User set operation to finished',
-                    'level' => 'info',
-                    'data' => [
-                        'customer' => $customerMail,
-                        'salarie' => $salarieMail,
-                        'type' => $type,
-                        'price' => $price
-                    ]
-                ]);
-                } catch (Exception $e) {
+            ]);
+            } catch (Exception $e) {
             }
 
       
@@ -669,24 +691,15 @@ class OperationCrudController extends AbstractCrudController {
         // Logique pour archiver l'opération
         $operation->setStatus('Archivée');
         $entityManager->flush();
-    
-        $salarie = $operation->getSalarie();
-        $salarieMail = $salarie->getEmail();
-        $customer = $operation->getCustomer();
-        $customerMail = $customer->getEmail();
+
         
-        // Log successful finished operation
+        //Log archived operation
             try {
                 $logsService->postLog([
                     'loggerName' => 'Operation',
-                    'user' => $salarieMail,
+                    'user' => 'Anonymous',
                     'message' => 'User archived operation',
-                    'level' => 'info',
-                    'data' => [
-                        'customer' => $customerMail,
-                        'salarie' => $salarieMail,
-                    ]
-                    
+                    'level' => 'info'
                 ]);
                 } catch (Exception $e) {
             }

@@ -71,9 +71,9 @@ class SecurityController extends AbstractController
                 // Log successful login google
                 try {
                     $logsService->postLog([
-                    'loggerName' => 'login',
-                    'user' => 'N\C',
-                    'message' => 'User logged successfully with google',
+                    'loggerName' => 'Login',
+                    'user' => 'Anonymous',
+                    'message' => 'User login with Google',
                     'level' => 'info'
                 ]);
                 } catch (Exception $e) {
@@ -128,8 +128,8 @@ public function check():Response
                     try {
                         $logsService->postLog([
                         'loggerName' => 'Security',
-                        'user' => $user->getEmail(),
-                        'message' => 'User used forgotten pass link',
+                        'user' => 'Anonymous',
+                        'message' => 'User called forgotten password',
                         'level' => 'info'
                     ]);
                     } catch (Exception $e) {
@@ -177,8 +177,8 @@ public function check():Response
             try {
                 $logsService->postLog([
                 'loggerName' => 'Security',
-                'user' => $user->getEmail(),
-                'message' => 'User set new password from forgotten pass',
+                'user' => 'Anonymous',
+                'message' => 'User set new password from forgotten password',
                 'level' => 'info'
             ]);
             } catch (Exception $e) {
