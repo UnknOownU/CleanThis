@@ -1,8 +1,5 @@
 <?php
-
 namespace App\Entity;
-
-
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -18,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
 
 #[ORM\Entity(repositoryClass: OperationRepository::class)]
 #[Vich\Uploadable]
@@ -46,7 +42,6 @@ class Operation
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
-
 
     #[ORM\Column(length: 10)]
     private ?string $zipcode_ope = null;
@@ -98,7 +93,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setType(string $type): static
     {
         $this->type = $type;
-
         return $this;
     }
 
@@ -110,7 +104,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -122,7 +115,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setPrice(int $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -134,7 +126,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -146,7 +137,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setStatus(string $status): static
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -158,7 +148,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setZipcodeOpe(string $zipcode_ope): static
     {
         $this->zipcode_ope = $zipcode_ope;
-
         return $this;
     }
 
@@ -170,7 +159,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setCityOpe(string $city_ope): static
     {
         $this->city_ope = $city_ope;
-
         return $this;
     }
 
@@ -182,7 +170,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setStreetOpe(string $street_ope): static
     {
         $this->street_ope = $street_ope;
-
         return $this;
     }
 
@@ -194,7 +181,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setCustomer(?User $customer): static
     {
         $this->customer = $customer;
-
         return $this;
     }
 
@@ -206,7 +192,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setSalarie(?User $salarie): static
     {
         $this->salarie = $salarie;
-
         return $this;
 
     }   
@@ -219,7 +204,6 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setFinishedAt(?\DateTimeImmutable $finished_at): static
     {
         $this->finished_at = $finished_at;
-
         return $this;
     }
     public function getCustomerFullName(): ?string
@@ -237,8 +221,8 @@ private ?\DateTimeImmutable $finished_at = null;
     #[ORM\Column(nullable: true)]
     #[Assert\GreaterThanOrEqual(propertyPath: "created_at")]
     private ?\DateTimeImmutable $rdv_at = null;
-
-    #[ORM\Column(length: 255, type: 'string')]
+    
+    #[ORM\Column(length: 255, type: 'string',nullable: true)]
     private ?string $attachment = null;
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'attachment')]
@@ -247,7 +231,6 @@ private ?\DateTimeImmutable $finished_at = null;
     
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $UpdatedAt = null;
-
 
     public function __construct()
     {
@@ -275,7 +258,6 @@ private ?\DateTimeImmutable $finished_at = null;
     {
         $this->rdv_at = $rdv_at;
         return $this;
-
     }
 
     public function getAttachment(): ?string
@@ -286,17 +268,13 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setAttachment(string $attachment): self
     {
         $this->attachment = $attachment;
-
         return $this;
     }
 
     public function setAttachmentFile(?File $attachmentFile = null): void
     {
         $this->attachmentFile = $attachmentFile;
-
         if (null !== $attachmentFile) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
             $this->UpdatedAt = new \DateTimeImmutable();
         }
     }
@@ -314,7 +292,13 @@ private ?\DateTimeImmutable $finished_at = null;
     public function setUpdatedAt(?\DateTimeImmutable $UpdatedAt): static
     {
         $this->UpdatedAt = $UpdatedAt;
-
         return $this;
     } 
+
+    public function getFullAddress()
+    {
+        return $this->street_ope . ', ' . $this->zipcode_ope . ' ' . $this->city_ope;
+    }
 }
+
+

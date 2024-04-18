@@ -1,8 +1,537 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}{{ "Index"|trans }}{% endblock %}
 
 {% block body %}
+  <main>
 
+            <section class="hero-section hero-section-full-height d-flex justify-content-center align-items-center">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-7 col-12 text-center mx-auto">
+                            <h1 class="cd-headline rotate-1 text-white mb-4 pb-2">
+                                <span>{{ "On clean vos"|trans }}</span>
+                                <span class="cd-words-wrapper">
+                                    <b class="is-visible">{{ "Maisons"|trans }}</b>
+                                    <b>{{ "Bureaux"|trans }}</b>
+                                    <b>{{ "Voitures"|trans }}</b>
+                                </span>
+                            </h1>
+
+                            <a class="custom-btn btn button button--atlas smoothscroll me-3" href="contact">
+                                <span>{{ "Demandez un devis!"|trans }}</span>
+
+                                <div class="marquee" aria-hidden="true">
+                                    <div class="marquee__inner">
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                        <span>{{ "Demandez un devis!"|trans }}</span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a class="custom-btn custom-border-btn custom-btn-bg-white btn button button--pan smoothscroll" href="#services-section">
+                                <span>{{ "Découvrez nos Services"|trans }}</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L40,229.3C80,235,160,245,240,250.7C320,256,400,256,480,240C560,224,640,192,720,176C800,160,880,160,960,138.7C1040,117,1120,75,1200,80C1280,85,1360,139,1400,165.3L1440,192L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path></svg>
+            </section>
+
+
+            <section class="intro-section" id="intro-section">
+                <div class="container">
+                    <div class="row justify-content-lg-center align-items-center">
+
+                        <div class="col-lg-6 col-12">
+                            <h2 class="mb-4">{{ "Nos services de propreté modulables"|trans }} <br> &amp; <br> {{ "sur-mesure POUR VOUS!"|trans }}</h2>
+
+                            <p><a href="#">{{ "CleanThis,"|trans }}</a>{{ "Avec nos différentes prestations de nettoyage,
+                             bénéficiez d’un service de qualité en propreté et hygiène spécifique, répondant aux normes du nettoyage industriel."|trans }}  
+                            <br>
+                            {{ "Choisissez quelles prestations de nettoyage vous souhaitez , nous adapterons notre offre à vos besoins :"|trans }}
+                            <ul>
+                            <li>{{ "Les techniques de nettoyage de vos locaux"|trans }}</li>
+                            <li>{{ "La durée de votre contrat"|trans }}</li>
+                            <li>{{ "La fréquence de passage de nos agents de propreté"|trans }}</li>
+                            <li>{{ "La périodicité des contrôles qualité"|trans }}</li>
+                            <li>{{ "Notre Espace Client qui permet le suivi des services propreté"|trans }}</li>
+                            <ul>
+
+                            <a href="contact" target="_blank">{{ "Contactez nous"|trans }}</a> {{ "pour plus d'information!"|trans }}</p>
+                        </div>
+
+                        <div class="col-lg-6 col-12 custom-block-wrap">
+                            <img src="images/male-wearing-apron-female-white-t-shirt-smiling-broadly-being-glad-clean.png" class="img-fluid">
+
+                            <div class="custom-block d-flex flex-column">
+                                <h6 class="text-white mb-3">{{ "Vous pouvez aussi"|trans }}<br> {{ "Nous appeler!"|trans }}</h6>
+
+                                <p class="d-flex mb-0">
+                                    <i class="bi-telephone-fill custom-icon me-2"></i>
+
+                                    <a href="tel: 110-220-9800">
+                                        06 99 99 99 99
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="services-section section-padding section-bg" id="services-section">                
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12">
+                            <h2 class="mb-4">{{ "Nos offres du moment!"|trans }}</h2>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="services-thumb">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-5 col-12">
+                                        <div class="services-image-wrap">
+                                            <a href="little">
+                                                <img src="images/services/people-taking-care-office-cleaning.jpg" class="services-image img-fluid" alt="">
+                                                <img src="images/services/person-taking-care-office.jpg" class="services-image services-image-hover img-fluid" alt="">
+
+                                                <div class="services-icon-wrap">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-cash me-2"></i>
+                                                            1000€
+                                                        </p>
+
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-clock-fill me-2"></i>
+                                                            4 hrs
+                                                        </p>
+                                                    </div>                                                    
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
+                                        <div class="services-info mt-4 mt-lg-0 mt-md-0">
+                                            <h4 class="services-title mb-1 mb-lg-2">
+                                                <a class="services-title-link" href="little">{{ "Petite surface/Bureau"|trans }}</a>
+                                            </h4>
+
+                                            <p>{{ "Une pièces sans un grain de poussière!"|trans }}</p>
+
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="reviews-icons">
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star"></i>
+                                                    <i class="bi-star"></i>
+                                                </div>
+
+                                                <a href="little" class="custom-btn btn button button--atlas mt-2 ms-auto">
+                                                    <span>{{ "Voir les détails"|trans }}</span>
+
+                                                    <div class="marquee" aria-hidden="true">
+                                                        <div class="marquee__inner">
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="services-thumb">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-5 col-12">
+                                        <div class="services-image-wrap">
+                                            <a href="little">
+                                                <img src="images/services/young-smiling-woman-wearing-rubber-gloves-cleaning-stove.jpg" class="services-image img-fluid" alt="">
+                                                <img src="images/services/woman-holding-rag-detergent-cleaning-cooker.jpg" class="services-image services-image-hover img-fluid" alt="">
+
+                                                <div class="services-icon-wrap">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-cash me-2"></i>
+                                                            2500€
+                                                        </p>
+
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-clock-fill me-2"></i>
+                                                            10 hrs
+                                                        </p>
+                                                    </div>                                                    
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
+                                        <div class="services-info mt-4 mt-lg-0 mt-md-0">
+                                            <h4 class="services-title mb-1 mb-lg-2">
+                                                <a class="services-title-link" href="little">{{ "Moyenne Surface/Maison"|trans }}</a>
+                                            </h4>
+
+                                            <p>{{ "Du sol au plafond!"|trans }}</p>
+
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="reviews-icons">
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                </div>
+
+                                                <a href="little" class="custom-btn btn button button--atlas mt-2 ms-auto">
+                                                    <span>{{ "Voir les détails"|trans }}</span>
+
+                                                    <div class="marquee" aria-hidden="true">
+                                                        <div class="marquee__inner">
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="services-thumb mb-lg-0">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-5 col-12">
+                                        <div class="services-image-wrap">
+                                            <a href="little">
+                                                <img src="images/services/man-polishing-car-inside-car-service.jpg" class="services-image img-fluid" alt="">
+                                                <img src="images/services/man-polishing-car-inside.jpg" class="services-image services-image-hover img-fluid" alt="">
+
+                                                <div class="services-icon-wrap">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-cash me-2"></i>
+                                                            5000€
+                                                        </p>
+
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-clock-fill me-2"></i>
+                                                            24 hrs
+                                                        </p>
+                                                    </div>                                                    
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
+                                        <div class="services-info mt-4 mt-lg-0 mt-md-0">
+                                            <h4 class="services-title mb-1 mb-lg-2">
+                                                <a class="services-title-link" href="little">{{ "Grande surface/Industriel"|trans }}</a>
+                                            </h4>
+
+                                            <p>{{ "Faites confiance à nos experts pour les tâches difficiles!"|trans }}</p>
+
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="reviews-icons">
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                </div>
+
+                                                <a href="little" class="custom-btn btn button button--atlas mt-2 ms-auto">
+                                                    <span>{{ "Voir les détails"|trans }}</span>
+
+                                                    <div class="marquee" aria-hidden="true">
+                                                        <div class="marquee__inner">
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="services-thumb mb-lg-0">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-5 col-12">
+                                        <div class="services-image-wrap">
+                                            <a href="little">
+                                                <img src="images/services/professional-industrial-cleaner-protective-uniform-cleaning-floor-food-processing-plant.jpg" class="services-image img-fluid" alt="">
+                                                <img src="images/services/close-up-mop-cleaning-industrial-plant-floor.jpg" class="services-image services-image-hover img-fluid" alt="">
+
+                                                <div class="services-icon-wrap">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-cash me-2"></i>
+                                                            {{ "Prix personnalisé "|trans }}
+                                                        </p>
+
+                                                        <p class="text-white mb-0">
+                                                            <i class="bi-clock-fill me-2"></i>
+                                                            24/7
+                                                        </p>
+                                                    </div>                                                    
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-7 col-md-7 col-12 d-flex align-items-center">
+                                        <div class="services-info mt-4 mt-lg-0 mt-md-0">
+                                            <h4 class="services-title mb-1 mb-lg-2">
+                                                <a class="services-title-link" href="little">{{ "Opération spécifique"|trans }}</a>
+                                            </h4>
+
+                                            <p>{{ "Votre voiture, vos habits, votre jardin... N'hésitez pas à nous envoyer un devis et nous ferons tout pour répondre à vos demandes!"|trans }}</p>
+
+                                            <div class="d-flex flex-wrap align-items-center">
+                                                <div class="reviews-icons">
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star-fill"></i>
+                                                    <i class="bi-star"></i>
+                                                </div>
+
+                                                <a href="little" class="custom-btn btn button button--atlas mt-2 ms-auto">
+                                                    <span>{{ "Voir les détails"|trans }}</span>
+
+                                                    <div class="marquee" aria-hidden="true">
+                                                        <div class="marquee__inner">
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                            <span>{{ "Voir les détails"|trans }}</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="testimonial-section section-padding section-bg">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12 text-center">
+                            <h2 class="text-white mb-4">{{ "Nos retours clients!"|trans }}</h2>
+                        </div>
+
+                        <div class="col-lg-4 col-12">
+                            <div class="featured-block">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="images/avatar/happy-customer-01.jpg" class="avatar-image img-fluid">
+
+                                    <div class="ms-3">
+                                        <h4 class="mb-0">Marie</h4>
+
+                                        <div class="reviews-icons mb-1">
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mb-0">Best Cleaning Service Provider Ipsum dolor sit consectetur kengan</p>
+                            </div>
+
+                            <div class="featured-block mb-lg-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="images/avatar/happy-customer-02.jpg" class="avatar-image img-fluid">
+
+                                    <div class="ms-3">
+                                        <h4 class="mb-0">Nana</h4>
+
+                                        <div class="reviews-icons mb-1">
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-12">
+                            <div class="featured-block">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="images/avatar/happy-customer-03.jpg" class="avatar-image img-fluid">
+
+                                    <div class="ms-3">
+                                        <h4 class="mb-0">Elon</h4>
+
+                                        <div class="reviews-icons mb-1">
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            </div>
+
+                            <div class="featured-block mb-lg-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="images/avatar/happy-customer-04.jpg" class="avatar-image img-fluid">
+
+                                    <div class="ms-3">
+                                        <h4 class="mb-0">Josh</h4>
+
+                                        <div class="reviews-icons mb-1">
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star"></i>
+                                            <i class="bi-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-12">
+                            <div class="featured-block">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="images/avatar/happy-customer-05.jpg" class="avatar-image img-fluid">
+
+                                    <div class="ms-3">
+                                        <h4 class="mb-0">Katie</h4>
+
+                                        <div class="reviews-icons mb-1">
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                            </div>
+
+                            <div class="featured-block mb-lg-0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="images/avatar/happy-customer-06.jpg" class="avatar-image img-fluid">
+
+                                    <div class="ms-3">
+                                        <h4 class="mb-0">Shai</h4>
+
+                                        <div class="reviews-icons mb-1">
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star-fill"></i>
+                                            <i class="bi-star"></i>
+                                            <i class="bi-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="partners-section">
+                <div class="container">
+                    <div class="row justify-content-center align-items-center">
+
+                        <div class="col-lg-12 col-12">
+                            <h4 class="partners-section-title bg-white shadow-lg">{{ "Ils nous ont fait confiance!"|trans }}</h4>
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/insy2s.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/HDF.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/afpa.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/FranceT.png" class="partners-image img-fluid">
+                        </div>
+
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <img src="images/partners/mel.png" class="partners-image img-fluid">
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+        <script src="{{ asset('js/counter.js') }}"></script>
+        <script src="{{ asset('js/countdown.js') }}"></script>
+        <script src="{{ asset('js/init.js') }}"></script>
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        <script src="{{ asset('js/animated-headline.js') }}"></script>
+        <script src="{{ asset('js/custom.js') }}"></script>
 
 {% endblock %}

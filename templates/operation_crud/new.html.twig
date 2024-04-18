@@ -1,11 +1,560 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
+{% block body_id 'page-content-wrapper' %}
 
-{% block title %}New Operation{% endblock %}
+{% block page_title %}{{ "Demande D'opération"|trans }}{% endblock %}
 
-{% block body %}
-    <h1>Create new Operation</h1>
+{% block main %}
 
-    {{ include('operation_crud/_form.html.twig') }}
+<div class="ea-new-form">
+<div class="container mt-3">
+    <h2 class="text-center mb-5">{{ "Nouvelle Demande De Nettoyage"|trans }}</h2>
+    </div>
+    <!-- Étape 1 : Choix du type d'opération -->
+    <div id="step1" class="row justify-content-center mb-4">
+        <!-- Petite Opération -->
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ "Petite Opération"|trans }}</h5>
+                    <p class="card-text">{{ "Pour une intervention d'environ 10 à 15 mètres carrés"|trans }}</p>
+                    <button class="btn btn-primary" data-type="Little" onclick="showStep(2, 'Little')">{{ "Sélectionner"|trans }}</button>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ "Moyenne Opération"|trans }}</h5>
+                    <p class="card-text">{{ "Pour une intervention d'environ 30 à 50 mètres carrés"|trans }}</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Medium')">{{ "Sélectionner"|trans }}</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ "Grande Opération"|trans }}</h5>
+                    <p class="card-text">{{ "Pour une intervention d'environ 50 à 500 mètres carrés"|trans }}</p>
+                    <button class="btn btn-primary" onclick="showStep(2, 'Big')">{{ "Sélectionner"|trans }}</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-5">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ "Opération Personnalisée"|trans }}</h5>
+                    <p class="card-text">{{ "Choisissez une opération personnalisée"|trans }}</p>
+                <button class="btn btn-primary" onclick="showStep(2, 'Custom')">{{ "Sélectionner"|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <a href="{{ path('app_operation_crud_index') }}">back to list</a>
+
+<!-- Étape 2 : Sélection des services de nettoyage et saisie de l'adresse -->
+<div id="step2" class="d-none">
+    <div class="container py-5">
+        <div class="card">
+            <div class="card-body">
+
+                <h3 class="card-title text-center">{{ "Services de Nettoyage"|trans }}</h3>
+        
+                <form id="operationForm" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nettoyageService" class="form-label">{{ "Type de Service"|trans }}</label>
+                            <select id="nettoyageService" name="nettoyageService" class="form-select" required>
+                                <option value="">{{ "Choisir..."|trans }}</option>
+                                <!-- Les options seront injectées ici -->
+                            </select>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez sélectionner un service de nettoyage."|trans }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="street_ope" class="form-label">{{ "Adresse"|trans }}</label>
+                            <input type="text" class="form-control adresse-autocomplete" id="street_ope" name="street_ope" placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez entrer l'adresse de l'opération."|trans }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="zipcode_ope" class="form-label">{{ "Code Postal"|trans }}</label>
+                            <input type="text" class="form-control zipcode_ope" id="zipcode_ope" name="zipcode_ope" placeholder="Code postal" required>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez entrer le code postal."|trans }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="city_ope" class="form-label">{{ "Ville"|trans }}</label>
+                            <input type="text" class="form-control city_ope" id="city_ope" name="city_ope" placeholder="Ville" required>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez entrer la ville."|trans }}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="map" class="mb-4" style="height: 250px; width: 250px;"></div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-warning" type="button" onclick="showStep(1)">{{ "Retour"|trans }}</button>
+                        <button class="btn btn-primary" type="button" onclick="showStep(3)">{{ "Continuer"|trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="step3" class="card border-0 shadow my-4 d-none">
+    <div class="card-header">
+        <h3 class="card-title text-center">{{ "Description de l'Opération"|trans }}</h3>
+    </div>
+    <div class="card-body">
+        <p>{{ "Veuillez fournir une description détaillée du site de nettoyage pour une préparation optimale."|trans }}</p>
+
+        <div class="form-group my-3">
+            <textarea id="description" name="description" class="form-control" rows="4" placeholder="{{ "Description du site de nettoyage"|trans }}"></textarea>
+        </div>
+
+        <div class="mb-3" id="imagewrapper">
+            <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
+            <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+        </div>
+        <div class="mb-3 mt-3" id="datewrapper">
+            <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
+            <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control">
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-secondary" onclick="showStep(2)">{{ "Retour"|trans }}</button>
+            <button class="btn btn-primary" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
+        </div>
+    </div>
+</div>
+
+<!-- Étape 4 : Confirmation des détails -->
+<div id="step4" class="container d-none">
+    <h3 class="text-center mb-4">{{ "Confirmation des Détails"|trans }}</h3>
+    <div class="p-4 rounded">
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item">{{ "Type de l'opération: "|trans }}<span id="confirmationType" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Service de nettoyage: "|trans }}<span id="confirmationService" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Adresse: "|trans }}<span id="confirmationAddress" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Description: "|trans }}<span id="confirmationDescription" class="fw-bold"></span></li>
+        </ul>
+        <p>{{ "Veuillez confirmer que toutes les informations ci-dessus sont correctes. Une fois confirmées, ces informations seront utilisées pour planifier et exécuter votre opération de nettoyage. Assurez-vous que les détails sont complets et précis."|trans }}</p>
+        <div class="text-center">
+            <button class="btn btn-primary me-2" onclick="submitOperation()">{{ "Confirmer et Soumettre"|trans }}</button>
+            <button class="btn btn-warning" onclick="showStep(3)">{{ "Retour"|trans }}</button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-3 mb-3 fixed-bottom"> <!-- mt-4 et mb-4 ajoutent un espacement en haut et en bas -->
+    <div class="row">
+        <div class="col text-center">
+            <p class="text-secondary"> 
+                {# <strong>{{ "Chez CleanThis,"|trans }}</strong> {{ "nous ne nous contentons pas de nettoyer - nous redéfinissons l'excellence du nettoyage. Avec une attention méticuleuse aux détails et une approche axée sur la satisfaction du client, nous vous offrons bien plus qu'un service de nettoyage standard."|trans }} <strong>{{ "Choisir CleanThis,"|trans }}</strong> {{ "c'est opter pour un environnement éclatant, un espace de vie harmonieux et un bien-être renforcé. Nous nous engageons à transformer votre espace, en apportant la propreté et la sérénité qui dépassent vos attentes. Parce que votre confort, votre santé et votre tranquillité d'esprit sont notre priorité, "|trans }}<strong>{{ "faites confiance à CleanThis"|trans }}</strong> {{ "pour une expérience de nettoyage hors pair."|trans }} #}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container my-1">
+    <div class="row">
+        <div class="col text-center step-indicator">
+            <div class="circle">1</div>
+            <div>{{ "Étape 1"|trans }}</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">2</div>
+            <div>{{ "Étape 2"|trans }}</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">3</div>
+            <div>{{ "Étape 3"|trans }}</div>
+        </div>
+        <div class="col text-center step-indicator">
+            <div class="circle">4</div>
+            <div>{{ "Étape 4"|trans }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+
+<style>
+   
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ddd; /* Gris pour étape non-active */
+    color: #fff; /* Blanc pour le texte à l'intérieur du cercle */
+    margin: 0 auto; /* Centre le cercle dans la 'step-indicator' */
+    position: relative;
+    z-index: 2; /* S'assurer que le cercle est au-dessus des lignes */
+}
+
+.circle.active {
+    background-color: #007bff; /* Bleu pour étape active */
+}
+
+    .circle {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 50%;
+        background-color: #5a6268; /* Couleur pour les étapes non actives */
+        color: white;
+        font-weight: bold;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.5s ease;
+    }
+
+    .circle.active {
+        background-color: #007bff; /* Couleur pour les étapes actives */
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .step-indicator:not(:last-child)::after {
+        content: '';
+        width: 100%;
+        border-bottom: 3px solid #ddd; /* Connecteur pour les étapes non actives */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(50%) translateY(-50%);
+        z-index: -1;
+    }
+
+    .step-indicator.active + .step-indicator::after {
+        border-bottom: 3px solid #007bff; /* Connecteur pour les étapes actives */
+    }
+
+    /* Animation de clignotement */
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .blink {
+        animation: blink 1.5s ease-in-out infinite;
+    }
+
+    #rdvDate, #operationImage {
+        width: 300px;
+        margin: 0 auto;
+    }
+
+    #imagewrapper, #datewrapper {
+        text-align:center;
+    }
+    
+</style>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    var operationType;
+    var isFormSubmitted = false;
+    var map;
+    var marker;
+
+function initMap() {
+        map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris par défaut
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    }
+
+function updateMap() {
+    var street = document.getElementById('street_ope').value;
+    var zipcode = document.getElementById('zipcode_ope').value;
+    var city = document.getElementById('city_ope').value;
+    var country = 'France'; // Ajoutez le pays pour améliorer la précision
+    var address = `${street}, ${zipcode}, ${city}, ${country}`;
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Ajoutez un log pour voir les données retournées
+            if(data && data.length > 0) {
+                var lat = data[0].lat;
+                var lon = data[0].lon;
+                console.log('Lat:', lat, 'Lon:', lon); // Log pour vérifier les coordonnées
+                map.setView([lat, lon], 13);
+                if(marker) {
+                    marker.remove();
+                }
+                marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup('Nous Interviendrons.<br> ici.')
+                .openPopup();
+            } else {
+                console.log('Aucun résultat trouvé pour cette adresse');
+                // Vous pouvez ici gérer le cas où l'adresse n'est pas trouvée
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+
+    document.getElementById('street_ope').addEventListener('change', updateMap);
+    document.getElementById('zipcode_ope').addEventListener('change', updateMap);
+    document.getElementById('city_ope').addEventListener('change', updateMap);
+
+    // Initialisation de la carte à l'ouverture de la page
+    window.onload = initMap;
+
+
+function validateStep2() {
+    var service = document.getElementById('nettoyageService').value;
+    var street = document.getElementById('street_ope').value;
+    var zipcode = document.getElementById('zipcode_ope').value;
+    var city = document.getElementById('city_ope').value;
+
+    var isZipcodeValid = /^\d+$/.test(zipcode); // Vérifier si le code postal contient uniquement des chiffres
+
+    if (!service || !street || !zipcode || !city) {
+        Swal.fire('Désolé !', 'Veuillez remplir tous les champs de l\'étape 2.', 'error');
+        return false;
+    } else if (!isZipcodeValid) {
+        Swal.fire('Code Postal Invalide', 'Le code postal doit contenir uniquement des chiffres.', 'error');
+        return false;
+    }
+    return true;
+}
+
+
+    function validateStep3() {
+        var description = document.getElementById('description').value;
+        if (!description) {
+            Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
+            return false;
+        }
+        return true;
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Mettre en évidence l'indicateur de l'étape 1 dès le chargement de la page
+    updateStepIndicators(1);
+});
+    function updateStepIndicators(stepNumber) {
+        var steps = document.querySelectorAll('.step-indicator .circle');
+        steps.forEach((step, index) => {
+            if (index < stepNumber) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+    }
+
+    function showStep(stepNumber, selectedOperationType = null) {
+        if ((stepNumber === 3 && !validateStep2()) || (stepNumber === 4 && !validateStep3())) {
+            updateStepIndicators(stepNumber - 1);
+            return;
+        }
+
+        updateStepIndicators(stepNumber); // Mise à jour des indicateurs d'étape seulement après validation réussie
+
+        if (selectedOperationType) {
+            operationType = selectedOperationType;
+        }
+
+        // Cachez toutes les étapes
+        document.getElementById('step1').classList.add('d-none');
+        document.getElementById('step2').classList.add('d-none');
+        document.getElementById('step3').classList.add('d-none');
+        document.getElementById('step4').classList.add('d-none');
+
+        // Affichez l'étape demandée
+        document.getElementById('step' + stepNumber).classList.remove('d-none');
+
+        if (stepNumber === 2 && selectedOperationType) {
+            fetchOptions(operationType);
+            setTimeout(function() {
+            map.invalidateSize();
+        }, 400);
+        } else if (stepNumber === 4) {
+            updateConfirmation();
+        }
+    }
+
+
+function updateStepIndicators(stepNumber) {
+    var steps = document.querySelectorAll('.step-indicator .circle');
+    steps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
+
+    function fetchOptions(operationType) {
+        fetch('/ajax/get-cleaning-options', {
+            method: 'POST',
+            body: JSON.stringify({ type: operationType }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updateCleaningOptions(data.options))
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    function updateCleaningOptions(options) {
+        let select = document.getElementById('nettoyageService');
+        select.innerHTML = '<option value="">-- Sélectionnez le service --</option>';
+        options.forEach(option => {
+            let newOption = new Option(option, option);
+            select.appendChild(newOption);
+        });
+    }
+
+    function updateConfirmation() {
+        const translatedType = translateOperationType(operationType);
+        const service = document.getElementById('nettoyageService').value;
+        const street = document.getElementById('street_ope').value;
+        const zipcode = document.getElementById('zipcode_ope').value;
+        const city = document.getElementById('city_ope').value;
+        const description = document.getElementById('description').value;
+    
+        document.getElementById('confirmationType').innerText = translatedType;
+        document.getElementById('confirmationService').innerText = service;
+        document.getElementById('confirmationAddress').innerText = `${street}, ${zipcode} ${city}`;
+        document.getElementById('confirmationDescription').innerText = description;
+    }
+   
+   
+    function translateOperationType(type) {
+    switch (type) {
+        case 'Little':
+            return 'Petite Opération (environ 10 à 15 m²)';
+        case 'Medium':
+            return 'Moyenne Opération (environ 30 à 50 m²)';
+        case 'Big':
+            return 'Grande Opération (environ 50 à 500 m²)';
+        case 'Custom':
+            return 'Opération Personnalisée';
+        default:
+            return 'Type Inconnu';
+    }
+ }
+
+   function submitOperation() {
+    if (isFormSubmitted) {
+        Swal.fire('Erreur!', 'Le formulaire a déjà été soumis.', 'error');
+        return;
+    }
+
+    if (!validateStep3()) return;
+
+    isFormSubmitted = true;
+
+    // Créer un objet FormData pour envoyer les données du formulaire
+    var formData = new FormData();
+    formData.append('type', operationType);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('name', document.getElementById('nettoyageService').value);
+    formData.append('street', document.getElementById('street_ope').value);
+    formData.append('zipcode', document.getElementById('zipcode_ope').value);
+    formData.append('city', document.getElementById('city_ope').value);
+    
+    var rdvDate = document.getElementById('rdvDate').value;
+    if (rdvDate) {
+        formData.append('rdvDate', rdvDate);
+    }
+
+    // Ajouter l'image au FormData
+    var imageFile = document.getElementById('operationImage').files[0];
+    if (imageFile) {
+        formData.append('attachmentFile', imageFile);
+    }
+
+    fetch('/ajax/create-operation', {
+        method: 'POST',
+        body: formData // Utilisation de FormData
+        // Ne pas ajouter de header 'Content-Type', car il est nécessaire d'utiliser le 'boundary' généré par FormData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire('Succès!', 'Opération créée avec succès.', 'success')
+            .then(() => {
+                window.location.href = '/admin'; // Redirection
+            });
+        } else {
+            isFormSubmitted = false; // Réinitialisez l'état si la soumission a échoué
+            Swal.fire('Erreur!', 'Erreur lors de la création de l\'opération.', 'error');
+        }
+    })
+    .catch(error => {
+        isFormSubmitted = false; // Réinitialisez l'état si une erreur survient
+        handleError(error);
+    });
+}
+
+function handleError(error) {
+    console.error('Erreur:', error);
+    Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
+}
+
+    function handleResponse(data) {
+        if (data.status === 'success') {
+            Swal.fire('Succès!', 'Opération créée avec succès.', 'success');
+        } else {
+            Swal.fire('Erreur!', 'Erreur lors de la création de l\'opération.', 'error');
+        }
+    }
+
+    function handleError(error) {
+        console.error('Erreur:', error);
+        Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
+    }
+
+// Ajouter cet écouteur pour chaque champ de saisie de votre formulaire
+document.getElementById('street_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Vous pouvez ici appeler updateMap ou toute autre fonction que vous souhaitez exécuter
+        updateMap();
+    }
+});
+
+document.getElementById('zipcode_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Logique similaire pour le champ code postal
+        updateMap();
+    }
+});
+
+document.getElementById('city_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Logique similaire pour le champ ville
+        updateMap();
+    }
+});
+
+</script>
+
+{% endblock %}
+
+{% block body_footer %}
+    {# Votre pied de page ici #}
 {% endblock %}

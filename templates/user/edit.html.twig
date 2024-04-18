@@ -1,7 +1,253 @@
-{% extends '@EasyAdmin/crud/edit.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
-{% block body_javascript %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Sidebar.css') }}">
-    <script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+{% block body_id 'page-content-wrapper' %}
+
+{% block main %}
+
+<section class="content-body">
+    <div class="row d-flex justify-content-around">
+        <div class="col-md-10">
+            <!-- Section d'Affichage des Informations du Profil (Non Sensibles) -->
+            <div class="user-info mb-4 p-5" id="profile-info" style="border-radius: 20px;">
+                <h2 class="h4 text-primary mb-4">{{ "Informations du Profil"|trans }}</h2>
+                <p><strong>{{ "Nom:"|trans }}</strong> {{ profileForm.vars.value.name }}</p>
+                <p><strong>{{ "Prénom:"|trans }}</strong> {{ profileForm.vars.value.firstname }}</p>
+                <p><strong>{{ "Code Postal:"|trans }}</strong> {{ profileForm.vars.value.zipcode }}</p>
+                <p><strong>{{ "Ville:"|trans }}</strong> {{ profileForm.vars.value.city }}</p>
+                <p><strong>{{ "Rue:"|trans }}</strong> {{ profileForm.vars.value.street }}</p>
+                <button class="btn btn-outline-primary" onclick="toggleEditForm('profile-edit-form')">{{ "Modifier Profil"|trans }}</button>
+            </div>
+            
+            <!-- Formulaire d'Édition du Profil (Non Sensibles) -->
+            <div class="edit-form d-none p-5" id="profile-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;">
+                {{ form_start(profileForm, {'attr': {'id': 'profile-edit-form-twig'}}) }}
+                {{ form_row(profileForm.name) }}
+                {{ form_row(profileForm.firstname) }}
+                {{ form_row(profileForm.zipcode) }}
+                {{ form_row(profileForm.city) }}
+                {{ form_row(profileForm.street) }}
+                <button type="submit" class="btn btn-success">{{ "Sauvegarder"|trans }}</button>
+                <button type="button" class="btn btn-secondary" onclick="toggleEditForm('profile-edit-form')">{{ "Annuler"|trans }}</button>
+                {{ form_end(profileForm) }}
+            </div>
+
+            <!-- Section d'Affichage des Informations Sensibles (Masquées) -->
+            <div class="user-info mb-4 p-5" style="border-radius: 20px;">
+                <h2 class="h4 text-primary mb-4">{{ "Informations Confidentielles"|trans }}</h2>
+                <p><strong>{{ "Email:"|trans }}</strong> {{ sensitiveInfoForm.vars.value.email | mask_email }}</p>
+                <p><strong>{{ "Téléphone:"|trans }}</strong> {{ sensitiveInfoForm.vars.value.phone | mask_phone }}</p>
+                <p><strong>{{ "Mot de passe:"|trans }}</strong> ********</p>
+                <button class="btn btn-outline-primary" onclick="toggleEditForm('sensitive-edit-form')">{{ "Modifier Informations confidentielles"|trans }}</button>
+            </div>
+
+            <!-- Formulaire d'Édition des Informations Sensibles -->
+            <div class="edit-form d-none p-5" id="sensitive-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;">
+                {{ form_start(sensitiveInfoForm, {'attr': {'id': 'sensitive-info-form-twig'}}) }}
+                {{ form_row(sensitiveInfoForm.email) }}
+                {{ form_row(sensitiveInfoForm.phone) }}
+                {{ form_row(sensitiveInfoForm.newPassword) }}
+                {{ form_row(sensitiveInfoForm.currentPassword) }}
+                <button type="submit" class="btn btn-success">{{ "Modifier"|trans }}</button>
+                <button type="button" class="btn btn-secondary" onclick="toggleEditForm('sensitive-edit-form')">{{ "Annuler"|trans }}</button>
+                {{ form_end(sensitiveInfoForm) }}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+    function toggleEditForm(formId) {
+        let profileInfo = document.getElementById('profile-info');
+        let editForms = document.querySelectorAll('.edit-form');
+        
+        editForms.forEach(form => {
+            if (form.id === formId) {
+                form.classList.toggle('d-none');
+                profileInfo.style.display = form.classList.contains('d-none') ? 'block' : 'none';
+            } else {
+                form.classList.add('d-none');
+            }
+        });
+    }
+
+    function handleFormSubmission(form, url, successMessage) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            let formData = new FormData(form);
+            let currentPassword = formData.get('sensitive_info[currentPassword]');
+
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({ password: currentPassword }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.isValid) {
+                    form.submit();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: 'Mot de passe actuel incorrect.'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let sensitiveForm = document.getElementById('sensitive-info-form-twig');
+        let checkPasswordUrl = '{{ path('check_password') }}';
+
+        handleFormSubmission(sensitiveForm, checkPasswordUrl, 'Informations sensibles mises à jour avec succès.');
+
+        // SweetAlert pour les messages flash
+        {% for message in app.flashes('success') %}
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès',
+                text: '{{ message }}'
+            });
+        {% endfor %}
+
+        {% for message in app.flashes('error_password') %}
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: '{{ message }}'
+            });
+        {% endfor %}
+    });
+</script>
+
+<style>
+
+[data-bs-theme="dark"] .h4 {
+    background-color: #5a5a5a; 
+}
+[data-bs-theme="dark"] .main-content{
+    background-color: #0a0a0a; 
+}
+[data-bs-theme="dark"] .user-info{
+    background-color: #5a5a5a; 
+}
+
+ /* Style pour le corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style pour la section principale */
+.content-body {
+    padding: 20px;
+}
+
+[data-bs-theme="light"] .content-header{
+    background-color: #f8fafc; 
+}
+
+/* Style pour les titres */
+{# .h4 {
+    color: #007bff;
+} #}
+
+/* Style pour les boutons */
+.btn {
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Style pour les formulaires */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Style pour les champs de formulaire */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+/* Style pour les sections d'informations utilisateur */
+.user-info {
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+/* Style pour les sections de formulaire d'édition */
+.edit-form {
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+</style>
 {% endblock %}
+
+
+{% endblock %}
+
+

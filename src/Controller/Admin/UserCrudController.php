@@ -61,13 +61,15 @@ class UserCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud {
         return $crud
-            ->overrideTemplate('crud/new', 'user/new.html.twig')
-            ->overrideTemplate('crud/edit', 'user/edit.html.twig')
+            ->overrideTemplate('crud/new', 'user_crud/new.html.twig')
+            ->overrideTemplate('crud/edit', 'user_crud/edit.html.twig')
             ->setPageTitle(Crud::PAGE_INDEX, 'Membres')
             ->setPageTitle(Crud::PAGE_EDIT, 'Modifier le Membre')
             ->setPageTitle(Crud::PAGE_NEW, 'Ajouter un Membre')
             ->setPageTitle(Crud::PAGE_DETAIL, 'Détails du Membre')
-            ->setSearchFields(null);
+            ->setSearchFields(['name', 'firstname', 'roles'])
+            ->setPaginatorPageSize(10)            
+            ->setPaginatorRangeSize(0);
             $rolesFilter = $this->getContext()->getRequest()->query->get('roles');
             if ($rolesFilter) {
                 $crud->setDefaultSort(['roles' => $rolesFilter]);
@@ -86,6 +88,7 @@ class UserCrudController extends AbstractCrudController
         // Désactiver l'action 'NEW' pour les utilisateurs sans le rôle 'ROLE_ADMIN'
         if (!$isAdmin) {
             $actions->disable(Action::NEW);
+            $actions->disable(Action::DETAIL);
         }
     
         // Mise à jour de l'action DELETE
@@ -123,15 +126,15 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextareaField::new('email')
             ->setFormType(EmailType::class),
-            TextField::new('name'),
-            TextField::new('firstname'),
+            TextField::new('name', 'Nom'),
+            TextField::new('firstname','Prenom'),
             TextField::new('street', 'Rue')
             ->setFormTypeOption('attr', ['class' => 'adresse-autocomplete']),
             TextField::new('zipcode', 'Code Postal')
             ->setFormTypeOption('attr', ['class' => 'zipcode_ope']),
             TextField::new('city', 'Ville')
             ->setFormTypeOption('attr', ['class' => 'city_ope']),
-            TextField::new('phone'),
+            TextField::new('phone','Telephone'),
             ChoiceField::new('singleRole', 'Role')
             ->setChoices([
                 'Admin' => 'ROLE_ADMIN',
@@ -139,14 +142,20 @@ class UserCrudController extends AbstractCrudController
                 'Apprenti' => 'ROLE_APPRENTI',
                 'Client' => 'ROLE_CUSTOMER'
             ])
+            ->renderAsBadges([
+                'ROLE_APPRENTI' => 'warning',
+                'ROLE_SENIOR' => 'primary',
+                'ROLE_EXPERT' => 'success',
+                'ROLE_ADMIN' => 'danger'
+            ])
             ->setFormTypeOption('disabled', !$this->security->isGranted('ROLE_ADMIN')),
     ];
-            $password = TextField::new('password')
+            $password = TextField::new('password', 'Mot de passe')
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => '(Repeat)'],
+                'first_options' => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmer mot de passe'],
                 'mapped' => false,
                 'constraints' => [
                     new Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', "Il faut un mot de passe de 8 caractères, une majuscule et un chiffre")

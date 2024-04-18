@@ -38,7 +38,7 @@ class DashboardController extends AbstractDashboardController
                 ->generateUrl();
             return $this->redirect($url);
         } else {
-            throw new AccessDeniedException('You do not have access to this section.');
+            throw new AccessDeniedException('Vous n\'avez pas accès à cette section.');
         }
     }
 
@@ -46,8 +46,8 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets {
         return parent::configureAssets()
             ->addCssFile('css/Sidebar.css');
-
     }
+    
     
     public function configureMenuItems(): iterable {
         //Admin dashboard
@@ -63,7 +63,10 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('status', 'En cours'),
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
+                    MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                        ->setQueryParameter('status', 'Archivée'),
             ]);
+            yield MenuItem::linkToRoute('Statistiques', 'fa fa-pie-chart', 'stats');   
             yield MenuItem::submenu('Profil', 'fa fa-user');
             yield MenuItem::subMenu('Membres', 'fa fa-users')
                 ->setSubItems([
@@ -73,12 +76,29 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('userType', 'employee'),
             ]);        
             // yield MenuItem::linkToRoute('Statistiques', 'fa fa-chart-line', 'statistics_route'); TODO:
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
+
             yield MenuItem::section('Support');
             // yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class); FIXME:
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
+            yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
-        //Senior dashboard
+        //Senior dashboard-
         if ($this->isGranted('ROLE_SENIOR')) {
             yield MenuItem::section('Principal');
             yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
@@ -91,10 +111,27 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('status', 'En cours'),
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
+                     MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                        ->setQueryParameter('status', 'Archivée'),
             ]);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
             yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
         if ($this->isGranted('ROLE_APPRENTI')) {
@@ -109,10 +146,28 @@ class DashboardController extends AbstractDashboardController
                     ->setQueryParameter('status', 'En cours'),
                 MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                     ->setQueryParameter('status', 'Terminée'),
+                MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                    ->setQueryParameter('status', 'Archivée'),
             ]);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
-            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
+            yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
+
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
         if ($this->isGranted('ROLE_CUSTOMER')) {
@@ -127,10 +182,28 @@ class DashboardController extends AbstractDashboardController
                         ->setQueryParameter('status', 'En cours'),
                     MenuItem::linkToCrud('Terminées', 'fa fa-check', Operation::class)
                         ->setQueryParameter('status', 'Terminée'),
+                    MenuItem::linkToCrud('Archivées', 'fa fa-history', Operation::class)
+                        ->setQueryParameter('status', 'Archivée'),
             ]);
-            yield MenuItem::linkToRoute('Historique', 'fa fa-history', 'history_route');
             yield MenuItem::section('Support');
-            yield MenuItem::linkToCrud('Votre Profil', 'fa fa-user', User::class);
+            yield MenuItem::linkToRoute('Votre Profil', 'fa fa-user', 'profile_edit');
+            yield MenuItem::linkToRoute(
+                'English', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'en', 
+                ]
+            );
+            yield MenuItem::linkToRoute(
+                'Français', 
+                "fa-solid fa-globe", 
+                'change_locale', 
+                [
+                    'locale' => 'fr', 
+                ]
+            );
+
             yield MenuItem::linkToLogout('Déconnexion', 'fa fa-sign-out');
         }
     }

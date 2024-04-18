@@ -2,7 +2,7 @@
 
 controllers:
   resource: '../src/Controller/'
-  type: annotation
+  type: attribute
 
 auth_oauth_check:
   path: /oauth/check/{service}
@@ -36,3 +36,52 @@ contact:
 recrutement:
     path: /recrutement
     controller: App\Controller\RecrutementController::index
+
+profile_edit:
+    path: /profile/edit
+    controller: App\Controller\ProfilController::edit
+
+ajax_get_cleaning_options:
+    path: /ajax/get-cleaning-options
+    controller: App\Controller\AjaxOperationController::getCleaningOptions
+    methods: POST
+
+ajax_create_operation:
+    path: /ajax/create-operation
+    controller: App\Controller\AjaxOperationController::createOperation
+    methods: POST
+
+ajax_update_operation:
+    path: /ajax/update-operation/{id}
+    controller: App\Controller\AjaxOperationController::updateOperation
+    methods: POST
+
+operation_edit:
+    path: /operation/edit/{id}
+    controller: App\Controller\AjaxOperationController::editOperation
+    methods: GET
+
+operation_download_invoice:
+    path: /operation/download-invoice/{id}
+    controller: App\Controller\InvoiceController::downloadInvoice
+    methods: GET
+    requirements:
+        id: '\d+'
+
+check_password:
+    path: /check-password
+    controller: App\Controller\ProfilController::checkPassword
+    methods: POST
+
+ajax_update_operation_operator:
+    path: /ajax/update-operation-operator/{id}
+    controller: App\Controller\AjaxOperationController::updateOperationOperator
+    methods: [POST]
+    requirements:
+        id: '\d+'
+
+admin_change_operator:
+    path: /admin/change-operator/{id}
+    controller: App\Controller\AjaxOperationController::changeOperator
+    requirements:
+        id: '\d+'

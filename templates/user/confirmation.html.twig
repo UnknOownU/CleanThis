@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ "Message envoyé"|trans }}{% endblock %}
+
+{% block body %}
+<main>
+    <div class="container">
+        <h1>{{ "Votre message a été envoyé avec succès !"|trans }}</h1>
+        <h3>{{ "Nous vous répondrons dans les plus bref délais!"|trans }}</h3>
+        <p>{{ "Vous serez redirigé vers la page d'accueil dans"|trans }} <span id="redirect-timer">5</span> {{ "secondes."|trans }}</p>
+    </div>
+    
+    <script>
+        // Fonction pour mettre à jour le timer de redirection
+        function updateTimer() {
+            var seconds = 5;
+            var timer = setInterval(function() {
+                seconds--;
+                document.getElementById('redirect-timer').textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    window.location.href = "{{ path('index') }}"; // Redirection vers l'index
+                }
+            }, 1000);
+        }
+
+        // Appel de la fonction au chargement de la page
+        window.onload = function() {
+            updateTimer();
+        };
+    </script>
+        </main>
+
+
+        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+        <script src="{{ asset('js/counter.js') }}"></script>
+        <script src="{{ asset('js/countdown.js') }}"></script>
+        <script src="{{ asset('js/init.js') }}"></script>
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        <script src="{{ asset('js/animated-headline.js') }}"></script>
+        <script src="{{ asset('js/custom.js') }}"></script>
+
+{% endblock %}

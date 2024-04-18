@@ -1,13 +1,463 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
+{% block body_id 'page-content-wrapper' %}
 
-{% block title %}Edit Operation{% endblock %}
+{% block main %}
 
-{% block body %}
-    <h1>Edit Operation</h1>
+<div class="ea-edit-form">
+<div class="container mt-3">
+    <h2 class="text-center mb-5">{{ "Modification de votre demande d'opération de néttoyage numéro"|trans }} {{ operation.id }}</h2>
+    </div>
+    <div id="operationEditContainer">
+        <!-- Étape 1 : Choix du type d'opération -->
+<div id="step1" class="row justify-content-center mb-4">
+    <!-- Petite Opération -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ "Petite Opération"|trans }}</h5>
+                <p class="card-text">{{ "Pour une intervention d'environ 10 à 15 mètres carrés"|trans }}</p>
+                <button class="btn btn-primary" data-type="Little" onclick="showStep(2, 'Little')">{{ "Sélectionner"|trans }}</button>
+            </div>
+        </div>
+    </div>
 
-    {{ include('operation_crud/_form.html.twig', {'button_label': 'Update'}) }}
+    <!-- Moyenne Opération -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ "Moyenne Opération"|trans }}</h5>
+                <p class="card-text">{{ "Pour une intervention d'environ 30 à 50 mètres carrés"|trans }}</p>
+                <button class="btn btn-primary" data-type="Medium" onclick="showStep(2, 'Medium')">{{ "Sélectionner"|trans }}</button>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('app_operation_crud_index') }}">back to list</a>
+    <!-- Grande Opération -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ "Grande Opération"|trans }}</h5>
+                <p class="card-text">{{ "Pour une intervention d'environ 50 à 500 mètres carrés"|trans }}</p>
+                <button class="btn btn-primary" data-type="Big" onclick="showStep(2, 'Big')">{{ "Sélectionner"|trans }}</button>
+            </div>
+        </div>
+    </div>
 
-    {{ include('operation_crud/_delete_form.html.twig') }}
+    <!-- Opération Personnalisée -->
+    <div class="col-md-6 mb-5">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ "Opération Personnalisée"|trans }}</h5>
+                <p class="card-text">{{ "Choisissez une opération personnalisée"|trans }}</p>
+                <button class="btn btn-primary" data-type="Custom" onclick="showStep(2, 'Custom')">{{ "Sélectionner"|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="step2" class="d-none">
+    <div class="container py-5">
+        <div class="card">
+            <div class="card-body">
+
+                <h3 class="card-title text-center">{{ "Services de Nettoyage"|trans }}</h3>
+
+                <form id="operationForm" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nettoyageService" class="form-label">{{ "Type de Service"|trans }}</label>
+                            <select id="nettoyageService" name="nettoyageService" class="form-select" required>
+                                <option value="">{{ "Choisir..."|trans }}</option>
+                                <!-- Les options seront injectées ici -->
+                            </select>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez sélectionner un service de nettoyage."|trans }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="street_ope" class="form-label">{{ "Adresse"|trans }}</label>
+                            <input type="text" class="form-control adresse-autocomplete" id="street_ope" name="street_ope" placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez entrer l'adresse de l'opération."|trans }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="zipcode_ope" class="form-label">{{ "Code Postal"|trans }}</label>
+                            <input type="text" class="form-control zipcode_ope" id="zipcode_ope" name="zipcode_ope" placeholder="Code postal" required>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez entrer le code postal."|trans }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="city_ope" class="form-label">{{ "Ville"|trans }}</label>
+                            <input type="text" class="form-control city_ope" id="city_ope" name="city_ope" placeholder="Ville" required>
+                            <div class="invalid-feedback">
+                                {{ "Veuillez entrer la ville."|trans }}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="map" class="mb-4" style="height: 250px; width: 250px;"></div>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-warning" type="button" onclick="showStep(1)">{{ "Retour"|trans }}</button>
+                        <button class="btn btn-primary" type="button" onclick="showStep(3)">{{ "Continuer"|trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="step3" class="container d-none">
+            <h3 class="mb-4">{{ "Description de l'Opération"|trans }}</h3>
+            <p>{{ "Veuillez fournir une description détaillée du site où aura lieu l'opération de nettoyage. Ceci est crucial pour assurer que nos équipes soient correctement préparées et équipées pour répondre au mieux à vos besoins. Vous devriez inclure :"|trans }}</p>
+            <ul>
+                <li>{{ "La taille approximative de l'espace à nettoyer (en mètres carrés)."|trans }}</li>
+                <li>{{ "Toute condition spécifique ou exigence (par exemple, surfaces délicates, zones à éviter)."|trans }}</li>
+                <li>{{ "Des informations sur les types de surfaces et de matériaux présents (carrelage, moquette, bois, etc.)."|trans }}</li>
+                <li>{{ "Tout obstacle potentiel ou zone difficile d'accès."|trans }}</li>
+                <li>{{ "Préférences concernant les produits de nettoyage (écologiques, hypoallergéniques, etc.)."|trans }}</li>
+                <li>{{ "Heures ou périodes souhaitées pour l'intervention."|trans }}</li>
+            </ul>
+            <p>{{ "Cette description nous aidera à assurer un service de qualité, adapté à vos besoins et en toute sécurité pour votre espace."|trans }}</p>
+            <textarea id="description" name="description" class="form-control" rows="4" placeholder="Décrivez l'opération ici" required></textarea> 
+            <div class="text-center mt-3">
+
+            <button type="button" class="btn btn-primary mt-3" onclick="if (validateStep3()) showStep(4)">{{ "Continuer"|trans }}</button>
+            <button type="button" class="btn btn-secondary mt-3" onclick="showStep(2)">{{ "Retour"|trans }}</button>
+<div class="mb-3">
+    <label for="operationImage" class="form-label">Ajouter une Image (optionnel)</label>
+    <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
+</div>
+        </div>
+        </div>
+
+<div id="step4" class="d-none">
+    <div class="container">
+        <h3 class="text-center mb-4">{{ "Comparaison des Données"|trans }}</h3>
+        <div id="dataComparison" class="p-4 rounded">
+            <h4 class="mb-3">{{ "Récapitulatif des Changements"|trans }}</h4>
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item">{{ "Type de l'opération:"|trans }} <span id="oldType" class="fw-bold"></span> → <span id="newType" class="fw-bold"></span></li>
+                <li class="list-group-item">{{ "Service de nettoyage:"|trans }} <span id="oldName" class="fw-bold"></span> → <span id="newName" class="fw-bold"></span></li>
+                <li class="list-group-item">{{ "Adresse: "|trans }}<span id="oldAddress" class="fw-bold"></span> → <span id="newAddress" class="fw-bold"></span></li>
+                <li class="list-group-item">{{ "Description:"|trans }} <span id="oldDescription" class="fw-bold"></span> → <span id="newDescription" class="fw-bold"></span></li>
+            </ul>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary me-2" onclick="submitEditForm()">{{ "Confirmer et Mettre à Jour"|trans }}</button>
+                <button type="button" class="btn btn-secondary" onclick="showStep(3)">{{ "Retour"|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+{% block body_javascript %}
+{{ parent() }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="{{ asset('js/adresse-autocomplete.js') }}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+var map;
+var marker;
+var operationId = {{ operation.id }};
+var oldData = {}; // Variable pour stocker les anciennes données
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetchOperationData(operationId);
+});
+
+function fetchOperationData(operationId) {
+    fetch(`/operation/edit/${operationId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                oldData = data.operation; // Sauvegarder les anciennes données
+                preselectOperationType(data.operation.type);
+                fillFormWithExistingData(data.operation);
+                fetchOptions(data.operation.type);
+                showStep(1);
+            } else {
+                console.error('Erreur lors du chargement des données de l\'opération');
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+function preselectOperationType(operationType) {
+    var buttons = document.querySelectorAll('#step1 .btn');
+    buttons.forEach(button => {
+        if (button.getAttribute('data-type') === operationType) {
+            button.classList.add('selected');
+        }
+    });
+}
+
+function fetchOptions(operationType) {
+    fetch('/ajax/get-cleaning-options', {
+        method: 'POST',
+        body: JSON.stringify({ type: operationType }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => updateCleaningOptions(data.options))
+    .catch(error => console.error('Erreur:', error));
+}
+
+function updateCleaningOptions(options) {
+    let select = document.getElementById('nettoyageService');
+    select.innerHTML = '<option value="">-- Sélectionnez le service --</option>';
+    options.forEach(option => {
+        let newOption = new Option(option, option);
+        select.appendChild(newOption);
+    });
+}
+
+function fillFormWithExistingData(operation) {
+    updateCleaningOptionsSelect(operation.name);
+    document.getElementById('street_ope').value = operation.street;
+    document.getElementById('zipcode_ope').value = operation.zipcode;
+    document.getElementById('city_ope').value = operation.city;
+    document.getElementById('description').value = operation.description;
+}
+
+function updateCleaningOptionsSelect(selectedName) {
+    let select = document.getElementById('nettoyageService');
+    for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === selectedName) {
+            select.selectedIndex = i;
+            break;
+        }
+    }
+}
+function showStep(stepNumber, operationType = null) {
+     if (stepNumber === 2) {
+        // Assurez-vous que l'exécution soit délayée jusqu'à ce que la transition ou l'animation soit terminée
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 400); // Le délai peut être ajusté selon la durée de votre animation/transition
+    }
+    if (stepNumber === 3) {
+        var service = document.getElementById('nettoyageService').value;
+        var street = document.getElementById('street_ope').value;
+        var zipcode = document.getElementById('zipcode_ope').value;
+        var city = document.getElementById('city_ope').value;
+
+        // Vérifiez si le code postal contient uniquement des chiffres
+        var isZipcodeValid = /^\d+$/.test(zipcode);
+
+        if (!service || !street || !zipcode || !city || !isZipcodeValid) {
+            var errorMessage = !isZipcodeValid 
+                               ? 'Le code postal doit être composé uniquement de chiffres.' 
+                               : 'Veuillez remplir tous les champs avant de continuer.';
+
+            Swal.fire({
+                title: 'Champs Incomplets ou Invalides',
+                text: errorMessage,
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            });
+            return; // Ne pas passer à l'étape suivante si la condition n'est pas remplie
+        }
+    }
+
+    // Le reste du code pour la fonction showStep
+    if (operationType) {
+        var selectedButton = document.querySelector(`#step1 .btn[data-type="${operationType}"]`);
+        if (selectedButton) {
+            document.querySelectorAll('#step1 .btn').forEach(button => button.classList.remove('selected'));
+            selectedButton.classList.add('selected');
+            fetchOptions(operationType);
+        }
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        document.getElementById('step' + i).classList.add('d-none');
+    }
+
+    if (stepNumber === 4) {
+        var currentData = {
+            type: getSelectedOperationType(),
+            name: document.getElementById('nettoyageService').value,
+            street: document.getElementById('street_ope').value,
+            zipcode: document.getElementById('zipcode_ope').value,
+            city: document.getElementById('city_ope').value,
+            description: document.getElementById('description').value
+        };
+        updateDataComparison(currentData);
+    }
+
+    document.getElementById('step' + stepNumber).classList.remove('d-none');
+}
+
+
+function updateDataComparison(newData) {
+    document.getElementById('oldType').textContent = oldData.type || 'N/A';
+    document.getElementById('newType').textContent = newData.type || 'N/A';
+    document.getElementById('oldName').textContent = oldData.name || 'N/A';
+    document.getElementById('newName').textContent = newData.name || 'N/A';
+    document.getElementById('oldAddress').textContent = oldData.street ? `${oldData.street}, ${oldData.zipcode}, ${oldData.city}` : 'N/A';
+    document.getElementById('newAddress').textContent = `${newData.street}, ${newData.zipcode}, ${newData.city}`;
+    document.getElementById('oldDescription').textContent = oldData.description || 'N/A';
+    document.getElementById('newDescription').textContent = newData.description || 'N/A';
+}
+
+function getSelectedOperationType() {
+    var selectedButton = document.querySelector('#step1 .btn.selected');
+    return selectedButton ? selectedButton.getAttribute('data-type') : '';
+}
+
+function validateStep3() {
+    var description = document.getElementById('description').value.trim();
+    if (description === '')  {
+        Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
+        return false;
+    }
+    return true;
+}
+
+
+
+function submitEditForm() {
+    var formData = new FormData();
+    formData.append('type', getSelectedOperationType());
+    formData.append('name', document.getElementById('nettoyageService').value);
+    formData.append('street', document.getElementById('street_ope').value);
+    formData.append('zipcode', document.getElementById('zipcode_ope').value);
+    formData.append('city', document.getElementById('city_ope').value);
+    formData.append('description', document.getElementById('description').value);
+
+    // Ajout de l'image si elle est présente
+    var imageFile = document.getElementById('operationImage').files[0];
+    if (imageFile) {
+        formData.append('attachmentFile', imageFile);
+    }
+
+
+    fetch(`/ajax/update-operation/${operationId}`, {
+        method: 'POST',
+        body: formData
+        // Ne pas définir 'Content-Type' header, FormData le fait automatiquement
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire({
+                title: 'Succès',
+                text: 'Opération mise à jour avec succès',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }) .then(() => {
+                window.location.href = '/admin'; // Redirection
+            });
+        } else {
+            Swal.fire('Erreur', 'Erreur lors de la mise à jour de l\'opération', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        Swal.fire('Erreur', 'Un problème est survenu lors de la mise à jour de l\'opération.', 'error');
+    });
+}
+
+
+function getSelectedOperationType() {
+    var selectedButton = document.querySelector('#step1 .btn.selected');
+    return selectedButton ? selectedButton.getAttribute('data-type') : '';
+}
+
+function compareOldAndNewData(newData) {
+    var comparisonMessage = `Comparaison des données :\n\n`;
+    comparisonMessage += `Type de l'opération :\nAncien : ${oldData.type}\nNouveau : ${newData.type}\n\n`;
+    comparisonMessage += `Service de nettoyage :\nAncien : ${oldData.name}\nNouveau : ${newData.name}\n\n`;
+    comparisonMessage += `Adresse :\nAncienne : ${oldData.street}, ${oldData.zipcode}, ${oldData.city}\nNouvelle : ${newData.street}, ${newData.zipcode}, ${newData.city}\n\n`;
+    comparisonMessage += `Description :\nAncienne : ${oldData.description}\nNouvelle : ${newData.description}`;
+
+}
+function initMap() {
+        map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris par défaut
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+    }
+
+function updateMap() {
+    var street = document.getElementById('street_ope').value;
+    var zipcode = document.getElementById('zipcode_ope').value;
+    var city = document.getElementById('city_ope').value;
+    var country = 'France'; // Ajoutez le pays pour améliorer la précision
+    var address = `${street}, ${zipcode}, ${city}, ${country}`;
+
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(address))
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Ajoutez un log pour voir les données retournées
+            if(data && data.length > 0) {
+                var lat = data[0].lat;
+                var lon = data[0].lon;
+                console.log('Lat:', lat, 'Lon:', lon); // Log pour vérifier les coordonnées
+                map.setView([lat, lon], 13);
+                if(marker) {
+                    marker.remove();
+                }
+                marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup('Nous Interviendrons.<br> ici.')
+                .openPopup();
+            } else {
+                console.log('Aucun résultat trouvé pour cette adresse');
+                // Vous pouvez ici gérer le cas où l'adresse n'est pas trouvée
+            }
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+
+
+    document.getElementById('street_ope').addEventListener('change', updateMap);
+    document.getElementById('zipcode_ope').addEventListener('change', updateMap);
+    document.getElementById('city_ope').addEventListener('change', updateMap);
+
+    // Initialisation de la carte à l'ouverture de la page
+    window.onload = initMap;
+document.getElementById('street_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Vous pouvez ici appeler updateMap ou toute autre fonction que vous souhaitez exécuter
+        updateMap();
+    }
+});
+
+document.getElementById('zipcode_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Logique similaire pour le champ code postal
+        updateMap();
+    }
+});
+
+document.getElementById('city_ope').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        // Logique similaire pour le champ ville
+        updateMap();
+    }
+});
+function updateStepIndicators(stepNumber) {
+    var steps = document.querySelectorAll('.step-indicator .circle');
+    steps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+}
+
+</script>
 {% endblock %}

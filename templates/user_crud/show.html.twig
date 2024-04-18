@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Operation{% endblock %}
+
+{% block body %}
+    <h1>Operation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ operation.id }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ operation.type }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ operation.name }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ operation.price }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ operation.description }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ operation.status }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ operation.createdAt ? operation.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Rdv_at</th>
+                <td>{{ operation.rdvAt ? operation.rdvAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Zipcode_ope</th>
+                <td>{{ operation.zipcodeOpe }}</td>
+            </tr>
+            <tr>
+                <th>City_ope</th>
+                <td>{{ operation.cityOpe }}</td>
+            </tr>
+            <tr>
+                <th>Street_ope</th>
+                <td>{{ operation.streetOpe }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_operation_crud_index') }}">back to list</a>
+
+    <a href="{{ path('app_operation_crud_edit', {'id': operation.id}) }}">edit</a>
+
+    {{ include('operation_crud/_delete_form.html.twig') }}
+{% endblock %}

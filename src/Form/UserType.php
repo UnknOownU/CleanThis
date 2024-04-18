@@ -1,44 +1,56 @@
 <?php
+// src/Form/UserType.php
 
 namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserType extends AbstractType
 {
+    private AuthorizationCheckerInterface $authChecker;
+
+    public function __construct(AuthorizationCheckerInterface $authChecker)
+    {
+        $this->authChecker = $authChecker;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('roles')
-            ->add('password')
-            ->add('name')
-            ->add('firstname')
+            ->add('email', EmailType::class)
+            ->add('name', TextType::class)
+            ->add('firstname', TextType::class)
             ->add('zipcode', TextType::class, [
-                'label' => 'Code Postal',
-                'attr' => ['class' => 'zipcode_ope']
+                'label' => 'Code Postal'
             ])
             ->add('city', TextType::class, [
-                'label' => 'Ville',
-                'attr' => ['class' => 'city_ope']
+                'label' => 'Ville'
             ])
             ->add('street', TextType::class, [
-                'label' => 'Rue',
-                'attr' => ['class' => 'adresse-autocomplete']
+                'label' => 'Rue'
             ])
-            ->add('phone');
-        ;
-        $builder->get('roles')
+            ->add('phone', TextType::class);
 
-    ->addModelTransformer(new CallbackTransformer(
-        fn ($rolesAsArray) => count($rolesAsArray) ? $rolesAsArray[0]: null,
-        fn ($rolesAsString) => [$rolesAsString]
-));
+
+        $builder->add('newPassword', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'first_options'  => ['label' => 'Nouveau mot de passe'],
+            'second_options' => ['label' => 'Répétez le mot de passe'],
+            'required' => false,
+            'mapped' => false, // Ajoutez cette option
+            'constraints' => [
+                new Regex('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', "Il faut un mot de passe de 8 caractères, une majuscule et un chiffre")
+            ],
+        ]);
 
     }
 
