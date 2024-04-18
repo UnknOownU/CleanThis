@@ -2,23 +2,24 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\User;
+use App\Service\LogsService;
+use App\Service\SendMailService;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
-use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager, SendMailService $mail, LogsService $logsService): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -54,6 +55,23 @@ class RegistrationController extends AbstractController
                 
             }
 
+            $role = $user->getRoles();
+            $userId = $user->getId();
+
+            // Log successful registration
+            try {
+                $logsService->postLog([
+                'loggerName' => 'Registration',
+                'user' => 'Anonymous',
+                'message' => 'User registered',
+                'level' => 'info',
+                'data' => [
+                    'role' => $role,
+                    'userId' => $userId
+                ]
+            ]);
+            } catch (Exception $e) {
+            }
             
             return $userAuthenticator->authenticateUser(
                 $user,

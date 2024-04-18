@@ -8,6 +8,7 @@ use App\Entity\user;
 use App\Entity\Operation;
 use App\Service\SendMailService;
 use App\Repository\UserRepository;
+use App\Service\LogsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -96,10 +97,89 @@ class AjaxOperationController extends AbstractController
 /**
  * @Route("/ajax/create-operation", name="ajax_create_operation")
  */
-public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security, SendMailService $mail): JsonResponse
+public function createOperation(Request $request, EntityManagerInterface $entityManager, Security $security, SendMailService $mail, LogsService $logsService): JsonResponse
 {
     $user = $security->getUser();
-    if ($user === null) {
+
+    if ($user !== null) {
+        $rdvDateTimeString = $request->request->get('rdvDateTime');
+        $rdvDateTime = new \DateTime($rdvDateTimeString);
+        $today = new \DateTime();
+        $today->setTime(0, 0, 0);
+    
+        if ($rdvDateTime < $today) {
+            return $this->json(['status' => 'error', 'message' => 'Les rendez-vous pour le jour même ne sont pas autorisés.']);
+        }
+    
+        if ($rdvDateTime->format('w') == 0) { // Dimanche
+            return $this->json(['status' => 'error', 'message' => 'Les rendez-vous le dimanche ne sont pas autorisés.']);
+        }
+        $operation = new Operation();
+        $operation->setType($request->request->get('type')); // Utiliser request->get pour les champs de texte
+        $operation->setAttachmentFile($request->files->get('attachmentFile')); // Utiliser request->files->get pour le fichier
+        $operation->setName($request->request->get('name'));
+        $operation->setDescription($request->request->get('description'));
+        $operation->setZipcodeOpe($request->request->get('zipcode'));
+        $operation->setStreetOpe($request->request->get('street'));
+        $operation->setCityOpe($request->request->get('city'));
+        $operation->setCustomer($user);
+        $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
+        
+
+        $rdvDateTime = $request->request->get('rdvDateTime');
+        if ($rdvDateTime) {
+            try {
+                $operation->setRdvAt(new \DateTimeImmutable($rdvDateTime));
+            } catch (\Exception $e) {
+                return $this->json(['status' => 'error', 'message' => 'Invalid date format']);
+            }
+        }
+        $entityManager->persist($operation);
+        $entityManager->flush();
+
+        $customer = $operation->getCustomer();
+        $created = $operation->getCreatedAt();
+        $idOpe = $operation->getId();
+        $customerId = $customer->getId();
+
+
+        // Log successful creation
+        try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => 'Anonymous',
+                'message' => 'User created operation',
+                'level' => 'info',
+                'data' => [
+                    'id_ope' => $idOpe,
+                    'created' => $created,
+                    'customer_id' => $customerId
+                ]
+
+            ]);
+            } catch (Exception $e) {
+            }
+
+        //Send mail
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Création de votre opération',
+                'opecreate',
+                [
+                    'user' => $customer
+                ]
+            );
+        } catch (Exception $e) {
+        } 
+        
+
+        return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
+
+
+    } else {
+>>>>>>> b05d992d2b13462a1fd37d3b645fac5d96d48cf6
         return $this->json(['status' => 'error', 'message' => 'Utilisateur non trouvé']);
     }
 
@@ -199,7 +279,7 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
         /**
         * @Route("/ajax/update-operation/{id}", name="ajax_update_operation")
         */
-        public function updateOperation(Request $request, Operation $operation, EntityManagerInterface $entityManager): JsonResponse
+        public function updateOperation(Request $request, Operation $operation, EntityManagerInterface $entityManager, LogsService $logsService): JsonResponse
         {
            if (!$operation) {
                return $this->json(['status' => 'error', 'message' => 'Opération non trouvée']);
@@ -218,6 +298,21 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
            $operation->setRdvAt(new \DateTimeImmutable());
        
            $entityManager->flush();
+           $idOpe = $operation->getId();
+
+            // Log edit operation
+         try {
+            $logsService->postLog([
+            'loggerName' => 'Operation',
+            'user' => 'Anonymous',
+            'message' => 'User edited operation',
+            'level' => 'info',
+            'data' => [
+                'id_ope' => $idOpe
+            ]
+        ]);
+        } catch (Exception $e) {
+        }
        
            return $this->json(['status' => 'success', 'message' => 'Opération mise à jour avec succès']);
         }
@@ -225,7 +320,7 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
  * @Route("/ajax/update-operation-operator/{id}", name="ajax_update_operation_operator")
  */
 
- public function updateOperationOperator(int $id, Request $request, EntityManagerInterface $entityManager, Security $security, UrlGeneratorInterface $urlGenerator): RedirectResponse
+ public function updateOperationOperator(int $id, Request $request, EntityManagerInterface $entityManager, Security $security, UrlGeneratorInterface $urlGenerator, LogsService $logsService): RedirectResponse
  {
      // Vérification des autorisations
      if (!$security->isGranted('ROLE_ADMIN')) {
@@ -261,7 +356,22 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
  
      // Mise à jour de l'opération avec le nouvel opérateur
      $operation->setSalarie($newOperator);
+     $idOpe = $operation->getId();
      $entityManager->flush();
+
+                 // Log edit operation
+                 try {
+                    $logsService->postLog([
+                    'loggerName' => 'Operation',
+                    'user' => 'Anonymous',
+                    'message' => 'User changed operator',
+                    'level' => 'info',
+                    'data' => [
+                        'id_ope' => $idOpe
+                    ]
+                ]);
+                } catch (Exception $e) {
+                }
  
      // Réaliser la redirection vers la page spécifiée
      return new RedirectResponse('/admin');

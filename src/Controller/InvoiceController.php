@@ -3,8 +3,12 @@
 
 namespace App\Controller;
 
+
 use App\Entity\User;
+
+use Exception;
 use App\Entity\Operation;
+use App\Service\LogsService;
 use App\Service\InvoiceService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,7 +28,8 @@ class InvoiceController extends AbstractController
     }
 
     #[Route('/operation/{id}/download-invoice', name: 'operation_download_invoice')]
-    public function downloadInvoice(Operation $operation): Response {
+
+    public function downloadInvoice(Operation $operation, LogsService $logsService): Response {
         $user = $this->getUser();
        
         if (!$this->isUserAllowedToViewOperation($user, $operation)) {
@@ -37,6 +42,20 @@ class InvoiceController extends AbstractController
         }
     
 
+        $customer = $operation->getCustomer();
+        $user = $customer->getEmail();
+        
+        // Log download invoice
+        try {
+            $logsService->postLog([
+            'loggerName' => 'Operation',
+            'user' => 'Anonymous',
+            'message' => 'User downloaded invoice',
+            'level' => 'info'
+        ]);
+        } catch (Exception $e) {
+        }
+        
         $pdfContent = $this->invoiceService->generateInvoice($operation);
 
         // Retournez une réponse avec le contenu du PDF et les en-têtes appropriés

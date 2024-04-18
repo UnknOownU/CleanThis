@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Exception;
+use App\Service\LogsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,6 +16,7 @@ class UserAuthenticatorController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
+
              return $this->redirectToRoute('app_login');
          }
 
@@ -28,6 +31,7 @@ class UserAuthenticatorController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(Request $request): Response
     {
+
         // Clear the session including the stored locale
         $request->getSession()->invalidate();
 

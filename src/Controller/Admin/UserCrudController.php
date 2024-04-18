@@ -4,36 +4,23 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
-use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormEvents;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Controller\OperationCrudController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
-
-use Symfony\Component\HttpFoundation\Response;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\Filter;
 use Symfony\Component\Validator\Constraints\Regex;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\{EmailType};
-use Symfony\Component\Form\{FormBuilderInterface, FormEvent};
+use Symfony\Component\Form\{FormBuilderInterface};
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, EmailField, TextField};
+use EasyCorp\Bundle\EasyAdminBundle\Field\{IdField, TextField};
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
@@ -52,7 +39,6 @@ class UserCrudController extends AbstractCrudController
         $this->security = $security;
         $this->authChecker = $authChecker;
     }
-    
 
     public static function getEntityFqcn(): string
     {
@@ -79,21 +65,21 @@ class UserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions {
         $actions = parent::configureActions($actions);
     
-        // Obtenez l'utilisateur actuellement connecté
+        //Obtenez l'utilisateur actuellement connecté
         $currentUser = $this->security->getUser();
     
-        // Vérifiez si l'utilisateur actuel est un administrateur
+        //Vérifiez si l'utilisateur actuel est un administrateur
         $isAdmin = $this->security->isGranted('ROLE_ADMIN');
     
-        // Désactiver l'action 'NEW' pour les utilisateurs sans le rôle 'ROLE_ADMIN'
+        //Désactiver l'action 'NEW' pour les utilisateurs sans le rôle 'ROLE_ADMIN'
         if (!$isAdmin) {
             $actions->disable(Action::NEW);
             $actions->disable(Action::DETAIL);
         }
     
-        // Mise à jour de l'action DELETE
+        //Mise à jour de l'action DELETE
         $actions->update(Crud::PAGE_INDEX, Action::DELETE, function (Action $action) use ($currentUser, $isAdmin) {
-            // L'action DELETE est conditionnée : seulement pour les administrateurs et ils ne peuvent pas se supprimer eux-mêmes
+            //L'action DELETE est conditionnée : seulement pour les administrateurs et ils ne peuvent pas se supprimer eux-mêmes
             return $action->displayIf(static function ($entity) use ($currentUser, $isAdmin) {
                 return $isAdmin && $entity->getId() !== $currentUser->getId();
             });
