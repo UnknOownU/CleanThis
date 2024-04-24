@@ -128,6 +128,17 @@ public function countOperationsTerminees()
         ->getSingleScalarResult();
 }
 
+public function findAssignedOperationsByUser($userId)
+{
+    return $this->createQueryBuilder('o')
+        ->select('o.name')
+        ->andWhere('o.salarie = :userId')
+        ->setParameter('userId', $userId)
+        ->getQuery()
+        ->getResult();
+}
+
+
 // Compte opérations en cours
 public function countMissionsEnCours()
 {

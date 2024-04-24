@@ -181,7 +181,61 @@ public function createOperation(Request $request, EntityManagerInterface $entity
     } else {
         return $this->json(['status' => 'error', 'message' => 'Utilisateur non trouvé']);
     }
+
+    $rdvDateTimeString = $request->request->get('rdvDateTime');
+    if (!$rdvDateTimeString) {
+        return $this->json(['status' => 'error', 'message' => 'Date et heure du RDV non spécifiées']);
+    }
+
+    try {
+        $rdvDateTime = new \DateTimeImmutable($rdvDateTimeString);
+    } catch (\Exception $e) {
+        return $this->json(['status' => 'error', 'message' => 'Format de date invalide']);
+    }
+
+    $today = new \DateTime();
+    $today->setTime(0, 0, 0);
+    $twoDaysLater = (clone $today)->modify('+2 days');
+
+    if ($rdvDateTime < $twoDaysLater) {
+        return $this->json(['status' => 'error', 'message' => 'Les rendez-vous doivent être pris au moins deux jours à l\'avance.']);
+    }
+
+    if ($rdvDateTime->format('w') == 0) { // Dimanche
+        return $this->json(['status' => 'error', 'message' => 'Les rendez-vous le dimanche ne sont pas autorisés.']);
+    }
+
+    $operation = new Operation();
+    // Collecter et vérifier toutes les autres entrées ici avant de continuer
+    $operation->setType($request->request->get('type'));
+    $operation->setAttachmentFile($request->files->get('attachmentFile'));
+    $operation->setName($request->request->get('name'));
+    $operation->setDescription($request->request->get('description'));
+    $operation->setZipcodeOpe($request->request->get('zipcode'));
+    $operation->setStreetOpe($request->request->get('street'));
+    $operation->setCityOpe($request->request->get('city'));
+    $operation->setCustomer($user);
+    $operation->setRdvAt($rdvDateTime);
+    $operation->setPrice($this->determinePriceBasedOnType($request->request->get('type')));
+
+    $entityManager->persist($operation);
+    $entityManager->flush();
+
+    try {
+        $mail->send(
+            'no-reply@cleanthis.fr',
+            $user->getEmail(),
+            'Création de votre opération',
+            'opecreate',
+            ['user' => $user]
+        );
+    } catch (\Exception $e) {
+        // Log de l'exception ou gestion d'erreur
+    }
+
+    return $this->json(['status' => 'success', 'message' => 'Opération créée avec succès']);
 }
+
 
         private function determinePriceBasedOnType(string $type): int
         {

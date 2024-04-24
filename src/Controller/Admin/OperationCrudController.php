@@ -3,12 +3,14 @@
 namespace App\Controller\Admin;
 
 use Exception;
+use LogicException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use App\Entity\Operation;
+use App\Service\LogsService;
+use UnexpectedValueException;
 use Doctrine\ORM\QueryBuilder;
 use App\Service\InvoiceService;
-use App\Service\LogsService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +40,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class OperationCrudController extends AbstractCrudController {
 
@@ -66,8 +69,6 @@ class OperationCrudController extends AbstractCrudController {
             'operation' => $operation
         ]);
     }
-    
-    
     
     
     public function delete(AdminContext $context)
@@ -175,7 +176,7 @@ class OperationCrudController extends AbstractCrudController {
                     
             $fields[] =ChoiceField::new('status')
                         ->setChoices([
-                        'En attente' => 'En attente de Validation',
+                        'En attente - Envoyé' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
                         'Archivée' => 'Archivée',
@@ -289,7 +290,7 @@ class OperationCrudController extends AbstractCrudController {
                     ->hideOnIndex(),
                 ChoiceField::new('status')
                     ->setChoices([
-                        'En attente' => 'En attente de Validation',
+                        'En attente - Envoyé' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
                         'Archivée' => 'Archivée',
@@ -428,136 +429,107 @@ class OperationCrudController extends AbstractCrudController {
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail,LogsService $logsService): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
-        $customer = $operation->getCustomer();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
-        
-        $user = $this->security->getUser();
     
-        // Vérifier le rôle de l'utilisateur et le nombre d'opérations en cours
-        if ($user) {
-            $role = '';
-            $maxOperations = 0;
-    
-            if ($this->isGranted('ROLE_ADMIN')) {
-                $role = 'admin';
-                $maxOperations = 5;
-            } elseif ($this->isGranted('ROLE_SENIOR')) {
-                $role = 'senior';
-                $maxOperations = 3;
-            } elseif ($this->isGranted('ROLE_APPRENTI')) {
-                $role = 'apprenti';
-                $maxOperations = 1;
-            }
-    
-            // Récupérer le nombre d'opérations en cours de l'utilisateur
-            if ($role) {
-                $qb = $entityManager->createQueryBuilder();
-                $qb->select('COUNT(op)')
-                   ->from(Operation::class, 'op')
-                   ->where('op.status = :status')
-                   ->andWhere('op.salarie = :user')
-                   ->setParameter('status', 'En cours')
-                   ->setParameter('user', $user);
-                $count = $qb->getQuery()->getSingleScalarResult();
-    
-                // Limiter le nombre d'opérations en cours en fonction du rôle de l'utilisateur
-                if ($count >= $maxOperations) {
-                    // Afficher un message d'erreur ou rediriger avec un message d'erreur
-                    if (!$session->getFlashBag()->has('error')) {
-                        $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
-                    }
-                
-                    return new RedirectResponse('/admin');
-                }
-            }
-        }
-
-    
-        // Logique pour accepter l'opération
-        $operation->setStatus('En cours');
-        $operation->setSalarie($user);
-        $entityManager->flush();
-
-
         $customer = $operation->getCustomer();
-        $idOpe = $operation->getId();
-        $created = $operation->getCreatedAt();
-        $type = $operation->getType();
-        $price = $operation->getPrice();
-        $city = $operation->getCityOpe();
-        $customerId = $customer->getId();
-
-        // Log successful acceptation
-        try {
-            $logsService->postLog([
-                'loggerName' => 'Operation',
-                'user' => 'Anonymous',
-                'message' => 'User accepted operation',
-                'level' => 'info',
-                'data' => [
-                    'id_ope' => $idOpe,
-                    'created' => $created,
-                    'type' => $type,
-                    'price' => $price,
-                    'city' => $city,
-                    'customer_id' => $customerId
-                ]
-
-            ]);
-            } catch (Exception $e) {
-            }
-
-
-        // Vérifier si le message flash a déjà été affiché dans la session
-        if (!$session->getFlashBag()->has('success')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
-
-            try {
-                $mail->send(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Acceptation de votre opération',
-                    'opeaccept',
-                    [
-                        'user' => $customer
-                    ]
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
+        if (!$customer) {
+            throw new UnexpectedValueException('Client associé non trouvé');
+        }
+    
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Utilisateur non identifié');
+        }
+    
+        $roleLimits = [
+            'ROLE_ADMIN' => 5,
+            'ROLE_SENIOR' => 3,
+            'ROLE_APPRENTI' => 1
+        ];
+    
+        list($role, $maxOperations) = $this->determineUserLimits($user, $roleLimits);
+    
+        if ($this->exceedsOperationLimit($entityManager, $user, $maxOperations)) {
+            $this->addFlash('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
             return new RedirectResponse('/admin');
         }
     
-        return new Response('<script>window.location.reload();</script>');
+        $this->processOperation($entityManager, $operation, $user);
+    
+        if ($this->sendOperationEmails($mail, $customer)) {
+            $this->addFlash('success', 'La mission a été acceptée et est maintenant "En cours".');
+            return new RedirectResponse('/admin');
+        }
+    
+        return new RedirectResponse('/admin');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail, LogsService $logsService): Response {
+    
+    private function determineUserLimits($user, $roleLimits) {
+        foreach ($roleLimits as $role => $limit) {
+            if ($this->isGranted($role)) {
+                return [$role, $limit];
+            }
+        }
+        throw new LogicException('Rôle de l\'utilisateur non reconnu ou absent.');
+    }
+    
+    private function exceedsOperationLimit(EntityManagerInterface $entityManager, $user, $maxOperations) {
+        $count = $entityManager->createQueryBuilder()
+            ->select('COUNT(op)')
+            ->from(Operation::class, 'op')
+            ->where('op.status = :status AND op.salarie = :user')
+            ->setParameter('status', 'En cours')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+    
+        return $count >= $maxOperations;
+    }
+    
+    
+    private function processOperation(EntityManagerInterface $entityManager, $operation, $user) {
+        $operation->setStatus('En cours');
+        $operation->setSalarie($user);
+        $entityManager->flush();
+    }
+    
+    private function sendOperationEmails(SendMailService $mail, $customer) {
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Acceptation de votre opération',
+                'opeaccept',
+                ['user' => $customer]
+            );
+            return true;
+        } catch (Exception $e) {
+            error_log('Caught exception: Connexion avec MailHog sur 1025 non établie' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
-        $customer = $operation->getCustomer();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
+        $customer = $operation->getCustomer();
+        if (!$customer) {
+            throw new UnexpectedValueException('Client associé non trouvé');
+        }
+    
         // Logique pour refuser l'opération
         $operation->setStatus('Refusée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-
-        $customer = $operation->getCustomer();
-
-
-        $idOpe = $operation->getId();
-        $created = $operation->getCreatedAt();
-        $type = $operation->getType();
-        $price = $operation->getPrice();
-        $city = $operation->getCityOpe();
-        $customerId = $customer->getId();
-
-        // Log operation declined
+    
+        // Logging the declined operation
         try {
             $logsService->postLog([
                 'loggerName' => 'Operation',
@@ -565,64 +537,49 @@ class OperationCrudController extends AbstractCrudController {
                 'message' => 'User declined operation',
                 'level' => 'info',
                 'data' => [
-                    'id_ope' => $idOpe,
-                    'created' => $created,
-                    'type' => $type,
-                    'price' => $price,
-                    'city' => $city,
-                    'customer_id' => $customerId
+                    'id_ope' => $operation->getId(),
+                    'created' => $operation->getCreatedAt(),
+                    'type' => $operation->getType(),
+                    'price' => $operation->getPrice(),
+                    'city' => $operation->getCityOpe(),
+                    'customer_id' => $customer->getId()
                 ]
-
             ]);
-            } catch (Exception $e) {
-            }
-
-                if (!$session->getFlashBag()->has('error')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
-            try {
-                $mail->send(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Refus de votre opération',
-                    'opedecline',
-                    [
-                        'user' => $customer
-                    ]
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
-            return new RedirectResponse('/admin');
-        
-                }
+        } catch (Exception $e) {
+            error_log('Failed to log declined operation: ' . $e->getMessage());
+        }
     
-        return new Response('<script>window.location.reload();</script>');
-
+        // Attempt to send decline notification email
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Refus de votre opération',
+                'opedecline',
+                ['user' => $customer]
+            );
+            $this->addFlash('error', 'La mission a été annulée et est maintenant "Refusée".');
+        } catch (Exception $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage());
+            error_log('Caught exception: Connexion avec MailHog sur 1025 non établie' . $e->getMessage());
+        }
+    
+        return new RedirectResponse('/admin');
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService, LogsService $logsService): Response {
+    
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, InvoiceService $invoiceService, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
-        $customer = $operation->getCustomer(); 
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
         
-        // Logique pour accepter l'opération
+        // Logique pour terminer l'opération
         $operation->setStatus('Terminée');
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
-        $entityManager->flush(); 
-
-        //Get infos for logs and send mail services
-        $customer = $operation->getCustomer();
-        $idOpe = $operation->getId();
-        $finished = $operation->getFinishedAt();
-        $type = $operation->getType();
-        $price = $operation->getPrice();
-        $city = $operation->getCityOpe();
-        $customerId = $customer->getId();
-        
-        //Log operation finished
+        $entityManager->flush();
+    
+        // Log operation finished
         try {
             $logsService->postLog([
                 'loggerName' => 'Operation',
@@ -630,82 +587,62 @@ class OperationCrudController extends AbstractCrudController {
                 'message' => 'User finished operation',
                 'level' => 'info',
                 'data' => [
-                    'id_ope' => $idOpe,
-                    'finished' => $finished,
-                    'type' => $type,
-                    'price' => $price,
-                    'city' => $city,
-                    'customer_id' => $customerId
+                    'id_ope' => $operation->getId(),
+                    'finished' => $operation->getFinishedAt(),
+                    'type' => $operation->getType(),
+                    'price' => $operation->getPrice(),
+                    'city' => $operation->getCityOpe(),
+                    'customer_id' => $operation->getCustomer()->getId()
                 ]
-
             ]);
-            } catch (Exception $e) {
-            }
-
-      
-        // Vérifier si le message flash a déjà été affiché dans la session
-        if (!$session->getFlashBag()->has('success')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
-            try {
-                // Generate the invoice PDF and get its path
-                $pdfPath = $invoiceService->generateInvoiceMail($operation);
-
-                // Send an email to the user with the invoice attached
-                $mail->sendAttach(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Opération terminée - Facture',
-                    'opefinished',
-                    [
-                        'user' => $customer
-                    ],
-                    $pdfPath 
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            }
-            return new RedirectResponse('/admin');
+        } catch (Exception $e) {
+            error_log('Failed to log operation: ' . $e->getMessage());
         }
     
-        return new Response('<script>window.location.reload();</script>');
-    } 
-
-    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, LogsService $logsService): Response {
-        $operation = $context->getEntity()->getInstance();
-        $currentUser = $this->security->getUser();
+        // Try to send an email with the invoice attached
+        try {
+            // Generate the invoice PDF and get its path
+            $pdfPath = $invoiceService->generateInvoiceMail($operation);
+            $mail->sendAttach(
+                'no-reply@cleanthis.fr',
+                $operation->getCustomer()->getEmail(),
+                'Opération terminée - Facture',
+                'opefinished',
+                ['user' => $operation->getCustomer()],
+                $pdfPath
+            );
+            $this->addFlash('success', 'La mission est maintenant terminée et la facture a été envoyée.');
+        } catch (Exception $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage());
+            error_log('Caught exception: Connexion avec MailHog sur 1025 non établie ' . $e->getMessage());
+        }
     
+        return new RedirectResponse('/admin');
+    }
+
+    
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, LogsService $logsService, Security $security): Response {
+        $operation = $context->getEntity()->getInstance();
+        /** @var User $currentUser */
+        $currentUser = $security->getUser();
+        
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
     
-        // Vérifiez si l'utilisateur actuel est le client ou le salarié de l'opération ou s'il a le rôle ADMIN
-        if ($operation->getCustomer() !== $currentUser && 
-            $operation->getSalarie() !== $currentUser && 
-            !$this->isGranted('ROLE_ADMIN')) {
-            // Si non, ajouter un message d'erreur et rediriger
-            $session->getFlashBag()->add('error', 'Vous n\'êtes pas autorisé à archiver cette opération.');
+        if ($currentUser && !$this->isGranted('ROLE_ADMIN') &&
+            $operation->getCustomer() !== $currentUser &&
+            $operation->getSalarie() !== $currentUser) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à archiver cette opération.');
             return $this->redirectToRoute('admin');
         }
-        
-        // Logique pour archiver l'opération
-        $operation->setStatus('Archivée');
+    
+        $operation->setArchivedFor($currentUser ? $currentUser->getId() : null);
         $entityManager->flush();
-
-        
-        //Log archived operation
-            try {
-                $logsService->postLog([
-                    'loggerName' => 'Operation',
-                    'user' => 'Anonymous',
-                    'message' => 'User archived operation',
-                    'level' => 'info'
-                ]);
-                } catch (Exception $e) {
-            }
-
-        // Ajouter un message de succès
-        $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
-        return new RedirectResponse('/admin');
+    
+        $this->addFlash('success', 'La mission est maintenant archivée pour vous');
+        return $this->redirectToRoute('admin');
     }
+    
+
 }

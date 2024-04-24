@@ -149,6 +149,7 @@
             <li class="list-group-item">{{ "Service de nettoyage: "|trans }}<span id="confirmationService" class="fw-bold"></span></li>
             <li class="list-group-item">{{ "Adresse: "|trans }}<span id="confirmationAddress" class="fw-bold"></span></li>
             <li class="list-group-item">{{ "Description: "|trans }}<span id="confirmationDescription" class="fw-bold"></span></li>
+            <li class="list-group-item">{{ "Date D'intervention: "|trans }}<span id="confirmationDate" class="fw-bold"></span></li>
         </ul>
         <p>{{ "Veuillez confirmer que toutes les informations ci-dessus sont correctes. Une fois confirmées, ces informations seront utilisées pour planifier et exécuter votre opération de nettoyage. Assurez-vous que les détails sont complets et précis."|trans }}</p>
         <div class="text-center">
@@ -612,20 +613,23 @@ function updateStepIndicators(stepNumber) {
         });
     }
 
-    function updateConfirmation() {
-        const translatedType = translateOperationType(operationType);
-        const service = document.getElementById('nettoyageService').value;
-        const street = document.getElementById('street_ope').value;
-        const zipcode = document.getElementById('zipcode_ope').value;
-        const city = document.getElementById('city_ope').value;
-        const description = document.getElementById('description').value;
-    
-        document.getElementById('confirmationType').innerText = translatedType;
-        document.getElementById('confirmationService').innerText = service;
-        document.getElementById('confirmationAddress').innerText = `${street}, ${zipcode} ${city}`;
-        document.getElementById('confirmationDescription').innerText = description;
-    }
-   
+function updateConfirmation() {
+    const translatedType = translateOperationType(operationType);
+    const service = document.getElementById('nettoyageService').value;
+    const street = document.getElementById('street_ope').value;
+    const zipcode = document.getElementById('zipcode_ope').value;
+    const city = document.getElementById('city_ope').value;
+    const description = document.getElementById('description').value;
+    const rdvDate = document.getElementById('rdvDate').value; 
+    const rdvTime = document.getElementById('rdvTime').value;
+
+    document.getElementById('confirmationType').innerText = translatedType;
+    document.getElementById('confirmationService').innerText = service;
+    document.getElementById('confirmationAddress').innerText = `${street}, ${zipcode} ${city}`;
+    document.getElementById('confirmationDescription').innerText = description;
+    document.getElementById('confirmationDate').innerText = `Le ${rdvDate}, à  ${rdvTime}`; 
+}
+
    
     function translateOperationType(type) {
     switch (type) {
@@ -684,66 +688,42 @@ function submitOperation() {
         // Ne pas ajouter de header 'Content-Type', car il est nécessaire d'utiliser le 'boundary' généré par FormData
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            Swal.fire('Succès!', 'Opération créée avec succès.', 'success')
-            .then(() => {
-                window.location.href = '/admin'; // Redirection
-            });
-        } else {
-            isFormSubmitted = false; // Réinitialisez l'état si la soumission a échoué
-            Swal.fire('Erreur!', 'Erreur lors de la création de l\'opération.', 'error');
-        }
-    })
-    .catch(error => {
-        isFormSubmitted = false; // Réinitialisez l'état si une erreur survient
-        handleError(error);
-    });
+    .then(handleResponse) // Utilisation de handleResponse pour gérer la réponse
+    .catch(handleError); // Utilisation de handleError pour gérer les erreurs
 }
-
 
 function handleError(error) {
     console.error('Erreur:', error);
     Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
 }
 
-    function handleResponse(data) {
-        if (data.status === 'success') {
-            Swal.fire('Succès!', 'Opération créée avec succès.', 'success');
-        } else {
-            Swal.fire('Erreur!', 'Erreur lors de la création de l\'opération.', 'error');
-        }
+function handleResponse(data) {
+    if (data.status === 'success') {
+        Swal.fire('Succès!', 'Opération créée avec succès.', 'success')
+        .then(() => {
+            window.location.href = '/admin'; // Redirection
+        });
+    } else {
+        isFormSubmitted = false; // Réinitialisez l'état si la soumission a échoué
+        handleError(); // Utilisation de la fonction handleError pour gérer les erreurs
     }
+}
 
-    function handleError(error) {
-        console.error('Erreur:', error);
-        Swal.fire('Erreur!', 'Un problème est survenu lors de la création de l\'opération.', 'error');
-    }
 
-// Ajouter cet écouteur pour chaque champ de saisie de votre formulaire
-document.getElementById('street_ope').addEventListener('keypress', function(event) {
+// Fonction pour gérer les événements 'keypress' sur les champs d'adresse
+function handleAddressKeyPress(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-        // Vous pouvez ici appeler updateMap ou toute autre fonction que vous souhaitez exécuter
+        // Appeler la fonction updateMap() ou toute autre fonction souhaitée
         updateMap();
     }
-});
+}
 
-document.getElementById('zipcode_ope').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        // Logique similaire pour le champ code postal
-        updateMap();
-    }
-});
+// Ajouter des écouteurs d'événements à tous les champs d'adresse avec la même logique
+document.getElementById('street_ope').addEventListener('keypress', handleAddressKeyPress);
+document.getElementById('zipcode_ope').addEventListener('keypress', handleAddressKeyPress);
+document.getElementById('city_ope').addEventListener('keypress', handleAddressKeyPress);
 
-document.getElementById('city_ope').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        // Logique similaire pour le champ ville
-        updateMap();
-    }
-});
 
 </script>
 
