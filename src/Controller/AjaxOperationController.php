@@ -130,7 +130,7 @@ public function createOperation(Request $request, EntityManagerInterface $entity
         if ($rdvDateTime) {
             try {
                 $operation->setRdvAt(new \DateTimeImmutable($rdvDateTime));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $this->json(['status' => 'error', 'message' => 'Invalid date format']);
             }
         }
