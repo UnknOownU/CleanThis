@@ -46,3 +46,9 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    App\EventSubscriber\RegisterEventListener:
+        arguments:
+            $logsService: '@App\Service\LogsService'
+        tags:
+            - { name: 'kernel.event_subscriber' }     
