@@ -2,11 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\Service\InvoiceService;
 use Exception;
+use LogicException;
 use DateTimeImmutable;
+use DateTimeInterface;
 use App\Entity\Operation;
+use App\Service\LogsService;
+use UnexpectedValueException;
 use Doctrine\ORM\QueryBuilder;
+use App\Service\InvoiceService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +38,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class OperationCrudController extends AbstractCrudController {
 
@@ -47,47 +53,40 @@ class OperationCrudController extends AbstractCrudController {
     public static function getEntityFqcn(): string {
         return Operation::class;
     }
+    
     public function edit(AdminContext $context)
     {
         $operation = $context->getEntity()->getInstance();
-        $user = $this->getUser();
-    
-        if (!$operation instanceof Operation || ($operation->getCustomer() !== $user && !$this->isGranted('ROLE_ADMIN'))) {
+        $currentUser = $this->security->getUser();
+        
+        if (!$operation instanceof Operation || 
+            ($operation->getCustomer() !== $currentUser && !$this->isGranted('ROLE_ADMIN'))) {
             $this->addFlash('error', 'Vous n\'avez pas le droit de modifier cette opération.');
-            return $this->redirectToRoute('admin'); // Assurez-vous que la route 'admin' est correcte
+            return $this->redirectToRoute('admin');
         }
     
-        // Assurez-vous que vous avez accès à Twig ou injectez le service Twig
         return $this->render('operation_crud/edit.html.twig', [
             'operation' => $operation
         ]);
     }
     
     
-public function delete(AdminContext $context)
-{
-    $operation = $context->getEntity()->getInstance();
-    if (!$operation instanceof Operation) {
-        throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
-    }
-
-    // Vérifier les droits de l'utilisateur sur l'opération
-    $this->denyAccessUnlessGranted('DELETE', $operation);
-
-    return parent::delete($context);
-}
-
-    
-    protected function initialize(Request $request): void
+    public function delete(AdminContext $context)
     {
-        parent::initialize($request);
+        $operation = $context->getEntity()->getInstance();
+        $currentUser = $this->security->getUser();
     
-        $entityId = $request->query->get('entityId');
-        if ($entityId) {
-            $operation = $this->entityManager->getRepository(Operation::class)->find($entityId);
-            $this->denyAccessUnlessGranted('EDIT', $operation);
+        if (!$operation instanceof Operation || 
+            ($operation->getCustomer() !== $currentUser && !$this->isGranted('ROLE_ADMIN'))) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette opération.');
+            return $this->redirectToRoute('admin');
         }
+    
+        return parent::delete($context);
     }
+    
+
+
     
     public function configureCrud(Crud $crud): Crud {
         return $crud
@@ -113,18 +112,20 @@ public function delete(AdminContext $context)
     }
     
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation) {
-            $this->setOperationPrice($entityInstance);
+        if ($entityInstance instanceof Operation && 
+            $entityInstance->getCustomer() !== $this->getUser() && 
+            !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Action non autorisée.');
         }
         parent::persistEntity($entityManager, $entityInstance);
     }
     
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation) {
-            $this->denyAccessUnlessGranted('EDIT', $entityInstance);
-            $this->setOperationPrice($entityInstance);
+        if ($entityInstance instanceof Operation && 
+            $entityInstance->getCustomer() !== $this->getUser() && 
+            !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Action non autorisée.');
         }
-    
         parent::updateEntity($entityManager, $entityInstance);
     }
     
@@ -173,16 +174,18 @@ public function delete(AdminContext $context)
                             return $salarie ? sprintf('%s %s', $salarie->getFirstName(), $salarie->getName()) : 'Non assigné';
                         });
                     
-                $fields[] =ChoiceField::new('status')
+            $fields[] =ChoiceField::new('status')
                         ->setChoices([
-                        'En attente' => 'En attente de Validation',
+                        'En attente - Envoyé' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
+                        'Archivée' => 'Archivée',
                         'Refusée' => 'Refusée',
                     ])   ->renderAsBadges([
                         'En attente de Validation' => 'warning',
                         'En cours' => 'primary',
                         'Terminée' => 'success',
+                        'Archivée' => 'info',
                         'Refusée' => 'danger',
                     ]); 
                     
@@ -191,6 +194,25 @@ public function delete(AdminContext $context)
                             return $entity->getFullAddress();
                         });
             }
+            
+            $fields[] = DateTimeField::new('rdv_at', 'Date d\'intervention')
+            ->formatValue(function (?DateTimeInterface $value) {
+                if ($value) {
+                    // Définir le locale en français
+                    $formatter = new \IntlDateFormatter(
+                        'fr_FR',
+                        \IntlDateFormatter::FULL,
+                        \IntlDateFormatter::SHORT,
+                        date_default_timezone_get()
+                    );
+                    
+                    // Formatage de la date pour qu'elle soit lisible
+                    return $formatter->format($value);
+                } else {
+                    return 'À définir';
+                }
+            });
+
     
     
             if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
@@ -230,7 +252,7 @@ public function delete(AdminContext $context)
                 DateTimeField::new('created_at', 'Créé le')
                     ->hideOnForm(),
                 FormField::addColumn('col-lg-8 col-xl-3'),
-                IdField::new('id', 'Nº')
+                TextField::new('name', 'Mission')
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
@@ -268,16 +290,17 @@ public function delete(AdminContext $context)
                     ->hideOnIndex(),
                 ChoiceField::new('status')
                     ->setChoices([
-                        'En attente' => 'En attente de Validation',
+                        'En attente - Envoyé' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
+                        'Archivée' => 'Archivée',
                         'Refusée' => 'Refusée',
                     ])
                     ->renderAsBadges([
                         'En attente de Validation' => 'info',
                         'En cours' => 'warning',
                         'Terminée' => 'success',
-                        'Archivée' => 'success',
+                        'Archivée' => 'info',
                     ])
                     ->hideOnForm(),
                 TextField::new('street_ope', 'Rue')
@@ -346,15 +369,18 @@ public function delete(AdminContext $context)
         $declineAction = Action::new('decline', 'Refuser', 'fa fa-times')
         ->displayIf(function (Operation $operation) use ($security) {
             return $operation->getStatus() === 'En attente de Validation' && 
-            ($security->isGranted('ROLE_ADMIN') || 
-            $security->isGranted('ROLE_SENIOR') || 
-            $security->isGranted('ROLE_APPRENTI'));
+                        ($security->isGranted('ROLE_ADMIN') || 
+                        $security->isGranted('ROLE_SENIOR') || 
+                        $security->isGranted('ROLE_APPRENTI'));
 })
         ->linkToCrudAction('declineOperation');
     
         $finishAction = Action::new('finish', 'Terminer', 'fa fa-flag-checkered')
-            ->displayIf(function (Operation $operation) {
-                return $operation->getStatus() === 'En cours';
+            ->displayIf(function (Operation $operation) use ($security) {
+                return $operation->getStatus() === 'En cours'&& 
+                        ($security->isGranted('ROLE_ADMIN') || 
+                        $security->isGranted('ROLE_SENIOR') || 
+                        $security->isGranted('ROLE_APPRENTI')); 
             })
             ->linkToCrudAction('finishOperation');
     
@@ -403,178 +429,220 @@ public function delete(AdminContext $context)
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
-        $customer = $operation->getCustomer();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
-        
-        $user = $this->security->getUser();
     
-        // Vérifier le rôle de l'utilisateur et le nombre d'opérations en cours
-        if ($user) {
-            $role = '';
-            $maxOperations = 0;
-    
-            if ($this->isGranted('ROLE_ADMIN')) {
-                $role = 'admin';
-                $maxOperations = 5;
-            } elseif ($this->isGranted('ROLE_SENIOR')) {
-                $role = 'senior';
-                $maxOperations = 3;
-            } elseif ($this->isGranted('ROLE_APPRENTI')) {
-                $role = 'apprenti';
-                $maxOperations = 1;
-            }
-    
-            // Récupérer le nombre d'opérations en cours de l'utilisateur
-            if ($role) {
-                $qb = $entityManager->createQueryBuilder();
-                $qb->select('COUNT(op)')
-                   ->from(Operation::class, 'op')
-                   ->where('op.status = :status')
-                   ->andWhere('op.salarie = :user')
-                   ->setParameter('status', 'En cours')
-                   ->setParameter('user', $user);
-                $count = $qb->getQuery()->getSingleScalarResult();
-    
-                // Limiter le nombre d'opérations en cours en fonction du rôle de l'utilisateur
-                if ($count >= $maxOperations) {
-                    // Afficher un message d'erreur ou rediriger avec un message d'erreur
-                    if (!$session->getFlashBag()->has('error')) {
-                        $session->getFlashBag()->add('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
-                    }
-                
-                    return new RedirectResponse('/admin');
-                }
-            }
+        $customer = $operation->getCustomer();
+        if (!$customer) {
+            throw new UnexpectedValueException('Client associé non trouvé');
         }
-
     
-        // Logique pour accepter l'opération
-        $operation->setStatus('En cours');
-        $operation->setSalarie($user);
-        $entityManager->flush();
+        $user = $this->security->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('Utilisateur non identifié');
+        }
     
-        // Vérifier si le message flash a déjà été affiché dans la session
-        if (!$session->getFlashBag()->has('success')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('success', 'La mission a été acceptée et est maintenant "En cours".');
-
-            try {
-                $mail->send(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Acceptation de votre opération',
-                    'opeaccept',
-                    [
-                        'user' => $customer
-                    ]
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
+        $roleLimits = [
+            'ROLE_ADMIN' => 5,
+            'ROLE_SENIOR' => 3,
+            'ROLE_APPRENTI' => 1
+        ];
+    
+        list($role, $maxOperations) = $this->determineUserLimits($user, $roleLimits);
+    
+        if ($this->exceedsOperationLimit($entityManager, $user, $maxOperations)) {
+            $this->addFlash('error', 'Vous avez déjà accepté le maximum d\'opérations en cours.');
             return new RedirectResponse('/admin');
         }
     
-        return new Response('<script>window.location.reload();</script>');
+        $this->processOperation($entityManager, $operation, $user);
+    
+        if ($this->sendOperationEmails($mail, $customer)) {
+            $this->addFlash('success', 'La mission a été acceptée et est maintenant "En cours".');
+            return new RedirectResponse('/admin');
+        }
+    
+        return new RedirectResponse('/admin');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
+    
+    private function determineUserLimits($user, $roleLimits) {
+        foreach ($roleLimits as $role => $limit) {
+            if ($this->isGranted($role)) {
+                return [$role, $limit];
+            }
+        }
+        throw new LogicException('Rôle de l\'utilisateur non reconnu ou absent.');
+    }
+    
+    private function exceedsOperationLimit(EntityManagerInterface $entityManager, $user, $maxOperations) {
+        $count = $entityManager->createQueryBuilder()
+            ->select('COUNT(op)')
+            ->from(Operation::class, 'op')
+            ->where('op.status = :status AND op.salarie = :user')
+            ->setParameter('status', 'En cours')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+    
+        return $count >= $maxOperations;
+    }
+    
+    
+    private function processOperation(EntityManagerInterface $entityManager, $operation, $user) {
+        $operation->setStatus('En cours');
+        $operation->setSalarie($user);
+        $entityManager->flush();
+    }
+    
+    private function sendOperationEmails(SendMailService $mail, $customer) {
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Acceptation de votre opération',
+                'opeaccept',
+                ['user' => $customer]
+            );
+            return true;
+        } catch (Exception $e) {
+            error_log('Caught exception: Connexion avec MailHog sur 1025 non établie' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
-        $customer = $operation->getCustomer();
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
+        $customer = $operation->getCustomer();
+        if (!$customer) {
+            throw new UnexpectedValueException('Client associé non trouvé');
+        }
+    
         // Logique pour refuser l'opération
         $operation->setStatus('Refusée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-                if (!$session->getFlashBag()->has('error')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
-            try {
-                $mail->send(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Refus de votre opération',
-                    'opedecline',
-                    [
-                        'user' => $customer
-                    ]
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            } 
-            return new RedirectResponse('/admin');
-        
-                }
     
-        return new Response('<script>window.location.reload();</script>');
-
+        // Logging the declined operation
+        try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => 'Anonymous',
+                'message' => 'User declined operation',
+                'level' => 'info',
+                'data' => [
+                    'id_ope' => $operation->getId(),
+                    'created' => $operation->getCreatedAt(),
+                    'type' => $operation->getType(),
+                    'price' => $operation->getPrice(),
+                    'city' => $operation->getCityOpe(),
+                    'customer_id' => $customer->getId()
+                ]
+            ]);
+        } catch (Exception $e) {
+            error_log('Failed to log declined operation: ' . $e->getMessage());
+        }
+    
+        // Attempt to send decline notification email
+        try {
+            $mail->send(
+                'no-reply@cleanthis.fr',
+                $customer->getEmail(),
+                'Refus de votre opération',
+                'opedecline',
+                ['user' => $customer]
+            );
+            $this->addFlash('error', 'La mission a été annulée et est maintenant "Refusée".');
+        } catch (Exception $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage());
+            error_log('Caught exception: Connexion avec MailHog sur 1025 non établie' . $e->getMessage());
+        }
+    
+        return new RedirectResponse('/admin');
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
+    
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, InvoiceService $invoiceService, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
-        $customer = $operation->getCustomer(); 
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
         
-        // Logique pour accepter l'opération
+        // Logique pour terminer l'opération
         $operation->setStatus('Terminée');
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
-        $entityManager->flush(); 
-
-      
-        // Vérifier si le message flash a déjà été affiché dans la session
-        if (!$session->getFlashBag()->has('success')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('success', 'La mission est maintenant terminée');
-            try {
-                // Generate the invoice PDF and get its path
-                $pdfPath = $invoiceService->generateInvoiceMail($operation);
-
-                // Send an email to the user with the invoice attached
-                $mail->sendAttach(
-                    'no-reply@cleanthis.fr',
-                    $customer->getEmail(),
-                    'Opération terminée - Facture',
-                    'opefinished',
-                    [
-                        'user' => $customer
-                    ],
-                    $pdfPath 
-                );
-            } catch (Exception $e) {
-                echo 'Caught exception: Connexion avec MailHog sur 1025 non établie',  $e->getMessage(), "\n";
-            }
-            return new RedirectResponse('/admin');
+        $entityManager->flush();
+    
+        // Log operation finished
+        try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => 'Anonymous',
+                'message' => 'User finished operation',
+                'level' => 'info',
+                'data' => [
+                    'id_ope' => $operation->getId(),
+                    'finished' => $operation->getFinishedAt(),
+                    'type' => $operation->getType(),
+                    'price' => $operation->getPrice(),
+                    'city' => $operation->getCityOpe(),
+                    'customer_id' => $operation->getCustomer()->getId()
+                ]
+            ]);
+        } catch (Exception $e) {
+            error_log('Failed to log operation: ' . $e->getMessage());
         }
     
-        return new Response('<script>window.location.reload();</script>');
-    } 
+        // Try to send an email with the invoice attached
+        try {
+            // Generate the invoice PDF and get its path
+            $pdfPath = $invoiceService->generateInvoiceMail($operation);
+            $mail->sendAttach(
+                'no-reply@cleanthis.fr',
+                $operation->getCustomer()->getEmail(),
+                'Opération terminée - Facture',
+                'opefinished',
+                ['user' => $operation->getCustomer()],
+                $pdfPath
+            );
+            $this->addFlash('success', 'La mission est maintenant terminée et la facture a été envoyée.');
+        } catch (Exception $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage());
+            error_log('Caught exception: Connexion avec MailHog sur 1025 non établie ' . $e->getMessage());
+        }
+    
+        return new RedirectResponse('/admin');
+    }
 
-    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
+    
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, LogsService $logsService, Security $security): Response {
         $operation = $context->getEntity()->getInstance();
+        /** @var User $currentUser */
+        $currentUser = $security->getUser();
+        
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
-        
-        // Logique pour accepter l'opération
-        $operation->setStatus('Archivée');
-        $operation->setSalarie($this->security->getUser());
-        $entityManager->flush();
-
-        
-        // Vérifier si le message flash a déjà été affiché dans la session
-        if (!$session->getFlashBag()->has('success')) {
-            // Si le message flash n'a pas encore été affiché, l'ajouter
-            $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
-                    return new RedirectResponse('/admin');
+    
+        if ($currentUser && !$this->isGranted('ROLE_ADMIN') &&
+            $operation->getCustomer() !== $currentUser &&
+            $operation->getSalarie() !== $currentUser) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à archiver cette opération.');
+            return $this->redirectToRoute('admin');
         }
     
-        return new Response('<script>window.location.reload();</script>');
-    } 
+        $operation->setArchivedFor($currentUser ? $currentUser->getId() : null);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'La mission est maintenant archivée pour vous');
+        return $this->redirectToRoute('admin');
+    }
+    
+
 }

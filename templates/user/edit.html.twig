@@ -3,59 +3,70 @@
 {% block body_id 'page-content-wrapper' %}
 
 {% block main %}
+<section class="content-body my-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <!-- Profile Information Card -->
+                <div class="card mb-5 shadow">
+                    <div class="card-body">
+                        <h2 class="h4 mb-3 text-center text-primary">{{ "Informations du Profil"|trans }}</h2>
+                        <div class="mb-2"><strong>{{ "Nom:"|trans }}</strong> <span id="name-display">{{ profileForm.vars.value.name }}</span></div>
+                        <div class="mb-2"><strong>{{ "Prénom:"|trans }}</strong> <span id="firstname-display">{{ profileForm.vars.value.firstname }}</span></div>
+                        <div class="mb-2"><strong>{{ "Code Postal:"|trans }}</strong> <span id="zipcode-display">{{ profileForm.vars.value.zipcode }}</span></div>
+                        <div class="mb-2"><strong>{{ "Ville:"|trans }}</strong> <span id="city-display">{{ profileForm.vars.value.city }}</span></div>
+                        <div class="mb-4"><strong>{{ "Rue:"|trans }}</strong> <span id="street-display">{{ profileForm.vars.value.street }}</span></div>
+                        <button class="btn btn-primary btn-block" data-bs-toggle="collapse" data-bs-target="#profile-edit-form">{{ "Modifier Profil"|trans }}</button>
+                    </div>
+                </div>
+                
+                <!-- Profile Edit Form -->
+                <div class="collapse" id="profile-edit-form">
+                    <div class="card card-body mb-4">
+                        {{ form_start(profileForm, {'attr': {'class': 'form'}}) }}
+                        {{ form_row(profileForm.name, {'attr': {'class': 'form-control mb-3'}}) }}
+                        {{ form_row(profileForm.firstname, {'attr': {'class': 'form-control mb-3'}}) }}
+                        {{ form_row(profileForm.zipcode, {'attr': {'class': 'form-control mb-3'}}) }}
+                        {{ form_row(profileForm.city, {'attr': {'class': 'form-control mb-3'}}) }}
+                        {{ form_row(profileForm.street, {'attr': {'class': 'form-control mb-3'}}) }}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">{{ "Sauvegarder"|trans }}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#profile-edit-form">{{ "Annuler"|trans }}</button>
+                        </div>
+                        {{ form_end(profileForm) }}
+                    </div>
+                </div>
 
-<section class="content-body">
-    <div class="row d-flex justify-content-around">
-        <div class="col-md-10">
-            <!-- Section d'Affichage des Informations du Profil (Non Sensibles) -->
-            <div class="user-info mb-4 p-5" id="profile-info" style="border-radius: 20px;">
-                <h2 class="h4 text-primary mb-4">{{ "Informations du Profil"|trans }}</h2>
-                <p><strong>{{ "Nom:"|trans }}</strong> {{ profileForm.vars.value.name }}</p>
-                <p><strong>{{ "Prénom:"|trans }}</strong> {{ profileForm.vars.value.firstname }}</p>
-                <p><strong>{{ "Code Postal:"|trans }}</strong> {{ profileForm.vars.value.zipcode }}</p>
-                <p><strong>{{ "Ville:"|trans }}</strong> {{ profileForm.vars.value.city }}</p>
-                <p><strong>{{ "Rue:"|trans }}</strong> {{ profileForm.vars.value.street }}</p>
-                <button class="btn btn-outline-primary" onclick="toggleEditForm('profile-edit-form')">{{ "Modifier Profil"|trans }}</button>
-            </div>
-            
-            <!-- Formulaire d'Édition du Profil (Non Sensibles) -->
-            <div class="edit-form d-none p-5" id="profile-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;">
-                {{ form_start(profileForm, {'attr': {'id': 'profile-edit-form-twig'}}) }}
-                {{ form_row(profileForm.name) }}
-                {{ form_row(profileForm.firstname) }}
-                {{ form_row(profileForm.zipcode) }}
-                {{ form_row(profileForm.city) }}
-                {{ form_row(profileForm.street) }}
-                <button type="submit" class="btn btn-success">{{ "Sauvegarder"|trans }}</button>
-                <button type="button" class="btn btn-secondary" onclick="toggleEditForm('profile-edit-form')">{{ "Annuler"|trans }}</button>
-                {{ form_end(profileForm) }}
-            </div>
+                <!-- Sensitive Information Card -->
+               <div class="card mb-5 shadow">
+                    <div class="card-body">
+                        <h2 class="h4 mb-3 text-center text-primary">{{ "Informations Confidentielles"|trans }}</h2>
+                        <div class="mb-2"><strong>{{ "Téléphone:"|trans }}</strong> <span>{{ sensitiveInfoForm.vars.value.phone | mask_phone }}</span></div>
+                        <div class="mb-4"><strong>{{ "Mot de passe:"|trans }}</strong> <span>********</span></div>
+                        <button class="btn btn-primary btn-block" data-bs-toggle="collapse" data-bs-target="#sensitive-edit-form">{{ "Modifier Informations confidentielles"|trans }}</button>
+                    </div>
+                </div>
 
-            <!-- Section d'Affichage des Informations Sensibles (Masquées) -->
-            <div class="user-info mb-4 p-5" style="border-radius: 20px;">
-                <h2 class="h4 text-primary mb-4">{{ "Informations Confidentielles"|trans }}</h2>
-                <p><strong>{{ "Email:"|trans }}</strong> {{ sensitiveInfoForm.vars.value.email | mask_email }}</p>
-                <p><strong>{{ "Téléphone:"|trans }}</strong> {{ sensitiveInfoForm.vars.value.phone | mask_phone }}</p>
-                <p><strong>{{ "Mot de passe:"|trans }}</strong> ********</p>
-                <button class="btn btn-outline-primary" onclick="toggleEditForm('sensitive-edit-form')">{{ "Modifier Informations confidentielles"|trans }}</button>
-            </div>
+                <!-- Sensitive Information Edit Form -->
+                <div class="collapse" id="sensitive-edit-form">
+                    <div class="card card-body mb-4">
+                        {{ form_start(sensitiveInfoForm, {'attr': {'class': 'form'}}) }}
+                        {{ form_row(sensitiveInfoForm.phone, {'attr': {'class': 'form-control mb-3'}}) }}
+                        {{ form_row(sensitiveInfoForm.newPassword, {'attr': {'class': 'form-control mb-3'}}) }}
+                        {{ form_row(sensitiveInfoForm.currentPassword, {'attr': {'class': 'form-control mb-3'}}) }}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">{{ "Modifier"|trans }}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#sensitive-edit-form">{{ "Annuler"|trans }}</button>
+                        </div>
+                        {{ form_end(sensitiveInfoForm) }}
+                    </div>
+                </div>
 
-            <!-- Formulaire d'Édition des Informations Sensibles -->
-            <div class="edit-form d-none p-5" id="sensitive-edit-form" style="border-radius: 20px; transition: all 0.5s ease-in-out;">
-                {{ form_start(sensitiveInfoForm, {'attr': {'id': 'sensitive-info-form-twig'}}) }}
-                {{ form_row(sensitiveInfoForm.email) }}
-                {{ form_row(sensitiveInfoForm.phone) }}
-                {{ form_row(sensitiveInfoForm.newPassword) }}
-                {{ form_row(sensitiveInfoForm.currentPassword) }}
-                <button type="submit" class="btn btn-success">{{ "Modifier"|trans }}</button>
-                <button type="button" class="btn btn-secondary" onclick="toggleEditForm('sensitive-edit-form')">{{ "Annuler"|trans }}</button>
-                {{ form_end(sensitiveInfoForm) }}
             </div>
         </div>
     </div>
 </section>
-
-
 {% block javascripts %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
@@ -132,118 +143,57 @@
 </script>
 
 <style>
+    /* Custom styles for a more refined look */
+    .card-header {
+        letter-spacing: 0.05rem;
+        border-bottom: none;
+    }
 
-[data-bs-theme="dark"] .h4 {
-    background-color: #5a5a5a; 
-}
-[data-bs-theme="dark"] .main-content{
-    background-color: #0a0a0a; 
-}
-[data-bs-theme="dark"] .user-info{
-    background-color: #5a5a5a; 
-}
+    .card-body {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
 
- /* Style pour le corps de la page */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-}
+    .btn-outline-primary {
+        border-color: #007bff;
+        color: #007bff;
+    }
 
-/* Style pour la section principale */
-.content-body {
-    padding: 20px;
-}
+    .btn-outline-primary:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
 
-[data-bs-theme="light"] .content-header{
-    background-color: #f8fafc; 
-}
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
 
-/* Style pour les titres */
-{# .h4 {
-    color: #007bff;
-} #}
+    .btn-success {
+        background-color: #28a745;
+    }
 
-/* Style pour les boutons */
-.btn {
-    margin-right: 10px;
-    border-radius: 5px;
-}
+    .btn-secondary {
+        background-color: #6c757d;
+    }
 
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-}
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-}
+    .form-control {
+        border-radius: 0.25rem;
+    }
 
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-}
+    /* Spacing and alignment adjustments */
+    .mb-2, .mb-3, .mb-4 {
+        margin-bottom: 1.5rem !important;
+    }
 
-.btn-secondary:hover {
-    background-color: #5a6268;
-}
-
-.btn-success {
-    background-color: #28a745;
-    color: #fff;
-}
-
-.btn-success:hover {
-    background-color: #218838;
-}
-
-.btn-outline-primary {
-    border-color: #007bff;
-    color: #007bff;
-}
-
-.btn-outline-primary:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.btn-outline-secondary {
-    border-color: #6c757d;
-    color: #6c757d;
-}
-
-.btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: #fff;
-}
-
-/* Style pour les formulaires */
-.form-group {
-    margin-bottom: 20px;
-}
-
-/* Style pour les champs de formulaire */
-.form-control {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-}
-
-/* Style pour les sections d'informations utilisateur */
-.user-info {
-    background-color: #fff;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-}
-
-/* Style pour les sections de formulaire d'édition */
-.edit-form {
-    background-color: #fff;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
-}
-
+    .text-center {
+        text-align: center;
+    }
 </style>
 {% endblock %}
 
