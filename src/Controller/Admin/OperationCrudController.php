@@ -460,11 +460,40 @@ class OperationCrudController extends AbstractCrudController {
     
         $this->processOperation($entityManager, $operation, $user);
     
+        $idOpe = $operation->getId();
+        $created = $operation->getCreatedAt();
+        $type = $operation->getType();
+        $price = $operation->getPrice();
+        $city = $operation->getCityOpe();
+        $customerId = $operation->getCustomer();
+
+        // Log successful acceptation
+        try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => 'Anonymous',
+                'message' => 'User accepted operation',
+                'level' => 'info',
+                'data' => [
+                    'id_ope' => $idOpe,
+                    'created' => $created,
+                    'type' => $type,
+                    'price' => $price,
+                    'city' => $city,
+                    'customer_id' => $customerId
+                ]
+
+            ]);
+            } catch (Exception $e) {
+            }
+
         if ($this->sendOperationEmails($mail, $customer)) {
             $this->addFlash('success', 'La mission a été acceptée et est maintenant "En cours".');
             return new RedirectResponse('/admin');
         }
     
+       
+
         return new RedirectResponse('/admin');
     }
     
@@ -639,6 +668,17 @@ class OperationCrudController extends AbstractCrudController {
     
         $operation->setArchivedFor($currentUser ? $currentUser->getId() : null);
         $entityManager->flush();
+
+         //Log archived operation
+         try {
+            $logsService->postLog([
+                'loggerName' => 'Operation',
+                'user' => 'Anonymous',
+                'message' => 'User archived operation',
+                'level' => 'info'
+            ]);
+            } catch (Exception $e) {
+        }
     
         $this->addFlash('success', 'La mission est maintenant archivée pour vous');
         return $this->redirectToRoute('admin');
