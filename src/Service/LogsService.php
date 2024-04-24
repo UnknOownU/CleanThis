@@ -34,7 +34,7 @@ class LogsService
         $requestJson = json_encode($requestData, JSON_THROW_ON_ERROR);
 
         //Requete vers endpoint API (backend en node.js)
-        $response = $this->httpClient->request('POST', 'http://localhost:3000/log', [
+        $response = $this->httpClient->request('POST', 'http://localhost:3000/logs', [
             'headers' => [
                 'Content-Type: application/json',
                 'Accept: application/json',
@@ -45,8 +45,6 @@ class LogsService
         if (201 !== $response->getStatusCode()) {
             throw new Exception('Response status code is different than expected.');
         }
-
-        // ... other checks
 
         $responseJson = $response->getContent();
         $responseData = json_decode($responseJson, true, 512, JSON_THROW_ON_ERROR);

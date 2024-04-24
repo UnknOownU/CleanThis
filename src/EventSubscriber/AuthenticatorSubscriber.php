@@ -1,5 +1,4 @@
 <?php
-// src/EventSubscriber/LogoutEventListener.php
 
 namespace App\EventSubscriber;
 
