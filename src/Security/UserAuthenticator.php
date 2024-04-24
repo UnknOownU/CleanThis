@@ -32,7 +32,6 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
-        
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),
@@ -46,7 +45,10 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+     
             return new RedirectResponse($targetPath);
+
+
         }
 
         return new RedirectResponse($this->urlGenerator->generate('admin'));

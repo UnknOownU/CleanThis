@@ -1,9 +1,7 @@
 <?php
 namespace App\Controller;
 
-use Exception;
 use App\Form\ProfileType;
-use App\Service\LogsService;
 use App\Form\SensitiveInfoType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +27,7 @@ class ProfilController extends AbstractController
     /**
      * @Route("/profile/edit", name="profile_edit")
      */
-    public function edit(Request $request, LogsService $logsService)
+    public function edit(Request $request)
     {
         $user = $this->security->getUser();
         if (!$user) {
@@ -44,18 +42,6 @@ class ProfilController extends AbstractController
         $sensitiveInfoForm->handleRequest($request);
 
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
-
-        // Log user edit profil
-        try {
-            $logsService->postLog([
-            'loggerName' => 'User',
-            'user' => 'Anonymous',
-            'message' => 'User edited profil',
-            'level' => 'info'
-        ]);
-        } catch (Exception $e) {
-        }
-
             $this->entityManager->flush();
             $this->addFlash('success', 'Vos informations ont été mises à jour.');
         }
@@ -68,20 +54,7 @@ class ProfilController extends AbstractController
                 if ($newPassword = $sensitiveInfoForm->get('newPassword')->getData()) {
                     $user->setPassword($this->userPasswordHasher->hashPassword($user, $newPassword));
                 }
-
-                        // Log user edit sensitive profil info
-        try {
-            $logsService->postLog([
-            'loggerName' => 'User',
-            'user' => 'Anonymous',
-            'message' => 'User edited password',
-            'level' => 'info'
-        ]);
-        } catch (Exception $e) {
-            // echo 'Insertion du log échoué';
-        }
                 $this->entityManager->flush();
-
                 $this->addFlash('success', 'Vos informations sensibles ont été mises à jour.');
             }
         }

@@ -389,10 +389,10 @@ Archivées: Archived
 "Un email vous sera envoyé lors de l'acceptation ou le refus de celle-ci": 'An email will be sent to you upon acceptance or refusal.'
 'Veuillez fournir une description détaillée du site de nettoyage pour une préparation optimale.': 'Please provide a detailed description of the cleaning site for optimum preparation.'
 'Description du site de nettoyage': 'Description of the cleaning site'
-"Chiffre d'affaires": 'Sales figures'
-"Chiffres d'affaires par mois": 'Sales figures per months'
+"Chiffre d'affaires": "Sales figures"
+"Chiffres d'affaires par mois": "Sales figures per months"
 Mois: Month
-"Chiffres d'affaires": Sales
+"Chiffres d'affaires": "Sales"
 'Missions par statut': 'Missions per status'
 'Modifier Profil': 'Edit Profile'
 'Informations Confidentielles': 'Confidentials informations'
@@ -403,14 +403,3 @@ Mois: Month
 'Refus de votre opération': 'Your operation has been declined'
 'Opération terminée - Facture': 'Operation finished - Billing'
 'Création de votre opération': 'Your operation has been submitted'
-"Chiffre d'affaire du mois": 'Sales of the month'
-'Opérations en cours': 'Current operations'
-'Opérations terminées': 'Operations finished'
-"Type d'opération": 'Type of operation'
-"Chiffre d'affaires par mois": 'Sales by month'
-Ligne: Line
-'Merci pour votre message !': 'Thank you for your message !'
-'Merci de bien vouloir vous créer un compte en cliquant sur le lien suivant :': 'Please create an account by clicking on the following link :'
-"A très vite ! L'équipe CleanThis": 'See you soon ! The CleanThis team'
-'Création de compte': 'Account creation'
-'Ce lien est valable une heure': 'This link is active one hour'

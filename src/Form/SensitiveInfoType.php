@@ -15,6 +15,7 @@ class SensitiveInfoType extends AbstractType
     {
         $builder
             ->add('phone', TextType::class)
+            ->add('email', EmailType::class)
             ->add('newPassword', PasswordType::class, [
                 'mapped' => false,
             ])

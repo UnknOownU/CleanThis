@@ -119,23 +119,14 @@
             <label for="operationImage" class="form-label">{{ "Ajouter une image (optionnel)"|trans }}</label>
             <input type="file" class="form-control" id="operationImage" name="operationImage" accept="image/*">
         </div>
-<div class="mb-3" id="datewrapper">
-    <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
-    <input type="date" id="rdvDate" name="rdvDate" class="form-control">
-    <div id="dateError" style="color: red; display: none; margin-top: 10px;"></div>
-</div>
+        <div class="mb-3 mt-3" id="datewrapper">
+            <label for="rdvDate" class="form-label">{{ "Date du Rendez-vous"|trans }}</label>
+            <input type="datetime-local" id="rdvDate" name="rdvDate" class="form-control">
+        </div>
 
-
-<div class="mb-3" id="timewrapper">
-    <label for="rdvTime" class="form-label">{{ "Heure du Rendez-vous"|trans }}</label>
-    <select id="rdvTime" name="rdvTime" class="form-control">
-        <!-- Les options d'heure seront injectées ici par JavaScript -->
-    </select>
-</div>
         <div class="d-flex justify-content-between mt-4">
             <button class="btn btn-secondary" onclick="showStep(2)">{{ "Retour"|trans }}</button>
-            <button class="btn btn-primary" type="button" id="continueButton" onclick="showStep(4)" disabled>{{ "Continuer"|trans }}</button>
-
+            <button class="btn btn-primary" onclick="showStep(4)">{{ "Continuer"|trans }}</button>
         </div>
     </div>
 </div>
@@ -154,7 +145,6 @@
         <div class="text-center">
             <button class="btn btn-primary me-2" onclick="submitOperation()">{{ "Confirmer et Soumettre"|trans }}</button>
             <button class="btn btn-warning" onclick="showStep(3)">{{ "Retour"|trans }}</button>
-            <div id="loadingOverlay">Demande en cours de traitement...</div>
         </div>
     </div>
 </div>
@@ -265,27 +255,6 @@
     #imagewrapper, #datewrapper {
         text-align:center;
     }
-    /* Style pour l'overlay de chargement */
-#loadingOverlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 9999;
-    text-align: center;
-    padding-top: 20%;
-    font-size: 24px;
-    color: #333;
-}
-
-/* Style pour appliquer un flou à l'arrière-plan */
-.is-blurred {
-    filter: blur(5px);
-}
-
     
 </style>
 
@@ -299,168 +268,14 @@
     var map;
     var marker;
 
-document.addEventListener('DOMContentLoaded', function() {
-    initMap();
-    initDateInput();
-    document.getElementById('rdvDate').addEventListener('change', handleDateChange);
-    document.getElementById('rdvTime').addEventListener('change', validateRdvDate);
-});
-
 function initMap() {
-    map = L.map('map').setView([48.8566, 2.3522], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-}
+        map = L.map('map').setView([48.8566, 2.3522], 13); // Coordonnées de Paris par défaut
 
-function initDateInput() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const minDate = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 jours à partir d'aujourd'hui
-    document.getElementById('rdvDate').setAttribute('min', minDate.toISOString().split('T')[0]);
-    document.getElementById('rdvDate').value = minDate.toISOString().split('T')[0];
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initDateInput();
-    handleDateChange(); // Initialise les heures immédiatement après la date
-});
-
-function handleDateChange() {
-    const selectedDay = new Date(document.getElementById('rdvDate').value).getDay();
-    const timeSelect = document.getElementById('rdvTime');
-    let hours = generateHoursBasedOnDay(selectedDay);
-
-    if (hours.length > 0) {
-        timeSelect.innerHTML = hours.map(hour => `<option value="${hour}">${hour}</option>`).join('');
-        timeSelect.disabled = false;
-        validateRdvDate();  // Continue to validate normally if hours are available
-    } else {
-        timeSelect.innerHTML = '<option>Aucun créneau disponible</option>';
-        timeSelect.disabled = true;
-        displaySundayError();  // Handle the Sunday case specifically
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
     }
-}
-
-function displaySundayError() {
-    const dateError = document.getElementById('dateError');
-    const continueButton = document.getElementById('continueButton');
-    dateError.textContent = 'Les rendez-vous ne peuvent pas être pris un dimanche.';
-    dateError.style.display = 'block';
-    continueButton.disabled = true;
-}
-function validateRdvDate() {
-    const rdvDateInput = document.getElementById('rdvDate');
-    const timeInput = document.getElementById('rdvTime').value;
-    const continueButton = document.getElementById('continueButton');
-    const dateError = document.getElementById('dateError');
-
-    if (!timeInput || timeInput.includes("Aucun")) {
-        dateError.textContent = 'Aucun créneau horaire sélectionné ou disponible.';
-        dateError.style.display = 'block';
-        continueButton.disabled = true;
-        return false;
-    }
-
-    const formattedTime = formatTime(timeInput);
-    const dateString = rdvDateInput.value + 'T' + formattedTime + ':00';
-    const selectedDate = new Date(dateString);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);  // Réinitialise l'heure du jour actuel pour juste minuit.
-
-    console.log("Date String:", dateString);
-    console.log("Selected Date: ", selectedDate);
-    console.log("Day of the week: ", selectedDate.getDay());
-
-    if (isNaN(selectedDate.getTime())) {
-        dateError.textContent = 'Format de date ou d\'heure invalide.';
-        dateError.style.display = 'block';
-        continueButton.disabled = true;
-        return false;
-    }
-
-    if (selectedDate < today) {
-        dateError.textContent = 'La date de rendez-vous ne peut pas être ultérieure à la date de création d\'opération.';
-        dateError.style.display = 'block';
-        continueButton.disabled = true;
-        return false;
-    }
-
-    if (selectedDate.getDay() === 0) {
-        dateError.textContent = 'Les rendez-vous ne peuvent pas être pris un dimanche.';
-        dateError.style.display = 'block';
-        continueButton.disabled = true;
-        return false;
-    }
-
-    const twoDaysLater = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
-
-    if (selectedDate < twoDaysLater) {
-        dateError.textContent = 'Les rendez-vous doivent être pris au moins deux jours à l\'avance.';
-        dateError.style.display = 'block';
-        continueButton.disabled = true;
-        return false;
-    } 
-
-    dateError.textContent = '';
-    dateError.style.display = 'none';
-    continueButton.disabled = false;
-    return true;
-}
-
-
-function generateHoursBasedOnDay(day) {
-    if (day === 0) { // Sunday
-        return [];
-    } else if (day === 6) { // Saturday
-        return generateHours(8, 14);
-    } else if (day === 5) { // Friday
-        return generateHours(12, 19);
-    } else { // Monday to Thursday
-        return generateHours(8, 22);
-    }
-}
-
-function generateHours(start, end) {
-    let times = [];
-    for (let hour = start; hour <= end; hour++) {
-        // Assurez-vous que les heures sont toujours à deux chiffres
-        let formattedHour = hour.toString().padStart(2, '0');
-        times.push(`${formattedHour}:00`);
-        if (hour < end) times.push(`${formattedHour}:30`);
-    }
-    return times;
-}
-
-
-function formatTime(timeInput) {
-    const parts = timeInput.split(':');
-    if (parts.length === 2) {
-        const hours = parts[0].padStart(2, '0');
-        const minutes = parts[1].padStart(2, '0');
-        return `${hours}:${minutes}`;
-    }
-    return timeInput;  // Retourner l'entrée originale si le format n'est pas hh:mm
-}
-
-
-
-
-
-
-
-
-document.getElementById('rdvDate').addEventListener('change', function() {
-    console.log("Date change detected, validating...");
-    validateRdvDate();
-});
-
-document.getElementById('rdvTime').addEventListener('change', function() {
-    console.log("Time change detected, validating...");
-    validateRdvDate();
-});
-
 
 function updateMap() {
     var street = document.getElementById('street_ope').value;
@@ -521,15 +336,13 @@ function validateStep2() {
 
 
     function validateStep3() {
-    var description = document.getElementById('description').value;
-    if (!description) {
-        Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
-        return false;  // Arrête l'exécution et indique une validation non réussie
+        var description = document.getElementById('description').value;
+        if (!description) {
+            Swal.fire('Désolé !', 'Veuillez fournir une description.', 'error');
+            return false;
+        }
+        return true;
     }
-    // Appelle validateRdvDate() pour vérifier les autres champs (date et heure)
-    return validateRdvDate();  // Renvoie true si la date et l'heure sont valides, sinon false
-}
-
     
     document.addEventListener('DOMContentLoaded', function() {
     // Mettre en évidence l'indicateur de l'étape 1 dès le chargement de la page
@@ -642,7 +455,7 @@ function updateStepIndicators(stepNumber) {
     }
  }
 
-function submitOperation() {
+   function submitOperation() {
     if (isFormSubmitted) {
         Swal.fire('Erreur!', 'Le formulaire a déjà été soumis.', 'error');
         return;
@@ -661,16 +474,10 @@ function submitOperation() {
     formData.append('zipcode', document.getElementById('zipcode_ope').value);
     formData.append('city', document.getElementById('city_ope').value);
     
-    // Obtenir la date et l'heure
     var rdvDate = document.getElementById('rdvDate').value;
-    var rdvTime = document.getElementById('rdvTime').value;
-
-    // Combine la date et l'heure dans un format compatible ISO 8601
-    if (rdvDate && rdvTime) {
-        var rdvDateTime = rdvDate + 'T' + rdvTime + ':00';
-        formData.append('rdvDateTime', rdvDateTime);
+    if (rdvDate) {
+        formData.append('rdvDate', rdvDate);
     }
-
 
     // Ajouter l'image au FormData
     var imageFile = document.getElementById('operationImage').files[0];
@@ -700,7 +507,6 @@ function submitOperation() {
         handleError(error);
     });
 }
-
 
 function handleError(error) {
     console.error('Erreur:', error);
@@ -747,4 +553,8 @@ document.getElementById('city_ope').addEventListener('keypress', function(event)
 
 </script>
 
+{% endblock %}
+
+{% block body_footer %}
+    {# Votre pied de page ici #}
 {% endblock %}

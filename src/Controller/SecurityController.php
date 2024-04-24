@@ -2,31 +2,29 @@
 
 namespace App\Controller;
 
-use Exception;
-use Doctrine\ORM\EntityManager;
-use App\Service\SendMailService;
-use App\Repository\UserRepository;
-use App\Form\ResetPasswordFormType;
-use Doctrine\ORM\EntityManagerInterface;
 use ApiPlatform\Api\UrlGeneratorInterface;
+use App\Form\ResetPasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
-use App\Service\LogsService;
+use App\Repository\UserRepository;
+use App\Service\SendMailService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bridge\Twig\NodeVisitor\Scope;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class SecurityController extends AbstractController
 {
@@ -35,10 +33,8 @@ class SecurityController extends AbstractController
      ];
 
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils, LogsService $logsService): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-
-
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
@@ -46,14 +42,13 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     
     
     }
 
     #[Route('/logout', name: 'app_logout')]
-    public function logout(Request $request, LogsService $logsService): Response
+    public function logout(Request $request): Response
     {
         // Clear the session including the stored locale
         $request->getSession()->invalidate();
@@ -63,22 +58,11 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path:'/oauth/connect/{service}', name:'auth_oauth_connect', methods: ['GET'])]
-        public function connect(string $service, ClientRegistry $clientRegistery, LogsService $logsService): RedirectResponse
+        public function connect(string $service, ClientRegistry $clientRegistery): RedirectResponse
     {
         if (!in_array($service, array_keys(self::SCOPES), true)){
           throw $this->createNotFoundException();  
         }
-                // Log successful login google
-                try {
-                    $logsService->postLog([
-                    'loggerName' => 'Login',
-                    'user' => 'Anonymous',
-                    'message' => 'User login with Google',
-                    'level' => 'info'
-                ]);
-                } catch (Exception $e) {
-                    echo 'Insertion du log échoué';
-                }
         return $clientRegistery
         ->getClient($service)
         ->redirect(self::SCOPES[$service]);
@@ -95,8 +79,7 @@ public function check():Response
             UserRepository $userRepository,
             TokenGeneratorInterface $tokenGenerator,
             EntityManagerInterface $entityManager,
-            SendMailService $mail,
-            LogsService $logsService
+            SendMailService $mail
             ): Response
         {
             $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -124,17 +107,6 @@ public function check():Response
                         'password_reset',
                         $context
                     );
-                    // Log forgotten pass
-                    try {
-                        $logsService->postLog([
-                        'loggerName' => 'Security',
-                        'user' => 'Anonymous',
-                        'message' => 'User called forgotten password',
-                        'level' => 'info'
-                    ]);
-                    } catch (Exception $e) {
-                    }
-                    
                     return $this->redirectToRoute('app_login');
                 }
 
@@ -152,8 +124,7 @@ public function check():Response
         Request $request,
         UserRepository $userRepository,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
-        LogsService $logsService
+        UserPasswordHasherInterface $passwordHasher
         ): Response 
     {
         $user = $userRepository->findOneByResetToken($token);
@@ -173,16 +144,6 @@ public function check():Response
                     $entityManager->persist($user);
                     $entityManager->flush();
 
-            // Log new pass
-            try {
-                $logsService->postLog([
-                'loggerName' => 'Security',
-                'user' => 'Anonymous',
-                'message' => 'User set new password from forgotten password',
-                'level' => 'info'
-            ]);
-            } catch (Exception $e) {
-            }
                     return $this->redirectToRoute('app_login');
             }
 

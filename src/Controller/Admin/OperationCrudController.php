@@ -2,13 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Service\InvoiceService;
 use Exception;
 use DateTimeImmutable;
-use DateTimeInterface;
 use App\Entity\Operation;
 use Doctrine\ORM\QueryBuilder;
-use App\Service\InvoiceService;
-use App\Service\LogsService;
 use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +34,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class OperationCrudController extends AbstractCrudController {
@@ -50,42 +47,47 @@ class OperationCrudController extends AbstractCrudController {
     public static function getEntityFqcn(): string {
         return Operation::class;
     }
-    
     public function edit(AdminContext $context)
     {
         $operation = $context->getEntity()->getInstance();
-        $currentUser = $this->security->getUser();
-        
-        if (!$operation instanceof Operation || 
-            ($operation->getCustomer() !== $currentUser && !$this->isGranted('ROLE_ADMIN'))) {
+        $user = $this->getUser();
+    
+        if (!$operation instanceof Operation || ($operation->getCustomer() !== $user && !$this->isGranted('ROLE_ADMIN'))) {
             $this->addFlash('error', 'Vous n\'avez pas le droit de modifier cette opération.');
-            return $this->redirectToRoute('admin');
+            return $this->redirectToRoute('admin'); // Assurez-vous que la route 'admin' est correcte
         }
     
+        // Assurez-vous que vous avez accès à Twig ou injectez le service Twig
         return $this->render('operation_crud/edit.html.twig', [
             'operation' => $operation
         ]);
     }
     
     
-    
-    
-    public function delete(AdminContext $context)
-    {
-        $operation = $context->getEntity()->getInstance();
-        $currentUser = $this->security->getUser();
-    
-        if (!$operation instanceof Operation || 
-            ($operation->getCustomer() !== $currentUser && !$this->isGranted('ROLE_ADMIN'))) {
-            $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette opération.');
-            return $this->redirectToRoute('admin');
-        }
-    
-        return parent::delete($context);
+public function delete(AdminContext $context)
+{
+    $operation = $context->getEntity()->getInstance();
+    if (!$operation instanceof Operation) {
+        throw new \RuntimeException('L\'entité attendue n\'est pas une instance d\'Operation.');
     }
+
+    // Vérifier les droits de l'utilisateur sur l'opération
+    $this->denyAccessUnlessGranted('DELETE', $operation);
+
+    return parent::delete($context);
+}
+
     
-
-
+    protected function initialize(Request $request): void
+    {
+        parent::initialize($request);
+    
+        $entityId = $request->query->get('entityId');
+        if ($entityId) {
+            $operation = $this->entityManager->getRepository(Operation::class)->find($entityId);
+            $this->denyAccessUnlessGranted('EDIT', $operation);
+        }
+    }
     
     public function configureCrud(Crud $crud): Crud {
         return $crud
@@ -111,20 +113,18 @@ class OperationCrudController extends AbstractCrudController {
     }
     
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation && 
-            $entityInstance->getCustomer() !== $this->getUser() && 
-            !$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Action non autorisée.');
+        if ($entityInstance instanceof Operation) {
+            $this->setOperationPrice($entityInstance);
         }
         parent::persistEntity($entityManager, $entityInstance);
     }
     
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void {
-        if ($entityInstance instanceof Operation && 
-            $entityInstance->getCustomer() !== $this->getUser() && 
-            !$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('Action non autorisée.');
+        if ($entityInstance instanceof Operation) {
+            $this->denyAccessUnlessGranted('EDIT', $entityInstance);
+            $this->setOperationPrice($entityInstance);
         }
+    
         parent::updateEntity($entityManager, $entityInstance);
     }
     
@@ -173,18 +173,16 @@ class OperationCrudController extends AbstractCrudController {
                             return $salarie ? sprintf('%s %s', $salarie->getFirstName(), $salarie->getName()) : 'Non assigné';
                         });
                     
-            $fields[] =ChoiceField::new('status')
+                $fields[] =ChoiceField::new('status')
                         ->setChoices([
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
-                        'Archivée' => 'Archivée',
                         'Refusée' => 'Refusée',
                     ])   ->renderAsBadges([
                         'En attente de Validation' => 'warning',
                         'En cours' => 'primary',
                         'Terminée' => 'success',
-                        'Archivée' => 'info',
                         'Refusée' => 'danger',
                     ]); 
                     
@@ -193,25 +191,6 @@ class OperationCrudController extends AbstractCrudController {
                             return $entity->getFullAddress();
                         });
             }
-            
-            $fields[] = DateTimeField::new('rdv_at', 'Date d\'intervention')
-            ->formatValue(function (?DateTimeInterface $value) {
-                if ($value) {
-                    // Définir le locale en français
-                    $formatter = new \IntlDateFormatter(
-                        'fr_FR',
-                        \IntlDateFormatter::FULL,
-                        \IntlDateFormatter::SHORT,
-                        date_default_timezone_get()
-                    );
-                    
-                    // Formatage de la date pour qu'elle soit lisible
-                    return $formatter->format($value);
-                } else {
-                    return 'À définir';
-                }
-            });
-
     
     
             if (Crud::PAGE_NEW === $pageName || Crud::PAGE_EDIT === $pageName) {
@@ -251,7 +230,7 @@ class OperationCrudController extends AbstractCrudController {
                 DateTimeField::new('created_at', 'Créé le')
                     ->hideOnForm(),
                 FormField::addColumn('col-lg-8 col-xl-3'),
-                TextField::new('name', 'Mission')
+                IdField::new('id', 'Nº')
                     ->hideOnForm(),
                 AssociationField::new('customer', 'Client')
                     ->hideOnForm(),
@@ -292,14 +271,13 @@ class OperationCrudController extends AbstractCrudController {
                         'En attente' => 'En attente de Validation',
                         'En cours' => 'En cours',
                         'Terminée' => 'Terminée',
-                        'Archivée' => 'Archivée',
                         'Refusée' => 'Refusée',
                     ])
                     ->renderAsBadges([
                         'En attente de Validation' => 'info',
                         'En cours' => 'warning',
                         'Terminée' => 'success',
-                        'Archivée' => 'info',
+                        'Archivée' => 'success',
                     ])
                     ->hideOnForm(),
                 TextField::new('street_ope', 'Rue')
@@ -368,18 +346,15 @@ class OperationCrudController extends AbstractCrudController {
         $declineAction = Action::new('decline', 'Refuser', 'fa fa-times')
         ->displayIf(function (Operation $operation) use ($security) {
             return $operation->getStatus() === 'En attente de Validation' && 
-                        ($security->isGranted('ROLE_ADMIN') || 
-                        $security->isGranted('ROLE_SENIOR') || 
-                        $security->isGranted('ROLE_APPRENTI'));
+            ($security->isGranted('ROLE_ADMIN') || 
+            $security->isGranted('ROLE_SENIOR') || 
+            $security->isGranted('ROLE_APPRENTI'));
 })
         ->linkToCrudAction('declineOperation');
     
         $finishAction = Action::new('finish', 'Terminer', 'fa fa-flag-checkered')
-            ->displayIf(function (Operation $operation) use ($security) {
-                return $operation->getStatus() === 'En cours'&& 
-                        ($security->isGranted('ROLE_ADMIN') || 
-                        $security->isGranted('ROLE_SENIOR') || 
-                        $security->isGranted('ROLE_APPRENTI')); 
+            ->displayIf(function (Operation $operation) {
+                return $operation->getStatus() === 'En cours';
             })
             ->linkToCrudAction('finishOperation');
     
@@ -428,7 +403,7 @@ class OperationCrudController extends AbstractCrudController {
     /**
      * Méthode personnalisée pour l'action "Accepter".
      */
-    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail,LogsService $logsService): Response {
+    public function acceptOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer();
         if (!$operation) {
@@ -481,37 +456,7 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setStatus('En cours');
         $operation->setSalarie($user);
         $entityManager->flush();
-
-
-        $customer = $operation->getCustomer();
-        $idOpe = $operation->getId();
-        $created = $operation->getCreatedAt();
-        $type = $operation->getType();
-        $price = $operation->getPrice();
-        $city = $operation->getCityOpe();
-        $customerId = $customer->getId();
-
-        // Log successful acceptation
-        try {
-            $logsService->postLog([
-                'loggerName' => 'Operation',
-                'user' => 'Anonymous',
-                'message' => 'User accepted operation',
-                'level' => 'info',
-                'data' => [
-                    'id_ope' => $idOpe,
-                    'created' => $created,
-                    'type' => $type,
-                    'price' => $price,
-                    'city' => $city,
-                    'customer_id' => $customerId
-                ]
-
-            ]);
-            } catch (Exception $e) {
-            }
-
-
+    
         // Vérifier si le message flash a déjà été affiché dans la session
         if (!$session->getFlashBag()->has('success')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
@@ -536,7 +481,7 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
     }
     
-    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail, LogsService $logsService): Response {
+    public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, SendMailService $mail): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer();
         if (!$operation) {
@@ -546,37 +491,6 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setStatus('Refusée');
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
-
-        $customer = $operation->getCustomer();
-
-
-        $idOpe = $operation->getId();
-        $created = $operation->getCreatedAt();
-        $type = $operation->getType();
-        $price = $operation->getPrice();
-        $city = $operation->getCityOpe();
-        $customerId = $customer->getId();
-
-        // Log operation declined
-        try {
-            $logsService->postLog([
-                'loggerName' => 'Operation',
-                'user' => 'Anonymous',
-                'message' => 'User declined operation',
-                'level' => 'info',
-                'data' => [
-                    'id_ope' => $idOpe,
-                    'created' => $created,
-                    'type' => $type,
-                    'price' => $price,
-                    'city' => $city,
-                    'customer_id' => $customerId
-                ]
-
-            ]);
-            } catch (Exception $e) {
-            }
-
                 if (!$session->getFlashBag()->has('error')) {
             // Si le message flash n'a pas encore été affiché, l'ajouter
             $session->getFlashBag()->add('error', 'La mission a été annulée et est maintenant "Refusée".');
@@ -600,7 +514,7 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
 
     }
-    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService, LogsService $logsService): Response {
+    public function finishOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session,  SendMailService $mail, InvoiceService $invoiceService): Response {
         $operation = $context->getEntity()->getInstance();
         $customer = $operation->getCustomer(); 
         if (!$operation) {
@@ -612,35 +526,6 @@ class OperationCrudController extends AbstractCrudController {
         $operation->setFinishedAt(new DateTimeImmutable);
         $operation->setSalarie($this->security->getUser());
         $entityManager->flush(); 
-
-        //Get infos for logs and send mail services
-        $customer = $operation->getCustomer();
-        $idOpe = $operation->getId();
-        $finished = $operation->getFinishedAt();
-        $type = $operation->getType();
-        $price = $operation->getPrice();
-        $city = $operation->getCityOpe();
-        $customerId = $customer->getId();
-        
-        //Log operation finished
-        try {
-            $logsService->postLog([
-                'loggerName' => 'Operation',
-                'user' => 'Anonymous',
-                'message' => 'User finished operation',
-                'level' => 'info',
-                'data' => [
-                    'id_ope' => $idOpe,
-                    'finished' => $finished,
-                    'type' => $type,
-                    'price' => $price,
-                    'city' => $city,
-                    'customer_id' => $customerId
-                ]
-
-            ]);
-            } catch (Exception $e) {
-            }
 
       
         // Vérifier si le message flash a déjà été affiché dans la session
@@ -671,41 +556,25 @@ class OperationCrudController extends AbstractCrudController {
         return new Response('<script>window.location.reload();</script>');
     } 
 
-    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session, LogsService $logsService): Response {
+    public function archiveOperation(AdminContext $context, EntityManagerInterface $entityManager, SessionInterface $session): Response {
         $operation = $context->getEntity()->getInstance();
-        $currentUser = $this->security->getUser();
-    
         if (!$operation) {
             throw $this->createNotFoundException('Opération non trouvée');
         }
-    
-        // Vérifiez si l'utilisateur actuel est le client ou le salarié de l'opération ou s'il a le rôle ADMIN
-        if ($operation->getCustomer() !== $currentUser && 
-            $operation->getSalarie() !== $currentUser && 
-            !$this->isGranted('ROLE_ADMIN')) {
-            // Si non, ajouter un message d'erreur et rediriger
-            $session->getFlashBag()->add('error', 'Vous n\'êtes pas autorisé à archiver cette opération.');
-            return $this->redirectToRoute('admin');
-        }
         
-        // Logique pour archiver l'opération
+        // Logique pour accepter l'opération
         $operation->setStatus('Archivée');
+        $operation->setSalarie($this->security->getUser());
         $entityManager->flush();
 
         
-        //Log archived operation
-            try {
-                $logsService->postLog([
-                    'loggerName' => 'Operation',
-                    'user' => 'Anonymous',
-                    'message' => 'User archived operation',
-                    'level' => 'info'
-                ]);
-                } catch (Exception $e) {
-            }
-
-        // Ajouter un message de succès
-        $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
-        return new RedirectResponse('/admin');
-    }
+        // Vérifier si le message flash a déjà été affiché dans la session
+        if (!$session->getFlashBag()->has('success')) {
+            // Si le message flash n'a pas encore été affiché, l'ajouter
+            $session->getFlashBag()->add('success', 'La mission est maintenant archivée');
+                    return new RedirectResponse('/admin');
+        }
+    
+        return new Response('<script>window.location.reload();</script>');
+    } 
 }
