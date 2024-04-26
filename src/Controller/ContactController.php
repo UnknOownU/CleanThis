@@ -13,11 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\ApilogService;
+
+
+;
+
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'contact')]
-    public function index(Request $request, MailerInterface $mailer, SendMailService $mail, LogsService $logsService): Response
+    public function index(Request $request, MailerInterface $mailer, SendMailService $mail, LogsService $logsService, ApilogService $apiLog): Response
     {
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
@@ -43,6 +48,20 @@ class ContactController extends AbstractController
 
             // Envoyer l'email
             $mailer->send($email);
+            //fonction log 
+            $logData = [
+                'message'=> $volunteerMessage,
+                'author'=> $volunteerEmail
+            ];
+
+            try {
+                $apiLog->postLog($logData);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+
+        //fin fonction log
+
 
                 // Generate a token
                 $token = $this->generateToken();

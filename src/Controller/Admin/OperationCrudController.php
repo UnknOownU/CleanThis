@@ -542,7 +542,7 @@ class OperationCrudController extends AbstractCrudController {
             return false;
         }
     }
-    
+  
     public function declineOperation(AdminContext $context, EntityManagerInterface $entityManager, SendMailService $mail, LogsService $logsService): Response {
         $operation = $context->getEntity()->getInstance();
         if (!$operation) {
@@ -645,7 +645,6 @@ class OperationCrudController extends AbstractCrudController {
             $this->addFlash('error', 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage());
             error_log('Caught exception: Connexion avec MailHog sur 1025 non établie ' . $e->getMessage());
         }
-    
         return new RedirectResponse('/admin');
     }
 
@@ -668,6 +667,7 @@ class OperationCrudController extends AbstractCrudController {
     
         $operation->setArchivedFor($currentUser ? $currentUser->getId() : null);
         $entityManager->flush();
+
 
          //Log archived operation
          try {
