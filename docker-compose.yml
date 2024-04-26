@@ -1,0 +1,48 @@
+services:
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www/cleanthis
+    mem_limit: 4g  # Allocation de 4 GB de RAM au service PHP
+    cpus: 2.5       # Allocation de 2.5 cœurs CPU
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/cleanthis
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    mem_limit: 512m  # 512 MB est généralement suffisant pour Nginx
+
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cleanthis
+      MYSQL_USER: cleanthis_user
+      MYSQL_PASSWORD: cleanthis_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    mem_limit: 2g  # Allocation de 2 GB de RAM à MySQL pour améliorer les performances de la base de données
+    cpus: 2        # Allocation de 2 cœurs CPU pour MySQL
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+    mem_limit: 512m  # 512 MB pour PHPMyAdmin suffisent généralement
+
+volumes:
+  db_data:
+  cleanthis:
