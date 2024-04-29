@@ -8,22 +8,21 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     git \
     unzip \
-    curl
+    curl \
+    procps \  
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && docker-php-ext-install zip pdo pdo_mysql intl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Installe les extensions PHP nécessaires
-RUN docker-php-ext-install zip pdo pdo_mysql intl
+# Crée les dossiers nécessaires pour Symfony
+RUN mkdir -p /symfony/var /symfony/vendor
 
 # Définit le répertoire de travail
 WORKDIR /var/www/cleanthis
 
 # Installe Composer globalement
 COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-# Installe API Platform et autres bundles utiles pour le développement
-RUN composer require api-platform/core
-
-RUN composer require --dev symfony/maker-bundle symfony/profiler-pack
-
 
 # Ajuste les configurations PHP pour le développement
 RUN { \
@@ -39,20 +38,22 @@ RUN { \
     echo "xdebug.client_host=host.docker.internal"; \
     echo "xdebug.client_port=9003"; \
     echo "xdebug.start_with_request=yes"; \
-    echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini; \
-    echo "upload_max_filesize=100M" >> /usr/local/etc/php/conf.d/docker-php-upload-size.ini; \
-    echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/docker-php-max-execution-time.ini; \
-    echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/docker-php-opcache.ini; \
-    echo "opcache.revalidate_freq=1" >> /usr/local/etc/php/conf.d/docker-php-opcache.ini;\
     } > /usr/local/etc/php/conf.d/docker-php-dev.ini
 
-# Nettoie les listes de packages pour minimiser la taille de l'image
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Définit les volumes pour persister les données
+VOLUME /symfony/var
+VOLUME /symfony/vendor
+
+# Change ownership and permissions of the work directory to avoid permission issues
+RUN chown -R www-data:www-data /var/www/cleanthis && \
+    chmod -R 775 /var/www/cleanthis
+
+# Copie le script de démarrage
+COPY setup-symfony.sh /usr/local/bin/setup-symfony
+RUN chmod +x /usr/local/bin/setup-symfony
 
 # Expose le port 9000 pour PHP-FPM
 EXPOSE 9000
 
 # Commande exécutée au démarrage du conteneur
-CMD ["php-fpm"]
-
-
+CMD ["setup-symfony"]

@@ -12,9 +12,7 @@
 **/.gitignore
 
 # Log and temporary files
-**/var/logs/**
-**/var/cache/**
-**/var/sessions/**
+**/var/**
 
 # Testing and CI/CD
 **/.github/
