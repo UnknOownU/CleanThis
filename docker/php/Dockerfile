@@ -9,10 +9,11 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     curl \
-    procps \  
+    procps \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && docker-php-ext-install zip pdo pdo_mysql intl \
+    && docker-php-ext-install opcache \ 
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Crée les dossiers nécessaires pour Symfony
@@ -29,11 +30,17 @@ RUN { \
     echo "memory_limit=512M"; \
     echo "upload_max_filesize=100M"; \
     echo "max_execution_time=300"; \
-    echo "opcache.enable=1"; \
+    echo "opcache.memory_consumption=256"; \
+    echo "opcache.interned_strings_buffer=16"; \
+    echo "opcache.max_accelerated_files=10000"; \
     echo "opcache.revalidate_freq=0"; \
-    echo "opcache.validate_timestamps=1"; \
-    echo "display_errors=on"; \
-    echo "display_startup_errors=on"; \
+    echo "opcache.validate_timestamps=0"; \
+    echo "opcache.save_comments=1"; \
+    echo "opcache.fast_shutdown=1"; \
+    echo "opcache.enable_cli=1"; \
+    echo "opcache.enable=1"; \
+    echo "display_errors=off"; \
+    echo "display_startup_errors=off"; \
     echo "xdebug.mode=develop,debug"; \
     echo "xdebug.client_host=host.docker.internal"; \
     echo "xdebug.client_port=9003"; \
