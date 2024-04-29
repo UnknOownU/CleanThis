@@ -30,6 +30,7 @@ class LogoutEventListener implements EventSubscriberInterface
 
     public function onLogoutEvent(LogoutEvent $event): void
     {
+        
         $user = $event->getToken()->getUser();
 
         try {

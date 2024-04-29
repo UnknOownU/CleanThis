@@ -3,26 +3,43 @@ parameters:
     
 services:
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true      # Injection automatique des dépendances dans vos services.
+        autoconfigure: true # Enregistre automatiquement vos services en tant que commandes, abonnés d'événements, etc.
         public: false 
 
+    # Configuration de Redis pour la connexion directe
+    Redis:
+        class: Redis
+        calls:
+            - method: connect
+              arguments:
+                - '%env(REDIS_HOST)%'  # Assurez-vous que cette variable est bien définie dans votre fichier .env
+                - '%env(int:REDIS_PORT)%'  # Utilisation de la conversion de type pour le port
+
+    # Configuration de l'adaptateur Redis pour Symfony Cache
+    Symfony\Component\Cache\Adapter\RedisAdapter:
+        arguments:
+            - '@Redis'
+            - namespace: '%env(APP_ENV)%_cache_namespace'
+            - options: { timeout: 5 }
+
+    # Services liés à la sécurité
     App\Security\OperationVoter:
         tags:
-            - { name: security.voter }
+            - { name: 'security.voter' }
 
+    # Abonnés d'événements
     App\EventSubscriber\EasyAdminSubscriber:
         tags:
-            - { name: kernel.event_subscriber }
-    
+            - { name: 'kernel.event_subscriber' }
+
     App\EventSubscriber\LogoutEventListener:
         arguments:
             $logsService: '@App\Service\LogsService'
         tags:
             - { name: 'kernel.event_subscriber' }
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
+    # Définition des services pour les classes dans src/
     App\:
         resource: '../src/'
         exclude:
@@ -30,11 +47,14 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Security/UserVoter.php'
+
+    # Services spécifiques
     App\Service\InvoiceService:
         arguments:
             $projectDir: '%kernel.project_dir%'
-            
+
     App\Controller\AjaxOperationController: ~
+
     App\Service\LogsService:
         arguments:
             $httpClient: '@http_client' 
@@ -42,7 +62,7 @@ services:
     App\Twig\AppExtension:
         tags:
             - { name: 'twig.extension' }
-     
+
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
@@ -51,4 +71,4 @@ services:
         arguments:
             $logsService: '@App\Service\LogsService'
         tags:
-            - { name: 'kernel.event_subscriber' }     
+            - { name: 'kernel.event_subscriber' }
