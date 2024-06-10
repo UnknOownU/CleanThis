@@ -313,7 +313,7 @@ public function editOperation(int $id, EntityManagerInterface $entityManager): J
         } catch (Exception $e) {
         }
        
-           return $this->json(['status' => 'success', 'message' => 'Opération mise à jour avec succès']);
+        return $this->json(['status' => 'success', 'message' => 'Opération mise à jour avec succès']);
         }
         /**
  * @Route("/ajax/update-operation-operator/{id}", name="ajax_update_operation_operator")
