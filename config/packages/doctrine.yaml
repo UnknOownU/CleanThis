@@ -1,13 +1,9 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
-
-        # IMPORTANT: You MUST configure your server version,
-        # either here or in the DATABASE_URL env var (see .env file)
-        #server_version: '16'
-
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -15,6 +11,14 @@ doctrine:
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
+        second_level_cache:
+            enabled: true
+            regions:
+                my_entity_region:
+                    lifetime: 3600
+                    cache_driver:
+                        type: service
+                        id: cache.app
         mappings:
             App:
                 type: attribute
@@ -26,7 +30,6 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
             dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
 when@prod:
@@ -40,6 +43,14 @@ when@prod:
             result_cache_driver:
                 type: pool
                 pool: doctrine.result_cache_pool
+            second_level_cache:
+                enabled: true
+                regions:
+                    my_entity_region:
+                        lifetime: 3600
+                        cache_driver:
+                            type: pool
+                            pool: cache.app
 
     framework:
         cache:

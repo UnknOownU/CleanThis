@@ -1,0 +1,78 @@
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - symfony_net
+
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www/cleanthis:delegated
+      - symfony_var:/symfony/var:delegated
+      - symfony_vendor:/symfony/vendor:delegated
+    networks:
+      - symfony_net
+    ports:
+      - "9000:9000"
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/cleanthis:delegated
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - symfony_net
+    restart: on-failure
+
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cleanthis
+      MYSQL_USER: cleanthis_user
+      MYSQL_PASSWORD: cleanthis_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - symfony_net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+    networks:
+      - symfony_net
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - symfony_net
+
+networks:
+  symfony_net:
+    driver: bridge
+
+volumes:
+  db_data:
+  symfony_var:
+  symfony_vendor:
+  redis_data:

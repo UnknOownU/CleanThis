@@ -1,11 +1,10 @@
 vich_uploader:
-    db_driver: orm
+    db_driver: orm  # ou 'mongodb' ou 'phpcr', selon votre driver de base de données
 
     mappings:
-       products:
-           uri_prefix: TextField::new('name', 'Intitulé de l’opération')
-           upload_destination: '%kernel.project_dir%/public/images/products'
-           namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
-           delete_on_update: false
-           delete_on_remove: false
-
+        products:  # Ceci est l'identifiant utilisé dans l'entité pour référencer le mappage
+            uri_prefix: /images/products  # Chemin accessible via le navigateur
+            upload_destination: '%kernel.project_dir%/public/images/products'  # Dossier où les fichiers seront stockés
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer  # Utilise un namer pour éviter les conflits de nom
+            delete_on_update: false  # Ne pas supprimer le fichier précédent lors de la mise à jour
+            delete_on_remove: false  # Ne pas supprimer le fichier lors de la suppression de l'entité
