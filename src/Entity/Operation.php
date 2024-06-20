@@ -7,7 +7,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use App\Entity\User;
 use DateTimeImmutable;
 use App\Repository\OperationRepository;
 use Doctrine\DBAL\Types\Types;
@@ -21,8 +20,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource]
 class Operation
 {
-
-    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -59,25 +56,34 @@ class Operation
     #[ORM\ManyToOne(inversedBy: 'operations')]
     private ?User $salarie = null;
 
-/**
-*@ORM\ManyToOne(targetEntity=User::class)
-*@ORM\JoinColumn(nullable=false)
- */
-private $createdBy;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $finished_at = null;
 
-#[ORM\Column(nullable: true)]
-private ?\DateTimeImmutable $finished_at = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private \DateTimeImmutable $created_at;
 
-    public function getCreatedBy(): ?User
+    #[ORM\Column(nullable: true)]
+    #[Assert\GreaterThanOrEqual(propertyPath: "created_at")]
+    private ?\DateTimeImmutable $rdv_at = null;
+
+    #[ORM\Column(length: 255, type: 'string',nullable: true)]
+    private ?string $attachment = null;
+
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'attachment')]
+    #[Assert\File(maxSize: '1024k')]
+    private ?File $attachmentFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    // Nouvelle propriété pour accepter la date
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $acceptedAt = null;
+
+    public function __construct()
     {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(User $user): self
-    {
-        $this->createdBy = $user;
-
-        return $this;
+        $this->created_at = new \DateTimeImmutable();
+        $this->status = 'En attente de Validation';
     }
 
     public function getId(): ?int
@@ -193,8 +199,7 @@ private ?\DateTimeImmutable $finished_at = null;
     {
         $this->salarie = $salarie;
         return $this;
-
-    }   
+    }
 
     public function getFinishedAt(): ?\DateTimeImmutable
     {
@@ -205,37 +210,6 @@ private ?\DateTimeImmutable $finished_at = null;
     {
         $this->finished_at = $finished_at;
         return $this;
-    }
-    public function getCustomerFullName(): ?string
-    {
-        if (!$this->customer) {
-            return null;
-        }
-    
-        return $this->customer->getFirstname() . ' ' . $this->customer->getName();
-    }
-  
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeImmutable $created_at;
-
-    #[ORM\Column(nullable: true)]
-    #[Assert\GreaterThanOrEqual(propertyPath: "created_at")]
-    private ?\DateTimeImmutable $rdv_at = null;
-    
-    #[ORM\Column(length: 255, type: 'string',nullable: true)]
-    private ?string $attachment = null;
-
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'attachment')]
-    #[Assert\File(maxSize: '1024k')]
-    private ?File $attachmentFile = null;
-    
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $UpdatedAt = null;
-
-    public function __construct()
-    {
-        $this->created_at = new \DateTimeImmutable();
-        $this->status = 'En attente de Validation';
     }
 
     public function getCreatedAt(): \DateTimeImmutable
@@ -275,7 +249,7 @@ private ?\DateTimeImmutable $finished_at = null;
     {
         $this->attachmentFile = $attachmentFile;
         if (null !== $attachmentFile) {
-            $this->UpdatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
@@ -286,19 +260,29 @@ private ?\DateTimeImmutable $finished_at = null;
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->UpdatedAt;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $UpdatedAt): static
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
-        $this->UpdatedAt = $UpdatedAt;
+        $this->updatedAt = $updatedAt;
         return $this;
-    } 
+    }
 
     public function getFullAddress()
     {
         return $this->street_ope . ', ' . $this->zipcode_ope . ' ' . $this->city_ope;
     }
+
+    // Méthode pour accepter la date
+    public function getAcceptedAt(): ?\DateTimeImmutable
+    {
+        return $this->acceptedAt;
+    }
+
+    public function setAcceptedAt(?\DateTimeImmutable $acceptedAt): self
+    {
+        $this->acceptedAt = $acceptedAt;
+        return $this;
+    }
 }
-
-
