@@ -46,12 +46,5 @@ Si vous souhaitez en savoir plus sur ce projet ou discuter d'opportunités profe
 
 **Dernière mise à jour :** Août 2024
 
----
-
-### 🏆 Statistiques GitHub
-
-![UnknOownU's GitHub stats](https://github-readme-stats.vercel.app/api?username=UnknOownU&show_icons=true&theme=radical)
 
 ---
-
-Cette version inclut les badges pour JavaScript et Google Auth, ce qui rend ton `README.md` encore plus complet et attractif pour les visiteurs de ton projet GitHub.
