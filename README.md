@@ -34,14 +34,6 @@
 
 ---
 
-## 📞 Contact
-
-Si vous souhaitez en savoir plus sur ce projet ou discuter d'opportunités professionnelles, vous pouvez me contacter via :
-
-- **Email :** [boucharafa.abdelkarim@gmail.com](mailto:boucharafa.abdelkarim@gmail.com)
-- **GitHub :** [UnknOownU](https://github.com/UnknOownU)
-- **Portfolio :** [Lien vers mon Portfolio](https://portfolio-abdelkarimboucharafa.web.app)
-
 ---
 
 **Dernière mise à jour :** Août 2024
